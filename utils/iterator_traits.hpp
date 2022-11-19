@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   iterator_traits.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jcauchet <jcauchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/16 10:02:51 by jcauchet          #+#    #+#             */
-/*   Updated: 2022/11/19 19:25:36 by jcauchet         ###   ########.fr       */
+/*   Created: 2022/11/19 18:40:01 by jcauchet          #+#    #+#             */
+/*   Updated: 2022/11/19 18:42:36 by jcauchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Vector.hpp"
-#include <vector>
+#pragma once
 
-int *trash()
-{
-    ft::Vector<int> Test(1, -1);
-    std::cout << Test.capacity() << std::endl;
-    return NULL;
-}
+#include <iostream>
+#include <string>
 
-int main()
+template <class T>
+struct iterator_traits
 {
-    // trash();
-    std::vector<int> Test(5, 42);
-    for (std::vector<int>::iterator it = Test.begin(); it != Test.end(); it++)
-    {
-        *it = 44;
-        std::cout << *it << std::endl;
-    }
-}
+	typedef typename T::value_type value_type;
+	typedef typename T::difference_type difference_type;
+	typedef typename T::iterator_category iterator_category;
+	typedef typename T::pointer pointer;
+	typedef typename T::reference reference;
+};

@@ -6,7 +6,7 @@
 /*   By: jcauchet <jcauchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 09:56:11 by jcauchet          #+#    #+#             */
-/*   Updated: 2022/11/19 15:34:17 by jcauchet         ###   ########.fr       */
+/*   Updated: 2022/11/19 18:33:57 by jcauchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 #include <string>
 #include <iostream>
+#include <limits.h>
+#include <stdexcept>
 
 namespace ft
 {
@@ -29,12 +31,13 @@ template < class T, class Allocator = std::allocator<T> >
 class Vector
 {
 public:
+	typedef typename Allocator::size_type size_t;
+
 	/* ----- Constructors ----- */
 
-	// Default
 	explicit Vector() : _array(NULL) {}
 	
-	explicit Vector (size_t n, const T &val = Allocator::value_type()) : _size(n)
+	explicit Vector (size_t n, const T &val = Allocator::value_type()) : _size(n), _capacity(n)
 	{
 		this->_array = this->_alloc.allocate(n);
 		for (size_t i = 0; i < n; i++)
@@ -43,10 +46,9 @@ public:
 
 	/* ----- Accessors ----- */
 
-	T	*getArray() const
-	{
-		return this->_array;
-	}
+	T	*getArray() const {return this->_array;}
+	size_t size() const {return this->_size;}
+	size_t capacity() const {return this->_capacity;}
 
 	/* ----- Destructors ----- */
 	
@@ -58,6 +60,7 @@ public:
 private:
 	T *_array;
 	size_t _size;
+	size_t _capacity;
 
 	Allocator _alloc;
 };
