@@ -6,7 +6,7 @@
 /*   By: jcauchet <jcauchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 09:56:11 by jcauchet          #+#    #+#             */
-/*   Updated: 2022/11/19 19:49:46 by jcauchet         ###   ########.fr       */
+/*   Updated: 2022/11/19 19:58:37 by jcauchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ public:
 	T	*getArray() const {return this->_array;}
 	size_t size() const {return this->_size;}
 	size_t capacity() const {return this->_capacity;}
+	size_t max_size() const {return this->_alloc.max_size();}
 
 	/* ----- Destructors ----- */
 	
