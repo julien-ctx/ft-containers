@@ -6,7 +6,7 @@
 /*   By: jcauchet <jcauchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 09:56:11 by jcauchet          #+#    #+#             */
-/*   Updated: 2022/11/19 19:58:37 by jcauchet         ###   ########.fr       */
+/*   Updated: 2023/01/04 20:12:22 by jcauchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,23 @@ public:
 	
 	explicit Vector (size_t n, const T &val = Allocator::value_type()) : _size(n), _capacity(n)
 	{
-		this->_array = this->_alloc.allocate(n);
+		_array = _alloc.allocate(n);
 		for (size_t i = 0; i < n; i++)
-			this->_array[i] = val;
+			_array[i] = val;
 	}
 
 	/* ----- Accessors ----- */
 
-	T	*getArray() const {return this->_array;}
-	size_t size() const {return this->_size;}
-	size_t capacity() const {return this->_capacity;}
-	size_t max_size() const {return this->_alloc.max_size();}
+	T	*getArray() const {return _array;}
+	size_t size() const {return _size;}
+	size_t capacity() const {return _capacity;}
+	size_t max_size() const {return _alloc.max_size();}
 
 	/* ----- Destructors ----- */
 	
 	~Vector()
 	{
-		this->_alloc.deallocate(this->_array, this->_size);
+		_alloc.deallocate(_array, _size);
 	}
 
 private:

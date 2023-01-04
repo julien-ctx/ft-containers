@@ -6,7 +6,7 @@
 /*   By: jcauchet <jcauchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 18:40:01 by jcauchet          #+#    #+#             */
-/*   Updated: 2023/01/04 19:43:05 by jcauchet         ###   ########.fr       */
+/*   Updated: 2023/01/04 20:23:30 by jcauchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // This structure is used to provide a generic way of accessing iterator traits,
 // depending on their attributes.
 
-template <class Iter>
+template<class Iter>
 struct iterator_traits
 {
 	typedef typename Iter::value_type value_type;
