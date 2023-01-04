@@ -6,7 +6,7 @@
 /*   By: jcauchet <jcauchet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 18:40:01 by jcauchet          #+#    #+#             */
-/*   Updated: 2022/11/19 18:42:36 by jcauchet         ###   ########.fr       */
+/*   Updated: 2023/01/04 19:43:05 by jcauchet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,15 @@
 #include <iostream>
 #include <string>
 
-template <class T>
+// This structure is used to provide a generic way of accessing iterator traits,
+// depending on their attributes.
+
+template <class Iter>
 struct iterator_traits
 {
-	typedef typename T::value_type value_type;
-	typedef typename T::difference_type difference_type;
-	typedef typename T::iterator_category iterator_category;
-	typedef typename T::pointer pointer;
-	typedef typename T::reference reference;
+	typedef typename Iter::value_type value_type;
+	typedef typename Iter::difference_type difference_type;
+	typedef typename Iter::iterator_category iterator_category;
+	typedef typename Iter::pointer pointer;
+	typedef typename Iter::reference reference;
 };
