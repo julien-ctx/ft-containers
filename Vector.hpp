@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Vector.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jcauchet <jcauchet@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/16 09:56:11 by jcauchet          #+#    #+#             */
-/*   Updated: 2023/01/04 20:12:22 by jcauchet         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #pragma once
 
 // https://en.cppreference.com/w/cpp/memory/allocator#:~:text=The%20default%20allocator%20is%20stateless,of%20the%20same%20allocator%20type.
