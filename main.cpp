@@ -1,21 +1,13 @@
 #include "Vector.hpp"
 #include <vector>
 
-int *trash()
-{
-    ft::Vector<int> Test(1, -1);
-    std::cout << Test.max_size() << std::endl;
-    return NULL;
-}
-
 int main()
 {
-    trash();
-    exit(1);
-    std::vector<int> Test(5, 42);
-    for (std::vector<int>::iterator it = Test.begin(); it != Test.end(); it++)
-    {
-        *it = 44;
-        std::cout << *it << std::endl;
-    }
+    std::vector<int> v;
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(5);
+    std::vector<int>::reverse_iterator it;
 }
