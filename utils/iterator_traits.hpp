@@ -6,6 +6,9 @@
 // This structure is used to provide a generic way of accessing iterator traits,
 // depending on their attributes.
 
+namespace ft
+{
+
 template<class Iter>
 struct iterator_traits
 {
@@ -15,3 +18,5 @@ struct iterator_traits
 	typedef typename Iter::pointer pointer;
 	typedef typename Iter::reference reference;
 };
+
+}

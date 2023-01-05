@@ -6,6 +6,9 @@
 // My containers implementation includes
 #include "Vector.hpp"
 
+#include "utils/iterator_traits.hpp"
+#include "utils/reverse_iterator.hpp"
+
 // STL containers includes
 #include <vector>
 #include <map>

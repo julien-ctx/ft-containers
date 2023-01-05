@@ -8,9 +8,6 @@ int main()
     v.push_back(3);
     v.push_back(4);
     v.push_back(5);
-    std::vector<int>::reverse_iterator it = v.rbegin();
-    for (; it != v.rend(); it++)
-        PRINT(*it);
+    ft::reverse_iterator<int> it;
     NL();
-    
 }
