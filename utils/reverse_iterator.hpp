@@ -11,6 +11,9 @@ class reverse_iterator
 private:
 	Iter iter;
 public:
-	
+	typedef typename Iter iterator_type;
+
+	/* ----- Constructors ----- */
+	reverse_iterator() {}
 };
 
