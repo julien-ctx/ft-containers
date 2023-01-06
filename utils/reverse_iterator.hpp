@@ -2,8 +2,6 @@
 
 #include "iterator_traits.hpp"
 
-// Reverse iterator is used a type alias, for example std::vector<int>::reverse_iterator vec
-
 namespace ft
 {
 
@@ -20,12 +18,15 @@ public:
 	typedef typename ft::iterator_traits<Iter>::pointer pointer;
 
 	/* ----- Constructors ----- */
+	// Default constructor
 	reverse_iterator() {}
 
-	explicit reverse_iterator(Iter x) {}
+	// Initialization constructor from a normal iterator with Iter type.
+	explicit reverse_iterator(Iter x) : _curr(x) {}
 
+	// Copy constructor from an already existing reverse iterator.
 	template <class Iter>
-	reverse_iterator (const reverse_iterator<Iter> &rev_it) {}
+	reverse_iterator (const reverse_iterator<Iter> &rev_it) : _curr(rev_it._curr) {}
 
 };
 

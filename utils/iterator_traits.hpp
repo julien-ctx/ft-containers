@@ -11,7 +11,7 @@ namespace ft
 {
 
 // A simple implementation to explain the inheritance of iterators.
-// For example forward_iterator is also an input_iterator.
+// For example forward_iterator is also an input_iterator, and so on...
 struct input_iterator_tag  {};
 struct output_iterator_tag {};
 struct forward_iterator_tag       : public input_iterator_tag         {};
