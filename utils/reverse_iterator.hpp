@@ -50,9 +50,23 @@ public:
 		return *tmp;
 	}
 
-	pointer operator->() const
+	pointer operator->() const {return &(operator*());}
+
+	reference operator[](difference_type n) const {return *(_curr - n - 1);}
+
+	// Prefix
+	reverse_iterator &operator++()
 	{
-		return &(operator*());
+		--_curr;
+		return *this;
+	}
+	// Suffix
+	// Returns a copy of the value and increment it later
+	reverse_iterator operator++(int)
+	{
+		reverse_iterator tmp = *this;
+		_curr--;
+		return tmp;
 	}
 };
 

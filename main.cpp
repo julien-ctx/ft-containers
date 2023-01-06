@@ -9,9 +9,8 @@ int main()
     v.push_back(3);
     v.push_back(4);
     v.push_back(5);
-    std::reverse_iterator<std::vector<int>::iterator> rit = v.rbegin();
-    
-    // Use the -> operator to access the value of the last element
-    std::cout << rit->value << std::endl;
+    std::vector<int>::iterator it = v.end();
+    ft::reverse_iterator<std::vector<int>::iterator> rit(it);
+    PRINT(rit[0]);
     NL();
 }
