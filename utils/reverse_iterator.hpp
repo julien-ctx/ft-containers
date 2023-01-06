@@ -18,20 +18,42 @@ public:
 	typedef typename ft::iterator_traits<Iter>::value_type value_type;
 	typedef typename ft::iterator_traits<Iter>::difference_type difference_type;
 	typedef typename ft::iterator_traits<Iter>::pointer pointer;
+	typedef typename ft::iterator_traits<Iter>::reference reference;
 
 	/* ----- Constructors ----- */
 	// Default constructor
-	reverse_iterator() : _type(UNDEFINED_IT) {}
+	reverse_iterator() {}
 
 	// Initialization constructor from a normal iterator with Iter type.
+	// x iterator should point to the element we want the reverse_iterator to start with.
 	explicit reverse_iterator(Iter x) : _curr(x) {}
 
 	// Copy constructor from an already existing reverse iterator.
-	template <class Iter>
-	reverse_iterator (const reverse_iterator<Iter> &rev_it) : _curr(rev_it._curr) {}
+	template <class T>
+	reverse_iterator (const reverse_iterator<T> &rev_it) : _curr(rev_it._curr) {}
 	/* -------------------------*/
 
-	iterator_type base() const {return _curr}
+	iterator_type base() const {return _curr;}
+
+	/* ----- Overloads ----- */	
+	template<class U>
+	reverse_iterator &operator=(const reverse_iterator<U> &rhs)
+	{
+		if (this != &rhs)
+			_curr = rhs._curr;
+		return *this;
+	}
+
+	reference operator*() const
+	{
+		Iter tmp = _curr - 1;
+		return *tmp;
+	}
+
+	pointer operator->() const
+	{
+
+	}
 };
 
 }

@@ -1,4 +1,5 @@
 #include "tools.hpp"
+#include "utils/reverse_iterator.hpp"
 
 int main()
 {
@@ -8,6 +9,8 @@ int main()
     v.push_back(3);
     v.push_back(4);
     v.push_back(5);
-    ft::reverse_iterator<int> it;
+    std::vector<int>::iterator it = v.begin() + 2;
+    std::reverse_iterator<std::vector<int>::iterator> rit(it);
+    PRINT(*rit);
     NL();
 }
