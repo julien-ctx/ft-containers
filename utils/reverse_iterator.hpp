@@ -52,7 +52,7 @@ public:
 
 	pointer operator->() const
 	{
-
+		return &(operator*());
 	}
 };
 
