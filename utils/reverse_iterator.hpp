@@ -61,13 +61,44 @@ public:
 		return *this;
 	}
 	// Suffix
-	// Returns a copy of the value and increment it later
+	// Returns a copy of the value and increments it later
 	reverse_iterator operator++(int)
 	{
 		reverse_iterator tmp = *this;
 		_curr--;
 		return tmp;
 	}
+	// Prefix
+	reverse_iterator &operator--()
+	{
+		++_curr;
+		return *this;
+	}
+	// Suffix
+	// Returns a copy of the value and decrements it later
+	reverse_iterator operator--(int)
+	{
+		reverse_iterator tmp = *this;
+		_curr++;
+		return tmp;
+	}
+
+	reverse_iterator operator+(difference_type n) const {return reverse_iterator(_curr - n);}
+
+	reverse_iterator operator-(difference_type n) const {return reverse_iterator(_curr + n);}
+
+	reverse_iterator &operator+=(difference_type n)
+	{
+		_curr -= n;
+		return *this;
+	}
+
+	reverse_iterator &operator-=(difference_type n)
+	{
+		_curr += n;
+		return *this;
+	}
+
 };
 
 }
