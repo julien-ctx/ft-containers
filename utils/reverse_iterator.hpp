@@ -31,11 +31,12 @@ public:
 	// Copy constructor from an already existing reverse iterator.
 	template <class T>
 	reverse_iterator (const reverse_iterator<T> &rev_it) : _curr(rev_it._curr) {}
+
+	// Destructor
+	~reverse_iterator() {}
 	/* -------------------------*/
 
-	iterator_type base() const {return _curr;}
-
-	/* ----- Overloads ----- */	
+	/* ------ Overloads ------- */	
 	template<class U>
 	reverse_iterator &operator=(const reverse_iterator<U> &rhs)
 	{
@@ -98,6 +99,9 @@ public:
 		_curr += n;
 		return *this;
 	}
+	/* -------------------------*/
+
+	iterator_type base() const {return _curr;}
 
 };
 
