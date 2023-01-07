@@ -15,6 +15,10 @@ class vector
 {
 
 private:
+	T* _array;
+	Allocator _alloc;
+	size_t _size;
+	size_t _capacity;
 
 public:
 	typedef T value_type;
@@ -24,8 +28,8 @@ public:
 	typedef typename Allocator::pointer pointer;
 	typedef typename Allocator::const_pointer const_pointer;
 	// The following two typedefs need to be edited are replaced by my implementation
-	typedef typename std::random_access_iterator<value_type> iterator;
-	typedef typename std::random_access_iterator<const value_type> const_iterator;
+	typedef typename std::iterator<std::random_access_iterator_tag, value_type> iterator;
+	typedef typename std::iterator<std::random_access_iterator_tag, const value_type> const_iterator;
 	typedef typename ft::reverse_iterator<iterator> reverse_iterator;
 	typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 	typedef size_t size_type;
@@ -33,10 +37,23 @@ public:
 
 	/* ----- Constructors ----- */
 	// Default constructor
-	explicit vector (const allocator_type &alloc = allocator_type()) {}
+	explicit vector (const allocator_type &alloc = allocator_type())
+	{
+		_array = NULL;
+		_alloc = alloc;
+		_size = 0;
+		_capacity = 0;
+	}
 
 	// Fill constructor
-	explicit vector (size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) {}
+	explicit vector (size_type n, const value_type &val = value_type(),
+	const allocator_type &alloc = allocator_type())
+	{
+		_alloc = alloc;
+		_array = _alloc.allocate(n);
+		for (size_t i = 0; i < n; i++)
+			_array[i] = val;
+	}
 
 	// Range constructor
 	template <class InputIterator>
@@ -50,6 +67,12 @@ public:
 	{
 
 	}
+	/* -------------------------*/
+
+	/* ------ Accessors ------- */
+
+	reference operator[](size_t n) const {return _array[n];}
+
 	/* -------------------------*/
 
 	/* ------ Overloads ------- */	
