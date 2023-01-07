@@ -47,12 +47,12 @@ public:
 
 	// Fill constructor
 	explicit vector (size_type n, const value_type &val = value_type(),
-	const allocator_type &alloc = allocator_type())
+		const allocator_type &alloc = allocator_type())
 	{
 		_alloc = alloc;
 		_array = _alloc.allocate(n);
 		for (size_t i = 0; i < n; i++)
-			_array[i] = val;
+			_alloc.construct(&_array[i], val);
 	}
 
 	// Range constructor

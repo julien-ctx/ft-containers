@@ -3,6 +3,6 @@
 
 int main()
 {
-    ft::vector<int> v(5, 9);
-    PRINT(v[2]);
+    ft::vector<int> v((size_t)5, 9);
+    PRINT(v[5]);
 }
