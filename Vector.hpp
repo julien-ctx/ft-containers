@@ -53,6 +53,8 @@ public:
 		_array = _alloc.allocate(n);
 		for (size_t i = 0; i < n; i++)
 			_alloc.construct(&_array[i], val);
+		_capacity = n;
+		_size = n;
 	}
 
 	// Range constructor
@@ -71,13 +73,31 @@ public:
 
 	/* ------ Accessors ------- */
 
+
+
+	/* -------------------------*/
+
+	/* ------ Overloads ------- */
+
 	reference operator[](size_t n) const {return _array[n];}
 
 	/* -------------------------*/
 
-	/* ------ Overloads ------- */	
-
-	/* -------------------------*/
+	reference at(size_type n)
+	{
+		if (n >= _size)
+			throw std::out_of_range("Index out of range");
+		else
+			return operator[](n);
+	}
+	
+	const_reference at(size_type n) const
+	{
+		if (n >= _size)
+			throw std::out_of_range("Index out of range");
+		else
+			return operator[](n);
+	}
 
 };
 
