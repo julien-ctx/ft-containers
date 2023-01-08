@@ -6,9 +6,10 @@
 #include <stdexcept>
 #include <type_traits>
 
+#include "tools.hpp"
 #include "utils/reverse_iterator.hpp"
 #include "utils/iterator_traits.hpp"
-#include "tools.hpp"
+#include "utils/enable_if.hpp"
 
 namespace ft
 {
@@ -115,7 +116,10 @@ public:
 
 	size_type size() const {return _size;}
 
+	size_type max_size() const {return _alloc.max_size();}
+
 	size_type capacity() const {return _capacity;}
+
 
 
 };

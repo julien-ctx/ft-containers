@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <limits>
 
 // My containers implementation includes
 
