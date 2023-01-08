@@ -5,6 +5,7 @@
 #include <limits.h>
 #include <stdexcept>
 #include <type_traits>
+#include <unistd.h>
 
 #include "tools.hpp"
 #include "utils/reverse_iterator.hpp"
@@ -120,8 +121,7 @@ public:
 
 	size_type capacity() const {return _capacity;}
 
-
-
 };
 
 }
+

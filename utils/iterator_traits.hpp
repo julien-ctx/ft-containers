@@ -4,8 +4,12 @@
 #include <iostream>
 #include <string>
 
-// This structure is used to provide a generic way of accessing iterator traits,
-// depending on their attributes.
+// https://h-deb.clg.qc.ca/Sujets/Divers--cplusplus/Traits.html
+
+/* 
+Traits are used to represent correctly data of an iterator.
+Thanks to specialization, we can change variables according to the type of the iterator.
+*/
 
 namespace ft
 {

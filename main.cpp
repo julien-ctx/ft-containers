@@ -10,10 +10,9 @@
 int main(void)
 {
 
-    TESTED_NAMESPACE::vector<TESTED_TYPE> v;
-    PRINT(v.max_size());
-    std::vector<TESTED_TYPE> v2;
-    PRINT(v2.max_size());
+    // TESTED_NAMESPACE::vector<TESTED_TYPE> v(5, 5);
+    // PRINT(v[2]);
+    
         // TESTED_NAMESPACE::vector<TESTED_TYPE> vct(7);
 
         // for (unsigned long int i = 0; i < vct.size(); ++i)
