@@ -28,7 +28,7 @@
 namespace ft
 {
 
-	typedef ptrdiff_t difference_type;
+	typedef std::ptrdiff_t difference_type;
 	typedef std::size_t size_type;
 
 	template<class It>
