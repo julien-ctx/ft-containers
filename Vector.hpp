@@ -17,12 +17,6 @@ template < class T, class Allocator = std::allocator<T> >
 class vector
 {
 
-private:
-	T* _array;
-	Allocator _alloc;
-	size_t _size;
-	size_t _capacity;
-
 public:
 	typedef T value_type;
 	typedef Allocator allocator_type;
@@ -35,8 +29,16 @@ public:
 	typedef typename std::iterator<std::random_access_iterator_tag, const value_type> const_iterator;
 	typedef typename ft::reverse_iterator<iterator> reverse_iterator;
 	typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
-	typedef size_t size_type;
+	typedef std::size_t size_type;
 	typedef ptrdiff_t difference_type;
+
+private:
+	T* _array;
+	Allocator _alloc;
+	size_type _size;
+	size_type _capacity;
+
+public:
 
 	/* ----- Constructors ----- */
 	// Default constructor
@@ -54,7 +56,7 @@ public:
 	{
 		_alloc = alloc;
 		_array = _alloc.allocate(n);
-		for (size_t i = 0; i < n; i++)
+		for (size_type i = 0; i < n; i++)
 			_alloc.construct(&_array[i], val);
 		_capacity = n;
 		_size = n;
@@ -65,9 +67,9 @@ public:
 	vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type())
 	{
 		_alloc = alloc;
-		size_t dist = ft::distance<InputIterator>(first, last);
+		size_type dist = ft::distance<InputIterator>(first, last);
 		_array = _alloc.allocate(dist);
-		for (size_t i = 0; i < dist; first++, i++)
+		for (size_type i = 0; i < dist; first++, i++)
 			_alloc.construct(&_array[i], *first);
 		_size = dist;
 		_capacity = dist;
@@ -82,7 +84,7 @@ public:
 	// Destructor
 	~vector()
 	{
-		for (size_t i = 0; i < _size; i++)
+		for (size_type i = 0; i < _size; i++)
 			_alloc.destroy(&_array[i]);
 		_alloc.deallocate(_array, _capacity);
 	}
@@ -90,7 +92,7 @@ public:
 
 	/* ------ Overloads ------- */
 
-	reference operator[](size_t n) const {return _array[n];}
+	reference operator[](size_type n) const {return _array[n];}
 
 	/* -------------------------*/
 

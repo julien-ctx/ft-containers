@@ -29,7 +29,7 @@ namespace ft
 {
 
 	typedef ptrdiff_t difference_type;
-	typedef size_t size_type;
+	typedef std::size_t size_type;
 
 	template<class It>
 	difference_type distance(It first, It last)
