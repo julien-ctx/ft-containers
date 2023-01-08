@@ -4,7 +4,7 @@
 
 #include "utils/reverse_iterator.hpp"
 
-int main()
+void trash()
 {
     std::vector<int> v1;
     v1.push_back(5);
@@ -14,9 +14,15 @@ int main()
     v1.push_back(545);
 
 
-    std::vector<int> v2(v1.begin(), v1.end());
+    ft::vector<int> v2(v1.begin(), v1.end());
     int size = v2.size();
     for (int i = 0; i < size; i++)
         PRINT(v2[i]);
     PRINT(v2.capacity());
+}
+
+int main()
+{
+    trash();
+    system("leaks ft_containers");
 }

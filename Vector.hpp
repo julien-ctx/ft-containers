@@ -82,7 +82,9 @@ public:
 	// Destructor
 	~vector()
 	{
-
+		for (size_t i = 0; i < _size; i++)
+			_alloc.destroy(&_array[i]);
+		_alloc.deallocate(_array, _capacity);
 	}
 	/* -------------------------*/
 
