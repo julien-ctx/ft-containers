@@ -4,8 +4,11 @@
 #include <iostream>
 #include <limits.h>
 #include <stdexcept>
+#include <type_traits>
 
 #include "utils/reverse_iterator.hpp"
+#include "utils/iterator_traits.hpp"
+#include "tools.hpp"
 
 namespace ft
 {
@@ -58,23 +61,29 @@ public:
 	}
 
 	// Range constructor
-	template <class InputIterator>
-	vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type()) {}
+	template<class InputIterator>
+	vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type())
+	{
+		_alloc = alloc;
+		size_t dist = ft::distance<InputIterator>(first, last);
+		_array = _alloc.allocate(dist);
+		for (size_t i = 0; i < dist; first++, i++)
+			_alloc.construct(&_array[i], *first);
+		_size = dist;
+		_capacity = dist;
+	}
 
 	// Copy constructor
-	vector (const vector &x) {}
+	vector (const vector &x)
+	{
+
+	}
 
 	// Destructor
 	~vector()
 	{
 
 	}
-	/* -------------------------*/
-
-	/* ------ Accessors ------- */
-
-
-
 	/* -------------------------*/
 
 	/* ------ Overloads ------- */
@@ -98,6 +107,11 @@ public:
 		else
 			return operator[](n);
 	}
+
+	size_type size() const {return _size;}
+
+	size_type capacity() const {return _capacity;}
+
 
 };
 

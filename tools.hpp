@@ -4,7 +4,6 @@
 #include <string>
 
 // My containers implementation includes
-#include "Vector.hpp"
 
 #include "utils/iterator_traits.hpp"
 #include "utils/reverse_iterator.hpp"
@@ -25,3 +24,21 @@
 
 #define PRINT(x) std::cout << BOLD << x << std::endl << RESET; 
 #define NL() std::cout << std::endl;
+
+namespace ft
+{
+
+	typedef ptrdiff_t difference_type;
+	typedef size_t size_type;
+
+	template<class It>
+	difference_type distance(It first, It last)
+	{
+		// Check here if the iterator is a random access iterator and return last - first.
+		difference_type i = 0;
+		for (i = 0; first != last; i++)
+			first++;
+		return i;
+	}
+
+}
