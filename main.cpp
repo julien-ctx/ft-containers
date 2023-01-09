@@ -5,18 +5,17 @@
 #include "utils/reverse_iterator.hpp"
 
 #define TESTED_TYPE int
-#define TESTED_NAMESPACE ft
+#define TESTED_NAMESPACE std
 
-void trash()
+int trash()
 {
-    ft::vector<int> v(5, 5);
+    TESTED_NAMESPACE::vector<int> v(5, 5);
   
     try
     {
-        v.clear();
-        PRINT(v.size());
-        PRINT(v.capacity());
-        PRINT(v[0]);
+        TESTED_NAMESPACE::vector<int> v2(5, 5);
+        v2[4] = 53;
+        return (v == v2) ? 1 : 0;
     }
     catch(const std::exception& e)
     {
@@ -30,5 +29,5 @@ void trash()
 
 int main(void)
 {
-    trash();
+    return trash();
 }

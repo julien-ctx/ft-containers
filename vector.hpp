@@ -106,6 +106,24 @@ public:
 		return *this;
 	}
 
+	/* 
+	friend keyword allows the function to become non-member of the class.
+	Thanks to this, the function becomes friend with ft::vector class.
+	Therefore it can access the private data of the class and compare the vectors.
+	It is needed by operator[] which access the underlying array directly.
+	*/
+	template<class Type, class Alloc>
+	friend bool operator==(const vector<Type, Alloc> &lhs,
+    	const vector<Type, Alloc> &rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return false;
+		size_type lhs_size = lhs.size();
+		for (size_type i = 0; i < lhs_size; i++)
+			if (lhs[i] != rhs[i])
+				return false;
+		return true;
+	}
 
 	/* -------------------------*/
 
