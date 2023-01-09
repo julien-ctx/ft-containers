@@ -70,9 +70,9 @@ public:
 	}
 
 	// Copy constructor
-	vector (const vector &x) : _alloc(Allocator()), _size(x.size()), _capacity(_size)
+	vector (const vector &x) : _alloc(Allocator()), _size(x.size()), _capacity(x.capacity())
 	{
-		_array = _alloc.allocate(_size);
+		_array = _alloc.allocate(_capacity);
 		for (size_type i = 0; i < _size; i++)
 			_alloc.construct(&_array[i], x[i]);
 	}
@@ -89,6 +89,23 @@ public:
 	/* ------ Overloads ------- */
 
 	reference operator[](size_type n) const {return _array[n];}
+
+	vector &operator=(const vector &other)
+	{
+		// Destroy and deallocate the previous data
+		for (size_type i = 0; i < _size; i++)
+			_alloc.destroy(&_array[i]);
+		_alloc.deallocate(_array, _capacity);
+
+		_capacity = other.capacity();
+		_size = other.size();
+
+		_array = _alloc.allocate(_capacity);
+		for (size_type i = 0; i < _size; i++)
+			_alloc.construct(&_array[i], other[i]);
+		return *this;
+	}
+
 
 	/* -------------------------*/
 
@@ -123,6 +140,23 @@ public:
 	bool empty() const {return !_size;}
 
 	size_type capacity() const {return _capacity;}
+
+	void reserve(size_type new_cap)
+	{
+		if (new_cap > max_size())
+			throw std::length_error("New cap too big");
+		if (new_cap > _capacity)
+		{
+			T* new_array = _alloc.allocate(new_cap);
+			_capacity = new_cap;
+			for (size_type i = 0; i < _size; i++)
+				_alloc.construct(&new_array[i], _array[i]);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.destroy(&_array[i]);
+			_alloc.deallocate(_array, _capacity);
+			_array = new_array;	
+		}
+	}
 
 };
 
