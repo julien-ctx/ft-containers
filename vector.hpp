@@ -92,7 +92,7 @@ public:
 
 	vector &operator=(const vector &other)
 	{
-		// Destroy and deallocate the previous data
+		// Destroys and deallocates the previous data
 		for (size_type i = 0; i < _size; i++)
 			_alloc.destroy(&_array[i]);
 		_alloc.deallocate(_array, _capacity);
@@ -144,7 +144,7 @@ public:
 	void reserve(size_type new_cap)
 	{
 		if (new_cap > max_size())
-			throw std::length_error("New cap too big");
+			throw std::bad_alloc();
 		if (new_cap > _capacity)
 		{
 			T* new_array = _alloc.allocate(new_cap);
@@ -157,6 +157,8 @@ public:
 			_array = new_array;	
 		}
 	}
+
+	void clear() {while (--_size) _alloc.destroy(&_array[_size]);}
 
 };
 
