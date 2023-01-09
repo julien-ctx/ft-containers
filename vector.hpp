@@ -120,6 +120,8 @@ public:
 
 	size_type max_size() const {return _alloc.max_size();}
 
+	bool empty() const {return !_size;}
+
 	size_type capacity() const {return _capacity;}
 
 };

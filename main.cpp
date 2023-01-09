@@ -9,8 +9,8 @@
 
 int main(void)
 {
-    ft::vector<int> v(5, 55);
-    PRINT(v[4]);
+    ft::vector<int> v(5, 5);
+    PRINT(v.empty());
     // TESTED_NAMESPACE::vector<TESTED_TYPE> v(5, 5);
     // PRINT(v[2]);
     
