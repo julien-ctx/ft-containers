@@ -125,6 +125,17 @@ public:
 		return true;
 	}
 
+	template< class Type, class Alloc >
+	friend bool operator!=(const std::vector<Type, Alloc> &lhs,
+    	const std::vector<Type, Alloc> &rhs) {return !operator==(lhs, rhs);}
+
+	// template< class Type, class Alloc >
+	// friend bool operator<(const std::vector<Type, Alloc> &lhs,
+    // 	const std::vector<Type, Alloc> &rhs)
+	// {
+
+	// }
+
 	/* -------------------------*/
 
 	reference at(size_type n)
@@ -177,6 +188,22 @@ public:
 	}
 
 	void clear() {while (--_size) _alloc.destroy(&_array[_size]);}
+
+	// Maybe I could have used erase...
+	void resize(size_type count, T value = T())
+	{
+		if (count > _size)
+		{
+			reserve(count);
+			for (size_t i = _size; i < _capacity; i++)
+				_alloc.construct(&_array[i], value);
+			_size = count;
+		}
+		else
+			while (--_size != count)
+				_alloc.destroy(&_array[_size]);
+	}
+
 
 };
 

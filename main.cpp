@@ -13,9 +13,12 @@ int trash()
   
     try
     {
-        TESTED_NAMESPACE::vector<int> v2(5, 5);
-        v2[4] = 53;
-        return (v == v2) ? 1 : 0;
+        v.resize(10);
+        PRINT(v.capacity());
+        PRINT(v.size());
+        NL();
+        for (size_t i = 0; i < v.size(); i++)
+            std::cout << v[i] << std::endl;
     }
     catch(const std::exception& e)
     {
@@ -23,7 +26,7 @@ int trash()
     }
     
 
-
+    return false;
 
 }
 
