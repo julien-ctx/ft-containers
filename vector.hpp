@@ -204,6 +204,12 @@ public:
 				_alloc.destroy(&_array[_size]);
 	}
 
+	void pop_back() {_alloc.destroy(&_array[_size-- - 1]);}
+
+	void swap(vector &other)
+	{
+		
+	}
 
 };
 

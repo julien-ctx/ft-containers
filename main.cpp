@@ -5,15 +5,15 @@
 #include "utils/reverse_iterator.hpp"
 
 #define TESTED_TYPE int
-#define TESTED_NAMESPACE std
+#define TESTED_NAMESPACE ft
 
 int trash()
 {
-    TESTED_NAMESPACE::vector<int> v(5, 5);
+    TESTED_NAMESPACE::vector<int> v;
   
     try
     {
-        v.resize(10);
+        v.pop_back();
         PRINT(v.capacity());
         PRINT(v.size());
         NL();
