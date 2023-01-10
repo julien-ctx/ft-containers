@@ -11,6 +11,7 @@
 #include "utils/reverse_iterator.hpp"
 #include "utils/iterator_traits.hpp"
 #include "utils/enable_if.hpp"
+#include "utils/random_access_iterator.hpp"
 
 namespace ft
 {
