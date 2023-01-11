@@ -163,13 +163,13 @@ public:
 
 	const_reference back() const {return operator[](_size - 1);}
 
-	iterator end() {return ft::random_access_iterator<T>(&_array[_size - 1]);}
+	iterator end() {return iterator(&_array[_size]);}
 	
-	const_iterator end() const {return ft::random_access_iterator<T>(&_array[_size - 1]);}
+	const_iterator end() const {return const_iterator(&_array[_size]);}
 
-	iterator begin() {return ft::random_access_iterator<T>(&_array[0]);}
+	iterator begin() {return iterator(_array);}
 	
-	const_iterator begin() const {return ft::random_access_iterator<T>(&_array[0]);}
+	const_iterator begin() const {return const_iterator(_array);}
 
 	size_type size() const {return _size;}
 
