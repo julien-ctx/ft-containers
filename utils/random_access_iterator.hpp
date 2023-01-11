@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdlib>
 #include "bidirectional_iterator.hpp"
 #include "iterator_traits.hpp"
 
@@ -40,6 +41,12 @@ public:
 		this->_curr -= n;
 		return *this;
 	}
+
+	random_access_iterator operator+(difference_type n) {return operator+=(n);}
+	
+	random_access_iterator operator-(difference_type n) {return operator-=(n);}
+
+	difference_type operator-(random_access_iterator<T> &rhs) {return std::abs(*this->_curr - *rhs);}
 
 	reference operator[](difference_type n) const {return this->_curr[n];}
 
