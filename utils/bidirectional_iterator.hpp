@@ -14,7 +14,7 @@ class bidirectional_iterator
 {
 
 protected:
-	T* _curr;
+	T *_curr;
 
 public:
 

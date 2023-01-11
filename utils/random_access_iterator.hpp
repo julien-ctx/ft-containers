@@ -41,7 +41,7 @@ public:
 		return *this;
 	}
 
-	reference operator[](difference_type n) const {return *(this->_curr - n - 1);}
+	reference operator[](difference_type n) const {return this->_curr[n];}
 
 };	
 

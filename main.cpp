@@ -48,7 +48,10 @@ int             main(void)
 
         for (int i = 2; i < start_size; ++i)
                 it[i] = (start_size - i) * 3;
-        printSize(vct, true);
+        for (size_t i = 0; i < vct.size(); i++)
+            std::cout << vct[i] << std::endl;
+        // printSize(vct, true);
+        exit(1);
 
         vct.resize(10, 42);
         printSize(vct, true);
