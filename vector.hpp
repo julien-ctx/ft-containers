@@ -216,7 +216,12 @@ public:
 	void push_back(const value_type &val)
 	{
 		if (_size == _capacity)
-			reserve(_capacity * 2 <= max_size() ? _capacity * 2 : max_size());
+		{
+			if (_capacity)
+				reserve(_capacity * 2 <= max_size() ? _capacity * 2 : max_size());
+			else
+				reserve(1 * sizeof(value_type));
+		}
 		_alloc.construct(&_array[_size++], val);
 	}
 

@@ -74,7 +74,7 @@ public:
 	
 	random_access_iterator operator-(difference_type n) {return operator-=(n);}
 
-	difference_type operator-(random_access_iterator<T> &rhs) {return std::abs(*this->_curr - *rhs);}
+	difference_type operator-(random_access_iterator<T> &rhs) {return this->_curr - rhs._curr;}
 
 	reference operator[](difference_type n) const {return this->_curr[n];}
 

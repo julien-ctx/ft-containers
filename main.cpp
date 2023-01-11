@@ -9,7 +9,6 @@
 
 
 
-#define TESTED_TYPE int
 
 #define T_SIZE_TYPE typename TESTED_NAMESPACE::vector<T>::size_type
 
@@ -35,39 +34,32 @@ void    printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = t
         std::cout << "###############################################" << std::endl;
 }
 
+
+#define TESTED_TYPE std::string
+
 int             main(void)
 {
-        TESTED_NAMESPACE::vector<TESTED_TYPE> vct(5);
-        TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin(), ite = vct.end();
+        TESTED_NAMESPACE::vector<TESTED_TYPE> vct(8);
+        TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
+        TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
 
-        std::cout << "len: " << (ite - it) << std::endl;
-        for (; it != ite; ++it)
-                *it = (ite - it);
+        for (unsigned long int i = 0; i < vct.size(); ++i)
+                it[i] = std::string((vct.size() - i), i + 65);
+        printSize(vct, true);
 
-        it = vct.begin();
-        TESTED_NAMESPACE::vector<TESTED_TYPE> vct_range(it, --(--ite));
-        for (int i = 0; it != ite; ++it)
-                *it = ++i * 5;
+        std::cout << "push_back():\n" << std::endl;
 
-        it = vct.begin();
-        TESTED_NAMESPACE::vector<TESTED_TYPE> vct_copy(vct);
-        for (int i = 0; it != ite; ++it)
-                *it = ++i * 7;
-        vct_copy.push_back(42);
-        vct_copy.push_back(21);
+        vct.push_back("One long string");
+        vct2.push_back("Another long string");
 
-        std::cout << "\t-- PART ONE --" << std::endl;
         printSize(vct);
-        printSize(vct_range);
-        printSize(vct_copy);
+        printSize(vct2);
 
-        vct = vct_copy;
-        vct_copy = vct_range;
-        vct_range.clear();
+        vct.pop_back();
+        vct2.pop_back();
 
-        std::cout << "\t-- PART TWO --" << std::endl;
         printSize(vct);
-        printSize(vct_range);
-        printSize(vct_copy);
+        printSize(vct2);
+
         return (0);
 }
