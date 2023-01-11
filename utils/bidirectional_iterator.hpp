@@ -62,6 +62,7 @@ public:
 		_curr++;
 		return tmp;
 	}
+	
 	bidirectional_iterator &operator--()
 	{
 		--_curr;

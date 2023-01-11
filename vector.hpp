@@ -60,7 +60,7 @@ public:
 	// Range constructor
 	template<class InputIterator>
 	vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
-		typename ft::enable_if< !ft::is_integral<InputIterator>::value, bool>::type = false) : _alloc(alloc)
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value, bool>::type = false) : _alloc(alloc)
 	{
 		size_type dist = ft::distance<InputIterator>(first, last);
 		_array = _alloc.allocate(dist);
@@ -212,6 +212,14 @@ public:
 			while (--_size != count)
 				_alloc.destroy(&_array[_size]);
 	}
+
+	void push_back(const value_type &val)
+	{
+		if (_size == _capacity)
+			reserve(_capacity * 2 <= max_size() ? _capacity * 2 : max_size());
+		_alloc.construct(&_array[_size++], val);
+	}
+
 
 	void pop_back() {_alloc.destroy(&_array[_size-- - 1]);}
 

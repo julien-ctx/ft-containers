@@ -42,6 +42,34 @@ public:
 		return *this;
 	}
 
+	random_access_iterator &operator++()
+	{
+		++this->_curr;
+		return *this;
+	}
+	// Suffix
+	// Returns a copy of the value and increments it later
+	random_access_iterator operator++(int)
+	{
+		random_access_iterator tmp = *this;
+		this->_curr++;
+		return tmp;
+	}
+
+	random_access_iterator &operator--()
+	{
+		--this->_curr;
+		return *this;
+	}
+	// Suffix
+	// Returns a copy of the value and decrements it later
+	random_access_iterator operator--(int)
+	{
+		random_access_iterator tmp = *this;
+		this->_curr--;
+		return tmp;
+	}
+
 	random_access_iterator operator+(difference_type n) {return operator+=(n);}
 	
 	random_access_iterator operator-(difference_type n) {return operator-=(n);}
