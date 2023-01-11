@@ -29,16 +29,15 @@ public:
 	explicit reverse_iterator(Iter x) : _curr(x) {}
 
 	// Copy constructor from an already existing reverse iterator.
-	template <class T>
-	reverse_iterator (const reverse_iterator<T> &rev_it) : _curr(rev_it._curr) {}
+	reverse_iterator (const reverse_iterator<Iter> &rev_it) : _curr(rev_it._curr) {}
 
 	// Destructor
 	~reverse_iterator() {}
 	/* -------------------------*/
 
 	/* ------ Overloads ------- */	
-	template<class U>
-	reverse_iterator &operator=(const reverse_iterator<U> &rhs)
+	
+	reverse_iterator &operator=(const reverse_iterator<Iter> &rhs)
 	{
 		if (this != &rhs)
 			_curr = rhs._curr;

@@ -27,9 +27,8 @@ public:
 	typedef typename Allocator::const_reference const_reference;
 	typedef typename Allocator::pointer pointer;
 	typedef typename Allocator::const_pointer const_pointer;
-	// The following two typedefs need to be edited are replaced by my implementation
-	typedef typename std::iterator<std::random_access_iterator_tag, value_type> iterator;
-	typedef typename std::iterator<std::random_access_iterator_tag, const value_type> const_iterator;
+	typedef typename ft::random_access_iterator<T> iterator;
+	typedef typename ft::random_access_iterator<T> const_iterator;
 	typedef typename ft::reverse_iterator<iterator> reverse_iterator;
 	typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 	typedef std::size_t size_type;
