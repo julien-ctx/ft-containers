@@ -13,7 +13,7 @@ template <class T>
 class bidirectional_iterator
 {
 
-private:
+protected:
 	T* _curr;
 
 public:
@@ -26,6 +26,8 @@ public:
 	
 	/* ----- Constructors ----- */
 	bidirectional_iterator() {}
+
+	bidirectional_iterator(T *ptr) : _curr(ptr) {}
 
 	bidirectional_iterator (const bidirectional_iterator<T> &it) : _curr(it._curr) {}
 

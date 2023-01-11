@@ -5,7 +5,7 @@
 #include "utils/reverse_iterator.hpp"
 
 #define TESTED_TYPE int
-#define TESTED_NAMESPACE std
+#define TESTED_NAMESPACE ft
 
 int main()
 {
@@ -13,9 +13,6 @@ int main()
     std::vector<int> v(5, 5);
     try
     {
-        TESTED_NAMESPACE::vector<int>::iterator it = v.begin();
-        it += 1;
-        std::cout << *it << std::endl;
     }
     catch(const std::exception& e)
     {

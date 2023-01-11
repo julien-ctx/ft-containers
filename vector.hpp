@@ -12,6 +12,7 @@
 #include "utils/iterator_traits.hpp"
 #include "utils/enable_if.hpp"
 #include "utils/random_access_iterator.hpp"
+#include "utils/is_integral.hpp"
 
 namespace ft
 {
@@ -28,7 +29,7 @@ public:
 	typedef typename Allocator::pointer pointer;
 	typedef typename Allocator::const_pointer const_pointer;
 	typedef typename ft::random_access_iterator<T> iterator;
-	typedef typename ft::random_access_iterator<T> const_iterator;
+	typedef typename ft::random_access_iterator<const T> const_iterator;
 	typedef typename ft::reverse_iterator<iterator> reverse_iterator;
 	typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 	typedef std::size_t size_type;
@@ -162,6 +163,14 @@ public:
 
 	const_reference back() const {return operator[](_size - 1);}
 
+	iterator end() {return ft::random_access_iterator<T>(&_array[_size - 1]);}
+	
+	const_iterator end() const {return ft::random_access_iterator<T>(&_array[_size - 1]);}
+
+	iterator begin() {return ft::random_access_iterator<T>(&_array[0]);}
+	
+	const_iterator begin() const {return ft::random_access_iterator<T>(&_array[0]);}
+
 	size_type size() const {return _size;}
 
 	size_type max_size() const {return _alloc.max_size();}
@@ -205,11 +214,6 @@ public:
 	}
 
 	void pop_back() {_alloc.destroy(&_array[_size-- - 1]);}
-
-	void swap(vector &other)
-	{
-		
-	}
 
 };
 
