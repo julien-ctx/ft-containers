@@ -25,7 +25,10 @@ public:
 
 	random_access_iterator(T *ptr) {this->_curr = ptr;}
 
-	random_access_iterator (const random_access_iterator<T> &it) {this->_curr = it._curr;}
+	random_access_iterator (const random_access_iterator &it) {this->_curr = it._curr;}
+
+	template<class U>
+	random_access_iterator (const random_access_iterator<U> &it) {this->_curr = it._curr;}
 
 	~random_access_iterator() {}
 	/* -------------------------*/
@@ -74,7 +77,7 @@ public:
 	
 	random_access_iterator operator-(difference_type n) {return operator-=(n);}
 
-	difference_type operator-(random_access_iterator<T> &rhs) {return this->_curr - rhs._curr;}
+	difference_type operator-(random_access_iterator &rhs) {return this->_curr - rhs._curr;}
 
 	reference operator[](difference_type n) const {return this->_curr[n];}
 

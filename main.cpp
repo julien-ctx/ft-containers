@@ -35,31 +35,34 @@ void    printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = t
 }
 
 
-#define TESTED_TYPE std::string
+#define TESTED_TYPE int
 
-int             main(void)
+int main(void)
 {
-        TESTED_NAMESPACE::vector<TESTED_TYPE> vct(8);
-        TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
-        TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin();
+        const int size = 5;
+        TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
+        TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it_ = vct.begin();
+        TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it(it_);
 
-        for (unsigned long int i = 0; i < vct.size(); ++i)
-                it[i] = std::string((vct.size() - i), i + 65);
-        printSize(vct, true);
-
-        std::cout << "push_back():\n" << std::endl;
-
-        vct.push_back("One long string");
-        vct2.push_back("Another long string");
-
+        for (int i = 0; i < size; ++i)
+                vct[i] = (i + 1) * 5;
         printSize(vct);
-        printSize(vct2);
 
-        vct.pop_back();
-        vct2.pop_back();
+        std::cout << (it_ == it.base()) << std::endl;
+        std::cout << (it_ == (it + 3).base()) << std::endl;
 
-        printSize(vct);
-        printSize(vct2);
+        std::cout << *(it.base() + 1) << std::endl;
+        std::cout << *(it - 3) << std::endl;
+        std::cout << *(it - 3).base() << std::endl;
+        it -= 3;
+        std::cout << *it.base() << std::endl;
+
+        std::cout << "TEST OFFSET" << std::endl;
+        std::cout << *(it) << std::endl;
+        std::cout << *(it).base() << std::endl;
+        std::cout << *(it - 0) << std::endl;
+        std::cout << *(it - 0).base() << std::endl;
+        std::cout << *(it - 1).base() << std::endl;
 
         return (0);
 }

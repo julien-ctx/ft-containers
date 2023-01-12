@@ -1,6 +1,8 @@
 #pragma once
 
 #include "iterator_traits.hpp"
+#include "bidirectional_iterator.hpp"
+#include "random_access_iterator.hpp"
 
 namespace ft
 {
@@ -29,7 +31,11 @@ public:
 	explicit reverse_iterator(Iter x) : _curr(x) {}
 
 	// Copy constructor from an already existing reverse iterator.
-	reverse_iterator (const reverse_iterator<Iter> &rev_it) : _curr(rev_it._curr) {}
+	reverse_iterator (const reverse_iterator &rev_it) : _curr(rev_it._curr) {}
+
+	// Copy constructor from an already existing reverse iterator, but another type. This is useful for const types.
+	template<class U>
+	reverse_iterator (const reverse_iterator<U> &rev_it) : _curr(rev_it._curr) {}
 
 	// Destructor
 	~reverse_iterator() {}
@@ -37,7 +43,7 @@ public:
 
 	/* ------ Overloads ------- */	
 	
-	reverse_iterator &operator=(const reverse_iterator<Iter> &rhs)
+	reverse_iterator &operator=(const reverse_iterator &rhs)
 	{
 		if (this != &rhs)
 			_curr = rhs._curr;
@@ -46,7 +52,7 @@ public:
 
 	reference operator*() const
 	{
-		Iter tmp = _curr - 1;
+		Iter tmp = base() - 1;
 		return *tmp;
 	}
 
@@ -83,9 +89,9 @@ public:
 		return tmp;
 	}
 
-	reverse_iterator operator+(difference_type n) const {return reverse_iterator(_curr - n);}
+	reverse_iterator operator+(difference_type n) const {return reverse_iterator(base() - n);}
 
-	reverse_iterator operator-(difference_type n) const {return reverse_iterator(_curr + n);}
+	reverse_iterator operator-(difference_type n) const {return reverse_iterator(base() + n);}
 
 	reverse_iterator &operator+=(difference_type n)
 	{

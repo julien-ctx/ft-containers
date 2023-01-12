@@ -29,7 +29,10 @@ public:
 
 	bidirectional_iterator(T *ptr) : _curr(ptr) {}
 
-	bidirectional_iterator (const bidirectional_iterator<T> &it) : _curr(it._curr) {}
+	bidirectional_iterator (const bidirectional_iterator &it) : _curr(it._curr) {}
+
+	template<class U>
+	bidirectional_iterator (const bidirectional_iterator<U> &it) : _curr(it._curr) {}
 
 	~bidirectional_iterator() {}
 	/* -------------------------*/
@@ -37,7 +40,7 @@ public:
 	/* ------ Overloads ------- */
 
 
-	bidirectional_iterator &operator=(const bidirectional_iterator<T> &rhs)
+	bidirectional_iterator &operator=(const bidirectional_iterator &rhs)
 	{
 		if (this != &rhs)
 			_curr = rhs._curr;
@@ -77,11 +80,11 @@ public:
 		return tmp;
 	}
 
-	friend bool operator==(const bidirectional_iterator<T> &lhs,
-		const bidirectional_iterator<T> &rhs) {return lhs._curr == rhs._curr;}
+	friend bool operator==(const bidirectional_iterator &lhs,
+		const bidirectional_iterator &rhs) {return lhs._curr == rhs._curr;}
 
-	friend bool operator!=(const bidirectional_iterator<T> &lhs,
-		const bidirectional_iterator<T> &rhs) {return !operator==(lhs, rhs);}
+	friend bool operator!=(const bidirectional_iterator &lhs,
+		const bidirectional_iterator &rhs) {return !operator==(lhs, rhs);}
 	
 	/* -------------------------*/
 };
