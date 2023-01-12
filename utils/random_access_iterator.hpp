@@ -25,10 +25,10 @@ public:
 
 	random_access_iterator(T *ptr) {this->_curr = ptr;}
 
-	random_access_iterator (const random_access_iterator &it) {this->_curr = it.getCurr();}
+	random_access_iterator (const random_access_iterator &it) {this->_curr = it.operator->();}
 
 	template<class U>
-	random_access_iterator (const random_access_iterator<U> &it) {this->_curr = it.getCurr();}
+	random_access_iterator (const random_access_iterator<U> &it) {this->_curr = it.operator->();}
 
 	~random_access_iterator() {}
 	/* -------------------------*/

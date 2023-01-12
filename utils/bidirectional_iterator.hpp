@@ -88,7 +88,6 @@ public:
 	
 	/* -------------------------*/
 
-	T* getCurr() const {return _curr;}
 };
 
 }
