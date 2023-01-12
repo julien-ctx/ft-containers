@@ -49,16 +49,16 @@ int             main(void)
 
         it = it + 5;
         it = 1 + it;
-        // it = it - 4;
-        // std::cout << *(it += 2) << std::endl;
-        // std::cout << *(it -= 1) << std::endl;
+        it = it - 4;
+        std::cout << *(it += 2) << std::endl;
+        std::cout << *(it -= 1) << std::endl;
 
-        // *(it -= 2) = 42;
-        // *(it += 2) = 21;
+        *(it -= 2) = 42;
+        *(it += 2) = 21;
 
-        // std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+        std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
 
-        // std::cout << "(it == const_it): " << (ite == it) << std::endl;
+        std::cout << "(it == const_it): " << (ite == it) << std::endl;
         // std::cout << "(const_ite - it): " << (ite - it) << std::endl;
         // std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
 

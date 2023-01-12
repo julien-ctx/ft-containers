@@ -215,17 +215,19 @@ public:
 
 	void push_back(const value_type &val)
 	{
+		size_type cx2 = _capacity * 2;
 		if (_size == _capacity)
-		{
-			if (_capacity)
-				reserve(_capacity * 2 <= max_size() ? _capacity * 2 : max_size());
-			else
-				reserve(1 * sizeof(value_type));
-		}
+			_capacity ? (reserve(cx2 <= max_size() ? cx2 : max_size())) : reserve(1);
 		_alloc.construct(&_array[_size++], val);
 	}
 
 	reverse_iterator rbegin() {return reverse_iterator(&_array[_size - 1]);}
+
+	reverse_iterator rend() {return reverse_iterator(_array);}
+
+	const_reverse_iterator rbegin() const {return reverse_iterator(&_array[_size - 1]);}
+	
+	const_reverse_iterator rend() const {return reverse_iterator(_array);}
 
 	void pop_back() {_alloc.destroy(&_array[_size-- - 1]);}
 

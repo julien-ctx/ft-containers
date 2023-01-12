@@ -110,6 +110,31 @@ public:
 		_curr += n;
 		return *this;
 	}
+
+	template<class Iterator1, class Iterator2>
+	friend bool operator==(const reverse_iterator<Iterator1> &lhs,
+		const reverse_iterator<Iterator2> &rhs) {return (rhs.base() == lhs.base());}
+
+	template<class Iterator1, class Iterator2>
+	friend bool operator!=(const reverse_iterator<Iterator1> &lhs,
+		const reverse_iterator<Iterator2> &rhs) {return !operator==(lhs, rhs);}
+
+	template<class Iterator1, class Iterator2>
+	friend bool operator>(const reverse_iterator<Iterator1> &lhs,
+		const reverse_iterator<Iterator2> &rhs) {return rhs.base() > lhs.base();}
+	
+	template<class Iterator1, class Iterator2>
+	friend bool operator<(const reverse_iterator<Iterator1> &lhs,
+		const reverse_iterator<Iterator2> &rhs) {return rhs.base() < lhs.base();}
+
+	template<class Iterator1, class Iterator2>
+	friend bool operator>=(const reverse_iterator<Iterator1> &lhs,
+		const reverse_iterator<Iterator2> &rhs) {return rhs.base() >= lhs.base();}
+
+	template<class Iterator1, class Iterator2>
+	friend bool operator<=(const reverse_iterator<Iterator1> &lhs,
+		const reverse_iterator<Iterator2> &rhs) {return rhs.base() <= lhs.base();}
+
 	/* -------------------------*/
 
 	iterator_type base() const {return _curr;}
