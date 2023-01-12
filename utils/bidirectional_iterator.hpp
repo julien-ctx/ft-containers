@@ -87,6 +87,8 @@ public:
 		const bidirectional_iterator &rhs) {return !operator==(lhs, rhs);}
 	
 	/* -------------------------*/
+
+	T* getCurr() const {return _curr;}
 };
 
 }

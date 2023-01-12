@@ -225,6 +225,7 @@ public:
 		_alloc.construct(&_array[_size++], val);
 	}
 
+	reverse_iterator rbegin() {return reverse_iterator(&_array[_size - 1]);}
 
 	void pop_back() {_alloc.destroy(&_array[_size-- - 1]);}
 

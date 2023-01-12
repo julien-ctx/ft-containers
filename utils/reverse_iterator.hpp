@@ -31,11 +31,11 @@ public:
 	explicit reverse_iterator(Iter x) : _curr(x) {}
 
 	// Copy constructor from an already existing reverse iterator.
-	reverse_iterator (const reverse_iterator &rev_it) : _curr(rev_it._curr) {}
+	reverse_iterator (const reverse_iterator &rev_it) : _curr(rev_it.base()) {}
 
 	// Copy constructor from an already existing reverse iterator, but another type. This is useful for const types.
 	template<class U>
-	reverse_iterator (const reverse_iterator<U> &rev_it) : _curr(rev_it._curr) {}
+	reverse_iterator (const reverse_iterator<U> &rev_it) : _curr(rev_it.base()) {}
 
 	// Destructor
 	~reverse_iterator() {}
@@ -58,7 +58,7 @@ public:
 
 	pointer operator->() const {return &(operator*());}
 
-	reference operator[](difference_type n) const {return *(_curr - n - 1);}
+	reference operator[](difference_type n) const {return *(base() - n - 1);}
 
 	// Prefix
 	reverse_iterator &operator++()
@@ -92,6 +92,12 @@ public:
 	reverse_iterator operator+(difference_type n) const {return reverse_iterator(base() - n);}
 
 	reverse_iterator operator-(difference_type n) const {return reverse_iterator(base() + n);}
+
+	template<class U>
+	friend reverse_iterator<U> operator+(difference_type n, const reverse_iterator<U> &it) {return it + n;}
+
+	template<class U>
+	friend reverse_iterator<U> operator-(difference_type n, const reverse_iterator<U> &it) {return it - n;}
 
 	reverse_iterator &operator+=(difference_type n)
 	{
