@@ -63,5 +63,5 @@ int             main(void)
         // std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
 
         // printSize(vct, true);
-        // return (0);
+        return (0);
 }

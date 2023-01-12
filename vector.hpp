@@ -221,13 +221,13 @@ public:
 		_alloc.construct(&_array[_size++], val);
 	}
 
-	reverse_iterator rbegin() {return reverse_iterator(&_array[_size - 1]);}
+	reverse_iterator rbegin() {return reverse_iterator(iterator(&_array[_size]));}
 
-	reverse_iterator rend() {return reverse_iterator(_array);}
+	reverse_iterator rend() {return reverse_iterator(iterator(_array));}
 
-	const_reverse_iterator rbegin() const {return reverse_iterator(&_array[_size - 1]);}
+	const_reverse_iterator rbegin() const {return reverse_iterator(iterator(&_array[_size]));}
 	
-	const_reverse_iterator rend() const {return reverse_iterator(_array);}
+	const_reverse_iterator rend() const {return reverse_iterator(iterator(_array));}
 
 	void pop_back() {_alloc.destroy(&_array[_size-- - 1]);}
 

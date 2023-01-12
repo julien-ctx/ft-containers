@@ -43,10 +43,11 @@ public:
 
 	/* ------ Overloads ------- */	
 	
-	reverse_iterator &operator=(const reverse_iterator &rhs)
+	template <class U>
+	reverse_iterator &operator=(const reverse_iterator<U> &rhs)
 	{
 		if (this != &rhs)
-			_curr = rhs._curr;
+			_curr = rhs.base();
 		return *this;
 	}
 
@@ -89,6 +90,7 @@ public:
 		return tmp;
 	}
 
+	
 	reverse_iterator operator+(difference_type n) const {return reverse_iterator(base() - n);}
 
 	reverse_iterator operator-(difference_type n) const {return reverse_iterator(base() + n);}
@@ -113,7 +115,7 @@ public:
 
 	template<class Iterator1, class Iterator2>
 	friend bool operator==(const reverse_iterator<Iterator1> &lhs,
-		const reverse_iterator<Iterator2> &rhs) {return (rhs.base() == lhs.base());}
+		const reverse_iterator<Iterator2> &rhs) {return rhs.base() == lhs.base();}
 
 	template<class Iterator1, class Iterator2>
 	friend bool operator!=(const reverse_iterator<Iterator1> &lhs,
