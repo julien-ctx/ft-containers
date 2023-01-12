@@ -42,8 +42,7 @@ public:
 	template <class U>
 	bidirectional_iterator &operator=(const bidirectional_iterator<U> &rhs)
 	{
-		if (this != &rhs)
-			_curr = rhs.operator->();
+		_curr = rhs.operator->();
 		return *this;
 	}
 
@@ -80,14 +79,16 @@ public:
 		return tmp;
 	}
 
-	friend bool operator==(const bidirectional_iterator &lhs,
-		const bidirectional_iterator &rhs) {return lhs._curr == rhs._curr;}
-
-	friend bool operator!=(const bidirectional_iterator &lhs,
-		const bidirectional_iterator &rhs) {return !operator==(lhs, rhs);}
-	
 	/* -------------------------*/
 
 };
+
+template<class Iterator1, class Iterator2>
+bool operator==(const bidirectional_iterator<Iterator1> &lhs,
+	const bidirectional_iterator<Iterator2> &rhs) {return lhs.operator->() == rhs.operator->();}
+
+template<class Iterator1, class Iterator2>
+bool operator!=(const bidirectional_iterator<Iterator1> &lhs,
+	const bidirectional_iterator<Iterator2> &rhs) {return !operator==(lhs, rhs);}
 
 }
