@@ -13,7 +13,7 @@ template <class T>
 class bidirectional_iterator
 {
 
-protected:
+private:
 	T *_curr;
 
 public:
