@@ -116,6 +116,6 @@ random_access_iterator<Iter> operator-(difference_type n, const random_access_it
 
 template<class Iterator1, class Iterator2>
 difference_type operator-(const random_access_iterator<Iterator1> &lhs, const random_access_iterator<Iterator2> &rhs)
-{return lhs - rhs;}
+{return lhs.operator->() - rhs.operator->();}
 
 }
