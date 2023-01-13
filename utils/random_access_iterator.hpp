@@ -21,7 +21,6 @@ public:
 	typedef std::ptrdiff_t difference_type;
 	typedef ft::random_access_iterator_tag iterator_category;
 
-
 	/* ----- Constructors ----- */
 	random_access_iterator() {}
 
@@ -115,7 +114,27 @@ random_access_iterator<Iter> operator-(difference_type n, const random_access_it
 {return random_access_iterator<Iter>(rhs.operator->() - n);}
 
 template<class Iterator1, class Iterator2>
+difference_type operator+(const random_access_iterator<Iterator1> &lhs, const random_access_iterator<Iterator2> &rhs)
+{return lhs.operator->() + rhs.operator->();}
+
+template<class Iterator1, class Iterator2>
 difference_type operator-(const random_access_iterator<Iterator1> &lhs, const random_access_iterator<Iterator2> &rhs)
 {return lhs.operator->() - rhs.operator->();}
+
+template<class Iterator1, class Iterator2>
+bool operator>(const random_access_iterator<Iterator1> &lhs,
+	const random_access_iterator<Iterator2> &rhs) {return lhs.operator->() > rhs.operator->();}
+
+template<class Iterator1, class Iterator2>
+bool operator<(const random_access_iterator<Iterator1> &lhs,
+	const random_access_iterator<Iterator2> &rhs) {return lhs.operator->() < rhs.operator->();}
+
+template<class Iterator1, class Iterator2>
+bool operator>=(const random_access_iterator<Iterator1> &lhs,
+	const random_access_iterator<Iterator2> &rhs) {return lhs.operator->() >= rhs.operator->();}
+
+template<class Iterator1, class Iterator2>
+bool operator<=(const random_access_iterator<Iterator1> &lhs,
+	const random_access_iterator<Iterator2> &rhs) {return lhs.operator->() <= rhs.operator->();}
 
 }
