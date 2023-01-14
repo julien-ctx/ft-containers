@@ -37,7 +37,6 @@ void    printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = t
         std::cout << "###############################################" << std::endl;
 }
 
-
 #define TEST std 
 int main()
 {
@@ -45,25 +44,20 @@ int main()
 
     // Initialize the vector with values
     myVector.push_back(1);
-    myVector.push_back(2);
     myVector.push_back(3);
+    // myVector.push_back(3);
 
-    std::cout << "Original vector: ";
-    for (TEST::vector<int>::iterator it = myVector.begin(); it != myVector.end(); ++it)
-        std::cout << *it << " ";
-    std::cout << std::endl;
-
-    // Assign the value 5 to all elements in the vector
-    myVector.assign(myVector.size() + 5, 5);
-        std::cout << myVector.size()  << std::endl;
-        std::cout << myVector.capacity()  << std::endl;
-
-    std::cout << "Vector after assign: ";
-    for (TEST::vector<int>::iterator it = myVector.begin(); it != myVector.end(); ++it)
-        std::cout << *it << " ";
-
-    std::cout << std::endl;
-
+    std::cout << "capacity before insert: " << myVector.capacity() << std::endl;
+	std::cout << std::endl;
+    std::cout << "return value " << *myVector.insert(myVector.begin() + 1, 6) << std::endl;
+	std::cout << std::endl;
+    std::cout << "capacity after insert: " << myVector.capacity() << std::endl;
+	std::cout << std::endl;
+    std::cout << "print vector:\n";
+	for (std::size_t i = 0; i < myVector.size(); i++)
+		std::cout << myVector[i] << " ";
+		std::cout << std::endl;
+	std::cout << std::endl;
     return 0;
 }
 

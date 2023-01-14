@@ -165,7 +165,7 @@ public:
 			throw std::bad_alloc();
 		if (new_cap > _capacity)
 		{
-			T* new_array = _alloc.allocate(new_cap);
+			T *new_array = _alloc.allocate(new_cap);
 			_capacity = new_cap;
 			for (size_type i = 0; i < _size; i++)
 				_alloc.construct(&new_array[i], _array[i]);
@@ -223,6 +223,54 @@ public:
 		for (size_type i = 0; i < count; i++, first++)
 			_alloc.construct(&_array[i], *first);
 	}
+
+	iterator insert(iterator position, const value_type &val)
+	{
+		// Save old capacity to deallocate and destroy the previous array
+		size_type old_capacity = _capacity;
+		if (_size == _capacity)
+			if ((_capacity *= 2) > max_size())
+				throw std::bad_alloc();
+		// If the position is end() and there is enough space, we don't reallocate
+		if (position == end())
+		{
+			if (_size <= _capacity)
+			{
+				_alloc.construct(&_array[_size++ - 1], val);
+				return iterator(end());
+			}
+		}
+		
+		T *new_array = _alloc.allocate(_capacity);
+		T *ptr = NULL; size_type i = 0;
+		_size++;
+		for (iterator it = begin(); it != end(); i++)
+		{
+			if (it == position && !ptr)
+			{
+				_alloc.construct(&new_array[i], val);
+				ptr = &new_array[i];
+			}
+			else
+				_alloc.construct(&new_array[i], *it++);
+		}
+		for (size_type i = 0; i < _size - 1; i++)
+			_alloc.destroy(&_array[i]);
+		_alloc.deallocate(_array, old_capacity);
+		_array = new_array;
+		return iterator(ptr);
+	}
+
+	// void insert(iterator position, size_type n, const value_type &val)
+	// {
+
+	// }
+
+	// template <class InputIterator>
+	// void insert(iterator position, InputIterator first, InputIterator last)
+	// {
+
+	// }
 
 };
 
