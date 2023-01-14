@@ -45,10 +45,25 @@ void    cmp(const TESTED_NAMESPACE::vector<T, Alloc> &lhs, const TESTED_NAMESPAC
         // std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
 }
 
-int             main(void)
+
+#include <algorithm>
+#include <string>
+
+struct MyComparator {
+    bool operator()(const char& a, const char& b) const {
+        return tolower(a) < tolower(b);
+    }
+};
+
+int main()
 {
-        std::string s1 = "salut";
-        std::string s2 = "salu";
-        std::cout << std::lexicographical_compare(s1.begin(), s1.end(), s2.begin(), s2.end()) << std::endl;
-        std::cout << ft::lexicographical_compare(s1.begin(), s1.end(), s2.begin(), s2.end()) << std::endl;
+    std::string s1 = "Hell";
+    std::string s2 = "Hello";
+
+    bool result = std::lexicographical_compare(s1.begin(), s1.end(), s2.begin(), s2.end(), MyComparator());
+    std::cout << result << std::endl;
+    result = ft::lexicographical_compare(s1.begin(), s1.end(), s2.begin(), s2.end(), MyComparator());
+    std::cout << result << std::endl;
+    return 0;
 }
+
