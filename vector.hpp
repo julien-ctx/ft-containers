@@ -13,6 +13,7 @@
 #include "utils/enable_if.hpp"
 #include "utils/random_access_iterator.hpp"
 #include "utils/is_integral.hpp"
+#include "utils/lexicographical_compare.hpp"
 
 namespace ft
 {
@@ -113,22 +114,7 @@ public:
 	Therefore it can access the private data of the class and compare the vectors.
 	It is needed by operator[] which access the underlying array directly.
 	*/
-	template<class Type, class Alloc>
-	friend bool operator==(const vector<Type, Alloc> &lhs,
-    	const vector<Type, Alloc> &rhs)
-	{
-		if (lhs.size() != rhs.size())
-			return false;
-		size_type lhs_size = lhs.size();
-		for (size_type i = 0; i < lhs_size; i++)
-			if (lhs[i] != rhs[i])
-				return false;
-		return true;
-	}
 
-	template< class Type, class Alloc >
-	friend bool operator!=(const std::vector<Type, Alloc> &lhs,
-    	const std::vector<Type, Alloc> &rhs) {return !operator==(lhs, rhs);}
 
 	/* -------------------------*/
 
@@ -226,20 +212,37 @@ public:
 
 };
 
-// template< class T, class Alloc >
-// bool operator<(const std::vector<T,Alloc> &lhs, const std::vector<T,Alloc> &rhs)
-// {return lhs < rhs;}
+template<class Type, class Alloc>
+bool operator==(const vector<Type, Alloc> &lhs,
+	const ft::vector<Type, Alloc> &rhs)
+{
+	if (lhs.size() != rhs.size())
+		return false;
+	size_type lhs_size = lhs.size();
+	for (size_type i = 0; i < lhs_size; i++)
+		if (lhs[i] != rhs[i])
+			return false;
+	return true;
+}
 
-// template< class T, class Alloc >
-// bool operator>(const std::vector<T,Alloc> &lhs, const std::vector<T,Alloc> &rhs)
-// {return lhs > rhs;}
+template< class Type, class Alloc >
+bool operator!=(const vector<Type, Alloc> &lhs,
+	const vector<Type, Alloc> &rhs) {return !operator==(lhs, rhs);}
 
-// template< class T, class Alloc >
-// bool operator<=(const std::vector<T,Alloc> &lhs, const std::vector<T,Alloc> &rhs)
-// {return lhs <= rhs;}
+template< class T, class Alloc >
+bool operator<(const std::vector<T,Alloc> &lhs, const std::vector<T,Alloc> &rhs)
+{return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());}
 
-// template< class T, class Alloc >
-// bool operator>=(const std::vector<T,Alloc> &lhs, const std::vector<T,Alloc> &rhs)
-// {return lhs >= rhs;}
+template< class T, class Alloc >
+bool operator>(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+{return !operator<(lhs, rhs) && !operator==(lhs, rhs);}
+
+template< class T, class Alloc >
+bool operator<=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+{return operator<(lhs, rhs) || operator==(lhs, rhs);}
+
+template< class T, class Alloc >
+bool operator>=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+{return operator>(lhs, rhs) || operator==(lhs, rhs);}
 
 }
