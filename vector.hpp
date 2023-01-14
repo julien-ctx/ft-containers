@@ -130,13 +130,6 @@ public:
 	friend bool operator!=(const std::vector<Type, Alloc> &lhs,
     	const std::vector<Type, Alloc> &rhs) {return !operator==(lhs, rhs);}
 
-	// template< class Type, class Alloc >
-	// friend bool operator<(const std::vector<Type, Alloc> &lhs,
-    // 	const std::vector<Type, Alloc> &rhs)
-	// {
-
-	// }
-
 	/* -------------------------*/
 
 	reference at(size_type n)
@@ -232,5 +225,21 @@ public:
 	void pop_back() {_alloc.destroy(&_array[_size-- - 1]);}
 
 };
+
+// template< class T, class Alloc >
+// bool operator<(const std::vector<T,Alloc> &lhs, const std::vector<T,Alloc> &rhs)
+// {return lhs < rhs;}
+
+// template< class T, class Alloc >
+// bool operator>(const std::vector<T,Alloc> &lhs, const std::vector<T,Alloc> &rhs)
+// {return lhs > rhs;}
+
+// template< class T, class Alloc >
+// bool operator<=(const std::vector<T,Alloc> &lhs, const std::vector<T,Alloc> &rhs)
+// {return lhs <= rhs;}
+
+// template< class T, class Alloc >
+// bool operator>=(const std::vector<T,Alloc> &lhs, const std::vector<T,Alloc> &rhs)
+// {return lhs >= rhs;}
 
 }

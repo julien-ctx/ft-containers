@@ -3,16 +3,11 @@
 #include "tools.hpp"
 
 #include "utils/reverse_iterator.hpp"
-
+#include "utils/lexicographical_compare.hpp"
 
 #define TESTED_NAMESPACE ft
 
-
-
-
 #define T_SIZE_TYPE typename TESTED_NAMESPACE::vector<T>::size_type
-
-
 
 template <typename T>
 void    printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true)
@@ -39,57 +34,21 @@ void    printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = t
 
 #define TESTED_TYPE int
 
-template <typename Ite_1, typename Ite_2>
-void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const bool redo = 1)
+template <class T, class Alloc>
+void    cmp(const TESTED_NAMESPACE::vector<T, Alloc> &lhs, const TESTED_NAMESPACE::vector<T, Alloc> &rhs)
 {
-        (void)redo;
-        std::cout << (first < second) << std::endl;
-        std::cout << (first <= second) << std::endl;
-        std::cout << (first > second) << std::endl;
-        std::cout << (first >= second) << std::endl;
-        if (redo)
-                ft_eq_ope(second, first, 0);
+        static int i = 0;
+
+        std::cout << "############### [" << i++ << "] ###############"  << std::endl;
+        std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
+        // std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
+        // std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
 }
 
 int             main(void)
 {
-        const int size = 5;
-        TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
-        TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it_0(vct.begin());
-        TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it_1(vct.end());
-        TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it_mid;
-
-        TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator cit_0 = vct.begin();
-        TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator cit_1;
-        TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator cit_mid;
-
-        for (int i = size; it_0 != it_1; --i)
-                *it_0++ = i;
-        printSize(vct, 1);
-        it_0 = vct.begin();
-        cit_1 = vct.end();
-        it_mid = it_0 + 3;
-        cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
-
-        std::cout << std::boolalpha;
-        std::cout << (it_0 + 3 == cit_0 + 3) /*&& (cit_0 + 3 == it_mid)) */ << std::endl;
-
-        std::cout << "\t\tft_eq_ope:" << std::endl;
-        // regular it
-        ft_eq_ope(it_0 + 3, it_mid);
-        ft_eq_ope(it_0, it_1);
-        ft_eq_ope(it_1 - 3, it_mid);
-        // const it
-        ft_eq_ope(cit_0 + 3, cit_mid);
-        ft_eq_ope(cit_0, cit_1);
-        ft_eq_ope(cit_1 - 3, cit_mid);
-        // both it
-        ft_eq_ope(it_0 + 3, cit_mid);
-        ft_eq_ope(it_mid, cit_0 + 3);
-        ft_eq_ope(it_0, cit_1);
-        ft_eq_ope(it_1, cit_0);
-        ft_eq_ope(it_1 - 3, cit_mid);
-        ft_eq_ope(it_mid, cit_1 - 3);
-
-        return (0);
+        std::string s1 = "salut";
+        std::string s2 = "salu";
+        std::cout << std::lexicographical_compare(s1.begin(), s1.end(), s2.begin(), s2.end()) << std::endl;
+        std::cout << ft::lexicographical_compare(s1.begin(), s1.end(), s2.begin(), s2.end()) << std::endl;
 }
