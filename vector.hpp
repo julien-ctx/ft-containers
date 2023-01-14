@@ -230,7 +230,7 @@ bool operator!=(const vector<Type, Alloc> &lhs,
 	const vector<Type, Alloc> &rhs) {return !operator==(lhs, rhs);}
 
 template< class T, class Alloc >
-bool operator<(const std::vector<T,Alloc> &lhs, const std::vector<T,Alloc> &rhs)
+bool operator<(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 {return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());}
 
 template< class T, class Alloc >
