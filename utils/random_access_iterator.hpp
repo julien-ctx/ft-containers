@@ -87,9 +87,9 @@ public:
 		return tmp;
 	}
 
-	random_access_iterator operator+(difference_type n) {return operator+=(n);}
+	random_access_iterator operator+(difference_type n) {return random_access_iterator(_curr + n);}
 	
-	random_access_iterator operator-(difference_type n) {return operator-=(n);}
+	random_access_iterator operator-(difference_type n) {return random_access_iterator(_curr - n);}
 
 	// difference_type operator-(random_access_iterator &rhs) {return this->_curr - rhs.operator->();}
 

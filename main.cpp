@@ -72,7 +72,7 @@ int             main(void)
         cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
 
         std::cout << std::boolalpha;
-        std::cout << (*(cit_0 + 1)) << std::endl;
+        std::cout << (it_0 + 3 == cit_0 + 3) /*&& (cit_0 + 3 == it_mid)) */ << std::endl;
 
         std::cout << "\t\tft_eq_ope:" << std::endl;
         // regular it
