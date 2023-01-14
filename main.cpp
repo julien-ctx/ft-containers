@@ -2,6 +2,10 @@
 
 #include "tools.hpp"
 
+#include <iostream>
+#include <vector>
+
+
 #include "utils/reverse_iterator.hpp"
 #include "utils/lexicographical_compare.hpp"
 
@@ -34,46 +38,32 @@ void    printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = t
 }
 
 
-// template <class T, class Alloc>
-// void    cmp(const TESTED_NAMESPACE::vector<T, Alloc> &lhs, const TESTED_NAMESPACE::vector<T, Alloc> &rhs)
-// {
-//         static int i = 0;
-
-//         std::cout << "############### [" << i++ << "] ###############"  << std::endl;
-//         std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
-//         // std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
-//         // std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
-// }
-
-// int             main(void)
-// {
-//         TESTED_NAMESPACE::vector<TESTED_TYPE> vct(4);
-//         TESTED_NAMESPACE::vector<TESTED_TYPE> vct2(4);
-
-//         cmp(vct, vct);  // 0
-//         cmp(vct, vct2); // 1
-
-//         vct2.resize(10);
-
-//         cmp(vct, vct2); // 2
-//         cmp(vct2, vct); // 3
-
-//         vct[2] = 42;
-
-//         cmp(vct, vct2); // 4
-//         cmp(vct2, vct); // 5
-
-//         swap(vct, vct2);
-
-//         cmp(vct, vct2); // 6
-//         cmp(vct2, vct); // 7
-
-//         return (0);
-// }
-
+#define TEST std 
 int main()
 {
-        ft::vector<int> v1(2);
-        ft::vector<int> v2(2);
-        std::cout << (v1 != v2) << std::endl;
+    TEST::vector<int> myVector;
+
+    // Initialize the vector with values
+    myVector.push_back(1);
+    myVector.push_back(2);
+    myVector.push_back(3);
+
+    std::cout << "Original vector: ";
+    for (TEST::vector<int>::iterator it = myVector.begin(); it != myVector.end(); ++it)
+        std::cout << *it << " ";
+    std::cout << std::endl;
+
+    // Assign the value 5 to all elements in the vector
+    myVector.assign(myVector.size() + 5, 5);
+        std::cout << myVector.size()  << std::endl;
+        std::cout << myVector.capacity()  << std::endl;
+
+    std::cout << "Vector after assign: ";
+    for (TEST::vector<int>::iterator it = myVector.begin(); it != myVector.end(); ++it)
+        std::cout << *it << " ";
+
+    std::cout << std::endl;
+
+    return 0;
 }
+

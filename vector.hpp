@@ -88,8 +88,7 @@ public:
 	}
 	/* -------------------------*/
 
-	/* ------ Overloads ------- */
-
+	/* ------ Members Overloads ------- */
 	reference operator[](size_type n) const {return _array[n];}
 
 	vector &operator=(const vector &other)
@@ -107,16 +106,7 @@ public:
 			_alloc.construct(&_array[i], other[i]);
 		return *this;
 	}
-
-	/* 
-	friend keyword allows the function to become non-member of the class.
-	Thanks to this, the function becomes friend with ft::vector class.
-	Therefore it can access the private data of the class and compare the vectors.
-	It is needed by operator[] which access the underlying array directly.
-	*/
-
-
-	/* -------------------------*/
+	/* ---------------------------------*/
 
 	reference at(size_type n)
 	{
@@ -141,6 +131,7 @@ public:
 	reference back() {return operator[](_size - 1);}
 
 	const_reference back() const {return operator[](_size - 1);}
+	
 
 	iterator end() {return iterator(&_array[_size]);}
 	
@@ -150,6 +141,15 @@ public:
 	
 	const_iterator begin() const {return const_iterator(_array);}
 
+	reverse_iterator rbegin() {return reverse_iterator(iterator(&_array[_size]));}
+
+	reverse_iterator rend() {return reverse_iterator(iterator(_array));}
+
+	const_reverse_iterator rbegin() const {return reverse_iterator(iterator(&_array[_size]));}
+	
+	const_reverse_iterator rend() const {return reverse_iterator(iterator(_array));}
+
+
 	size_type size() const {return _size;}
 
 	size_type max_size() const {return _alloc.max_size();}
@@ -157,6 +157,7 @@ public:
 	bool empty() const {return !_size;}
 
 	size_type capacity() const {return _capacity;}
+
 
 	void reserve(size_type new_cap)
 	{
@@ -200,18 +201,32 @@ public:
 		_alloc.construct(&_array[_size++], val);
 	}
 
-	reverse_iterator rbegin() {return reverse_iterator(iterator(&_array[_size]));}
-
-	reverse_iterator rend() {return reverse_iterator(iterator(_array));}
-
-	const_reverse_iterator rbegin() const {return reverse_iterator(iterator(&_array[_size]));}
-	
-	const_reverse_iterator rend() const {return reverse_iterator(iterator(_array));}
-
 	void pop_back() {_alloc.destroy(&_array[_size-- - 1]);}
+
+	void assign(size_type count, const T &value)
+	{
+		for (size_type i = 0; i < count; i++)
+			_alloc.destroy(&_array[i]);
+		resize(count);
+		for (size_type i = 0; i < count; i++)
+			_alloc.construct(&_array[i], value);
+	}
+
+	template <class InputIterator> 
+	void assign(InputIterator first, InputIterator last,
+	typename ft::enable_if<!ft::is_integral<InputIterator>::value, bool>::type = false)
+	{
+		size_type count = ft::distance(first, last);
+		for (size_type i = 0; i < count; i++)
+			_alloc.destroy(&_array[i]);
+		resize(count);
+		for (size_type i = 0; i < count; i++, first++)
+			_alloc.construct(&_array[i], *first);
+	}
 
 };
 
+/* ---- Non Members Overloads ----- */
 template<class Type, class Alloc>
 bool operator==(const vector<Type, Alloc> &lhs,
 	const ft::vector<Type, Alloc> &rhs)
@@ -244,5 +259,6 @@ bool operator<=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 template< class T, class Alloc >
 bool operator>=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 {return operator>(lhs, rhs) || operator==(lhs, rhs);}
+/* ---------------------------------*/
 
 }
