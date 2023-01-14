@@ -145,6 +145,6 @@ reverse_iterator<Iter>operator+(difference_type n, const reverse_iterator<Iter> 
 
 template<class Iterator1, class Iterator2>
 difference_type operator-(const reverse_iterator<Iterator1> &lhs,
-	const reverse_iterator<Iterator2> &rhs) {return rhs.base() + lhs.base();}
+	const reverse_iterator<Iterator2> &rhs) {return rhs.base() - lhs.base();}
 
 }
