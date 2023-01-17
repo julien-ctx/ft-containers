@@ -15,6 +15,8 @@
 #include "utils/is_integral.hpp"
 #include "utils/lexicographical_compare.hpp"
 
+#define VEC_DATA() std::cout << _size << " <- size | capacity -> " << _capacity << std::endl;
+
 namespace ft
 {
 	
@@ -89,9 +91,9 @@ public:
 	// Destructor
 	~vector()
 	{
+		_alloc.deallocate(_array, _capacity);
 		for (size_type i = 0; i < _size; i++)
 			_alloc.destroy(&_array[i]);
-		_alloc.deallocate(_array, _capacity);
 	}
 	/* -------------------------*/
 
@@ -165,7 +167,6 @@ public:
 
 	size_type capacity() const {return _capacity;}
 
-
 	void reserve(size_type new_cap)
 	{
 		if (new_cap > max_size())
@@ -173,10 +174,10 @@ public:
 		if (new_cap > _capacity)
 		{
 			T *new_array = _alloc.allocate(new_cap);
-			_capacity = new_cap;
 			for (size_type i = 0; i < _size; i++)
 				_alloc.construct(&new_array[i], _array[i]);
 			destroyAndFree(_size, _capacity);
+			_capacity = new_cap;
 			_array = new_array;	
 		}
 	}
@@ -241,10 +242,10 @@ public:
 		if (position == end())
 		{
 			push_back(val);
-			return end();
+			return end() - 1;
 		}
 		T *new_array = _alloc.allocate(_capacity);
-		T *ptr = NULL; size_type i = 0; _size++;
+		T *ptr = NULL; size_type i = 0;
 		for (iterator it = begin(); it != end(); i++)
 		{
 			if (it == position && !ptr)
@@ -255,8 +256,8 @@ public:
 			else
 				_alloc.construct(&new_array[i], *it++);
 		}
-		destroyAndFree(_size - 1, old_capacity);
-		_array = new_array;
+		destroyAndFree(_size, old_capacity);
+		_array = new_array; _size++;
 		return iterator(ptr);
 	}
 
@@ -269,7 +270,39 @@ public:
 		{
 			size_type old_capacity = _capacity;
 			if (_size + n > _capacity)
-				if ((_capacity += n) > max_size())
+				if ((_capacity = _size + n) > max_size())
+					throw std::bad_alloc();
+			T *new_array = _alloc.allocate(_capacity);
+			bool found = false; size_type i = 0;
+			for (iterator it = begin(); it != end(); i++)
+			{
+				if (it == position && !found)
+				{
+					for (size_type j = 0; j < n; j++, i++)
+						_alloc.construct(&new_array[i], val);
+					found = true; --i;
+				}
+				else
+					_alloc.construct(&new_array[i], *it++);
+			}
+			destroyAndFree(_size, old_capacity);
+			_array = new_array; _size += n;
+		}
+	}
+
+	template <class InputIterator>
+	void insert(iterator position, InputIterator first, InputIterator last,
+	typename ft::enable_if<!ft::is_integral<InputIterator>::value, bool>::type = false)
+	{
+		if (position == end())
+			for (; first != last; first++)
+				push_back(*first);
+		else
+		{
+			size_type old_capacity = _capacity;
+			size_type n = last - first;
+			if (_size + n > _capacity)
+				if ((_capacity = _size + n) > max_size())
 					throw std::bad_alloc();
 			T *new_array = _alloc.allocate(_capacity);
 			bool found = false; size_type i = 0; ;
@@ -277,8 +310,8 @@ public:
 			{
 				if (it == position && !found)
 				{
-					for (size_type j = 0; j < n; j++)
-						_alloc.construct(&new_array[i++], val);
+					for (; first != last; first++)
+						_alloc.construct(&new_array[i++], *first);
 					found = true; i--;
 				}
 				else
@@ -288,12 +321,6 @@ public:
 			_size += n; _array = new_array;
 		}
 	}
-
-	// template <class InputIterator>
-	// void insert(iterator position, InputIterator first, InputIterator last)
-	// {
-
-	// }
 
 };
 
