@@ -203,7 +203,12 @@ public:
 	{
 		size_type cx2 = _capacity * 2;
 		if (_size == _capacity)
-			_capacity ? (reserve(cx2 <= max_size() ? cx2 : max_size())) : reserve(1);
+		{
+			if (_capacity)
+				reserve(cx2 <= max_size() ? cx2 : max_size());
+			else
+				reserve(1);
+		}
 		_alloc.construct(&_array[_size++], val);
 	}
 
@@ -237,7 +242,7 @@ public:
 		if (_size == _capacity)
 			if ((_capacity *= 2) > max_size())
 				throw std::bad_alloc();
-	
+
 		// If the position is end() and there is enough space, we don't reallocate
 		if (position == end())
 		{
@@ -320,6 +325,39 @@ public:
 			destroyAndFree(_size, old_capacity);
 			_array = new_array; _size += n;
 		}
+	}
+
+	iterator erase (iterator position)
+	{
+		for (size_type i = 0; i < _size; i++)
+		{
+			if (position.operator->() == &_array[i])
+			{
+				for (; i + 1 < _size; i++)
+					_array[i] = _array[i + 1];
+				_alloc.destroy(&_array[--_size]);
+				return position;
+			}
+		}
+		return position;
+	}
+	
+	iterator erase (iterator first, iterator last)
+	{
+		for (size_type i = 0; i < _size; i++)
+		{
+			if (first.operator->() == &_array[i])
+			{
+				size_type count = ft::distance(first, last);
+				for (; i + 1 < _size; i++)
+					_array[i] = _array[i + count];
+				for (i = 1; i < count; i++)
+					_alloc.destroy(&_array[_size - i]);	
+				_size -= count;
+				return first;
+			}
+		}
+		return first;	
 	}
 
 };
