@@ -55,7 +55,7 @@ public:
 
 	/* ----- Constructors ----- */
 	// Default constructor
-	explicit vector (const allocator_type &alloc = allocator_type()) :
+	explicit vector(const allocator_type &alloc = allocator_type()) :
 		_array(NULL), _alloc(alloc), _size(0), _capacity(0) {}
 
 	// Fill constructor
@@ -69,7 +69,7 @@ public:
 
 	// Range constructor
 	template<class InputIterator>
-	vector (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
+	vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, bool>::type = false) : _alloc(alloc)
 	{
 		size_type dist = ft::distance<InputIterator>(first, last);
@@ -81,7 +81,7 @@ public:
 	}
 
 	// Copy constructor
-	vector (const vector &x) : _alloc(Allocator()), _size(x.size()), _capacity(x.capacity())
+	vector(const vector &x) : _alloc(Allocator()), _size(x.size()), _capacity(x.capacity())
 	{
 		_array = _alloc.allocate(_capacity);
 		for (size_type i = 0; i < _size; i++)
@@ -327,7 +327,7 @@ public:
 		}
 	}
 
-	iterator erase (iterator position)
+	iterator erase(iterator position)
 	{
 		for (size_type i = 0; i < _size; i++)
 		{
@@ -342,7 +342,7 @@ public:
 		return position;
 	}
 	
-	iterator erase (iterator first, iterator last)
+	iterator erase(iterator first, iterator last)
 	{
 		for (size_type i = 0; i < _size; i++)
 		{
@@ -358,6 +358,13 @@ public:
 			}
 		}
 		return first;	
+	}
+
+	void swap(vector &x)
+	{
+	    ft::swapData(_array, x._array);
+    	ft::swapData(_size, x._size);
+    	ft::swapData(_capacity, x._capacity);
 	}
 
 };

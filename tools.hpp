@@ -43,4 +43,12 @@ namespace ft
 		return i;
 	}
 
+	template<class T>
+	void swapData(T &first, T &second)
+	{
+		T tmp = first;
+		first = second;
+		second = tmp;
+	}
+
 }

@@ -92,16 +92,39 @@ range (3)
 //         return (0);
 // }
 
-int main()
+// int main()
+// {
+//         std::vector<int> v(5, 20);
+//         std::vector<int> v2(3, 10);
+//         v.swap(v2);
+//         for (size_t i = 0; i < v.size(); i++)
+//             std::cout << v[i] << " ";
+//         std::cout << std::endl;
+// 		std::cout << v.size() << std::endl;
+// 		std::cout << v2.size() << std::endl;
+// 		for (size_t i = 0; i < v2.size(); i++)
+//             std::cout << v2[i] << " ";
+//         std::cout << std::endl;
+// }
+
+int main ()
 {
-	ft::vector<int> v;
-	for (int i = 0; i < 10; i++)
-		v.push_back(i);
-	std::cout << *v.erase(v.end() - 5, v.end() - 2) << std::endl;;
-	std::cout << std::endl;
-	std::cout << v.size() << std::endl;
-	std::cout << v.capacity() << std::endl;
-	for (size_t i = 0; i < v.size(); i++)
-		std::cout << v[i] << " ";
-	std::cout << std::endl;
+        TESTED_NAMESPACE::vector<TESTED_TYPE> foo(3, 15);
+        TESTED_NAMESPACE::vector<TESTED_TYPE> bar(5, 42);
+        TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator it_foo = foo.begin();
+        TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator it_bar = bar.begin();
+        foo.swap(bar);
+
+        std::cout << "AFTER SWAP" << std::endl;
+
+        std::cout << "foo contains:" << std::endl;
+        printSize(foo);
+        std::cout << "bar contains:" << std::endl;
+        printSize(bar);
+
+        std::cout << "Iterator validity:" << std::endl;
+        std::cout << (it_foo == bar.begin()) << std::endl;
+        std::cout << (it_bar == foo.begin()) << std::endl;
+
+        return (0);
 }
