@@ -91,9 +91,9 @@ public:
 	// Destructor
 	~vector()
 	{
-		_alloc.deallocate(_array, _capacity);
 		for (size_type i = 0; i < _size; i++)
 			_alloc.destroy(&_array[i]);
+		_alloc.deallocate(_array, _capacity);
 	}
 	/* -------------------------*/
 
@@ -318,7 +318,7 @@ public:
 					_alloc.construct(&new_array[i], *it++);
 			}
 			destroyAndFree(_size, old_capacity);
-			_size += n; _array = new_array;
+			_array = new_array; _size += n;
 		}
 	}
 
