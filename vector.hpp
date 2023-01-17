@@ -42,6 +42,13 @@ private:
 	size_type _size;
 	size_type _capacity;
 
+	void destroyAndFree(size_type size, size_type capacity)
+	{
+		for (size_type i = 0; i < size; i++)
+			_alloc.destroy(&_array[i]);
+		_alloc.deallocate(_array, capacity);
+	}
+
 public:
 
 	/* ----- Constructors ----- */
@@ -169,9 +176,7 @@ public:
 			_capacity = new_cap;
 			for (size_type i = 0; i < _size; i++)
 				_alloc.construct(&new_array[i], _array[i]);
-			for (size_type i = 0; i < _size; i++)
-				_alloc.destroy(&_array[i]);
-			_alloc.deallocate(_array, _capacity);
+			destroyAndFree(_size, _capacity);
 			_array = new_array;	
 		}
 	}
@@ -231,19 +236,15 @@ public:
 		if (_size == _capacity)
 			if ((_capacity *= 2) > max_size())
 				throw std::bad_alloc();
+	
 		// If the position is end() and there is enough space, we don't reallocate
 		if (position == end())
 		{
-			if (_size <= _capacity)
-			{
-				_alloc.construct(&_array[_size++ - 1], val);
-				return iterator(end());
-			}
+			push_back(val);
+			return end();
 		}
-		
 		T *new_array = _alloc.allocate(_capacity);
-		T *ptr = NULL; size_type i = 0;
-		_size++;
+		T *ptr = NULL; size_type i = 0; _size++;
 		for (iterator it = begin(); it != end(); i++)
 		{
 			if (it == position && !ptr)
@@ -254,17 +255,39 @@ public:
 			else
 				_alloc.construct(&new_array[i], *it++);
 		}
-		for (size_type i = 0; i < _size - 1; i++)
-			_alloc.destroy(&_array[i]);
-		_alloc.deallocate(_array, old_capacity);
+		destroyAndFree(_size - 1, old_capacity);
 		_array = new_array;
 		return iterator(ptr);
 	}
 
-	// void insert(iterator position, size_type n, const value_type &val)
-	// {
-
-	// }
+	void insert(iterator position, size_type n, const value_type &val)
+	{
+		if (position == end())
+			for (size_type i = 0; i < n; i++)
+				push_back(val);
+		else
+		{
+			size_type old_capacity = _capacity;
+			if (_size + n > _capacity)
+				if ((_capacity += n) > max_size())
+					throw std::bad_alloc();
+			T *new_array = _alloc.allocate(_capacity);
+			bool found = false; size_type i = 0; ;
+			for (iterator it = begin(); it != end(); i++)
+			{
+				if (it == position && !found)
+				{
+					for (size_type j = 0; j < n; j++)
+						_alloc.construct(&new_array[i++], val);
+					found = true; i--;
+				}
+				else
+					_alloc.construct(&new_array[i], *it++);
+			}
+			destroyAndFree(_size, old_capacity);
+			_size += n; _array = new_array;
+		}
+	}
 
 	// template <class InputIterator>
 	// void insert(iterator position, InputIterator first, InputIterator last)

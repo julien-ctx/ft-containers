@@ -40,24 +40,15 @@ void    printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = t
 #define TEST std 
 int main()
 {
-    TEST::vector<int> myVector;
-
-    // Initialize the vector with values
-    myVector.push_back(1);
-    myVector.push_back(3);
-    // myVector.push_back(3);
-
-    std::cout << "capacity before insert: " << myVector.capacity() << std::endl;
-	std::cout << std::endl;
-    std::cout << "return value " << *myVector.insert(myVector.begin() + 1, 6) << std::endl;
-	std::cout << std::endl;
-    std::cout << "capacity after insert: " << myVector.capacity() << std::endl;
-	std::cout << std::endl;
-    std::cout << "print vector:\n";
-	for (std::size_t i = 0; i < myVector.size(); i++)
-		std::cout << myVector[i] << " ";
-		std::cout << std::endl;
-	std::cout << std::endl;
-    return 0;
+    ft::vector<int> v(5, 42);
+    for (size_t i = 0; i < v.size(); i++)
+        std::cout << v[i] << " ";
+    std::cout << std::endl;
+    v.insert(v.begin(), 5, 24);
+       for (size_t i = 0; i < v.size(); i++)
+        std::cout << v[i] << " ";
+    std::cout << std::endl;
+    std::cout << v.capacity() << std::endl;
+    std::cout << v.size() << std::endl;
 }
 
