@@ -27,6 +27,8 @@
 #define PRINT(x) std::cout << BOLD << x << std::endl << RESET; 
 #define NL() std::cout << std::endl;
 
+void vectorTest();
+
 namespace ft
 {
 

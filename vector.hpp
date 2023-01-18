@@ -133,6 +133,10 @@ public:
 			return operator[](n);
 	}
 
+	T* data() {return _array;}
+
+	const T* data() const {return _array;}
+
 	reference front() {return operator[](0);}
 
 	const_reference front() const {return operator[](0);}
