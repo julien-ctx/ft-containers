@@ -116,7 +116,6 @@ void vectorTest()
 			std::cout << v.front() << std::endl;
 			std::cout << v.back() << std::endl;
 			std::cout << *v.data() << std::endl;
-			
 		}
 		catch(const std::exception &e)
 		{
@@ -136,7 +135,76 @@ void vectorTest()
 			std::cout << v.front() << std::endl;
 			std::cout << v.back() << std::endl;
 			std::cout << *v.data() << std::endl;
-			
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+	}
+	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
+	std::cout << CYAN << "------------------- MODIFIERS ------------------\n" << RESET;
+	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
+	{
+		std::vector<int> v;
+		try
+		{
+			v.push_back(24);
+			for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();
+			v.push_back(42);
+			for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();
+			v.pop_back();
+			for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();
+			v.push_back(84);
+			std::cout << *v.erase(v.begin()) << std::endl;
+			for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();
+			v.push_back(84);
+			v.push_back(84);
+			v.erase(v.begin(), v.end());
+			for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();	
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+	}
+	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
+	{
+		ft::vector<int> v;
+		try
+		{
+			v.push_back(24);
+			for (ft::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();
+			v.push_back(42);
+			for (ft::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();
+			v.pop_back();
+			for (ft::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();
+			v.push_back(84);
+			std::cout << *v.erase(v.begin()) << std::endl;
+			for (ft::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();
+			v.push_back(84);
+			v.push_back(84);
+			v.erase(v.begin(), v.end());
+			for (ft::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();	
 		}
 		catch(const std::exception &e)
 		{

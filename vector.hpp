@@ -133,6 +133,7 @@ public:
 			return operator[](n);
 	}
 
+
 	T* data() {return _array;}
 
 	const T* data() const {return _array;}
@@ -161,6 +162,8 @@ public:
 	const_reverse_iterator rbegin() const {return reverse_iterator(iterator(&_array[_size]));}
 	
 	const_reverse_iterator rend() const {return reverse_iterator(iterator(_array));}
+
+	allocator_type get_allocator() const {return _alloc;}
 
 
 	size_type size() const {return _size;}
@@ -349,7 +352,7 @@ public:
 			if (first.operator->() == &_array[i])
 			{
 				size_type count = ft::distance(first, last);
-				for (; i + 1 < _size; i++)
+				for (; i + count < _size; i++)
 					_array[i] = _array[i + count];
 				for (i = 1; i < count; i++)
 					_alloc.destroy(&_array[_size - i]);	
@@ -357,6 +360,7 @@ public:
 				return first;
 			}
 		}
+		// std::cout << "test\n";
 		return first;	
 	}
 
