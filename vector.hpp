@@ -360,7 +360,6 @@ public:
 				return first;
 			}
 		}
-		// std::cout << "test\n";
 		return first;	
 	}
 
@@ -389,7 +388,7 @@ bool operator==(const vector<Type, Alloc> &lhs,
 
 template< class Type, class Alloc >
 bool operator!=(const vector<Type, Alloc> &lhs,
-	const vector<Type, Alloc> &rhs) {return !operator==(lhs, rhs);}
+	const vector<Type, Alloc> &rhs) {return !(lhs == rhs);}
 
 template< class T, class Alloc >
 bool operator<(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
@@ -397,15 +396,15 @@ bool operator<(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 
 template< class T, class Alloc >
 bool operator>(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
-{return !operator<(lhs, rhs) && !operator==(lhs, rhs);}
+{return rhs < lhs;}
 
 template< class T, class Alloc >
 bool operator<=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
-{return operator<(lhs, rhs) || operator==(lhs, rhs);}
+{return lhs == rhs || lhs < rhs;}
 
 template< class T, class Alloc >
 bool operator>=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
-{return operator>(lhs, rhs) || operator==(lhs, rhs);}
+{return rhs <= lhs;}
 /* ---------------------------------*/
 
 }

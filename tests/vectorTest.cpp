@@ -323,6 +323,9 @@ void vectorTest()
 			it++;
 			std::vector<unsigned int>::const_iterator const_it = v.begin();
 			std::cout << (it - const_it) << std::endl;
+			for (; it2 != v.rend(); it2++)
+				std::cout << *it2 << " ";
+			NL();
 		}
 		catch(const std::exception &e)
 		{
@@ -353,6 +356,53 @@ void vectorTest()
 			it++;
 			ft::vector<unsigned int>::const_iterator const_it = v.begin();
 			std::cout << (it - const_it) << std::endl;
+			for (; it2 != v.rend(); it2++)
+				std::cout << *it2 << " ";
+			NL();
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+	}
+	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
+	std::cout << CYAN << "----------- RELATIONAL OPERATORS -----------\n" << RESET;
+	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
+	{
+		std::vector<int> v;
+		for (int i = 0; i < 10; i++)
+			v.push_back(i);
+		std::vector<int> v2;
+		for (int i = 0; i < 10; i++)
+			v2.push_back(i);
+		try
+		{
+			std::cout << (v == v2) << std::endl;
+			v2.insert(v2.begin() + 1, -1);
+			std::cout << (v != v2) << std::endl;
+			std::cout << (v <= v2) << std::endl;	
+			std::cout << (v > v2) << std::endl;
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+	}
+	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
+	{
+		ft::vector<int> v;
+		for (int i = 0; i < 10; i++)
+			v.push_back(i);
+		ft::vector<int> v2;
+		for (int i = 0; i < 10; i++)
+			v2.push_back(i);
+		try
+		{
+			std::cout << (v == v2) << std::endl;
+			v2.insert(v2.begin() + 1, -1);
+			std::cout << (v != v2) << std::endl;
+			std::cout << (v <= v2) << std::endl;	
+			std::cout << (v > v2) << std::endl;
 		}
 		catch(const std::exception &e)
 		{
