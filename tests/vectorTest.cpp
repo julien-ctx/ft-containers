@@ -102,6 +102,58 @@ void vectorTest()
 		}
 	}
 	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
+	std::cout << CYAN << "----------------- CAPACITY -----------------\n" << RESET;
+	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
+	{
+		std::vector<int> v;
+		try
+		{
+			v.push_back(42);
+			v.push_back(84);
+			std::cout << v.capacity() << " " << v.size() << std::endl;	
+			for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			v.reserve(10);
+			for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			std::cout << v.capacity() << " " << v.size() << std::endl;	
+			v.reserve(1);
+			std::cout << v.capacity() << " " << v.size() << std::endl;	
+			for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();	
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+	}
+	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
+	{
+		ft::vector<int> v;
+		try
+		{
+			v.push_back(42);
+			v.push_back(84);
+			std::cout << v.capacity() << " " << v.size() << std::endl;	
+			for (ft::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			v.reserve(10);
+			for (ft::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			std::cout << v.capacity() << " " << v.size() << std::endl;	
+			v.reserve(1);
+			std::cout << v.capacity() << " " << v.size() << std::endl;	
+			for (ft::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << " ";
+			NL();	
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+	}
+	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
 	std::cout << CYAN << "------------------- ACCESS ------------------\n" << RESET;
 	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
 	{
@@ -142,7 +194,7 @@ void vectorTest()
 		}
 	}
 	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
-	std::cout << CYAN << "------------------- MODIFIERS ------------------\n" << RESET;
+	std::cout << CYAN << "----------------- MODIFIERS ----------------\n" << RESET;
 	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
 	{
 		std::vector<int> v;
@@ -239,6 +291,68 @@ void vectorTest()
 			for (ft::vector<std::string>::iterator it = v3.begin(); it != v3.end(); it++)
 				std::cout << *it << " ";
 			NL();
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+	}
+	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
+	std::cout << CYAN << "---------------- ITERATORS -----------------\n" << RESET;
+	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
+	{
+		std::vector<unsigned int> v;
+		for (unsigned int i = 0; i < 10; i++)
+			v.push_back(i);
+		try
+		{
+			std::cout << ft::distance(v.begin(), v.end()) << std::endl;
+			std::cout << *(v.begin() + 2) << std::endl;
+			std::cout << *(v.end() - 1) << std::endl;
+			std::cout << v.back() << std::endl;
+			std::cout << *++v.begin() << std::endl;
+			std::cout << (v.begin() < (v.begin() + 1)) << std::endl;
+
+			std::vector<unsigned int>::iterator it = v.begin();
+
+			std::cout << (it == v.begin()) << std::endl;
+
+			std::vector<unsigned int>::reverse_iterator it2 = v.rbegin();	
+
+			std::cout << (it2 == std::vector<unsigned int>::reverse_iterator((v.end() - 1))) << std::endl;	
+			it++;
+			std::vector<unsigned int>::const_iterator const_it = v.begin();
+			std::cout << (it - const_it) << std::endl;
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+	}
+	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
+	{
+		ft::vector<unsigned int> v;
+		for (unsigned int i = 0; i < 10; i++)
+			v.push_back(i);
+		try
+		{
+			std::cout << ft::distance(v.begin(), v.end()) << std::endl;
+			std::cout << *(v.begin() + 2) << std::endl;
+			std::cout << *(v.end() - 1) << std::endl;
+			std::cout << v.back() << std::endl;
+			std::cout << *++v.begin() << std::endl;
+			std::cout << (v.begin() < (v.begin() + 1)) << std::endl;
+
+			ft::vector<unsigned int>::iterator it = v.begin();
+
+			std::cout << (it == v.begin()) << std::endl;
+
+			ft::vector<unsigned int>::reverse_iterator it2 = v.rbegin();	
+
+			std::cout << (it2 == ft::vector<unsigned int>::reverse_iterator((v.end() - 1))) << std::endl;	
+			it++;
+			ft::vector<unsigned int>::const_iterator const_it = v.begin();
+			std::cout << (it - const_it) << std::endl;
 		}
 		catch(const std::exception &e)
 		{
