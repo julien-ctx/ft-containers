@@ -165,12 +165,29 @@ void vectorTest()
 			for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
 				std::cout << *it << " ";
 			NL();
+			v.clear();
+			std::cout << v.empty() << std::endl;
 			v.push_back(84);
 			v.push_back(84);
 			v.erase(v.begin(), v.end());
-			for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+			std::cout << v.empty() << std::endl;
+			NL();
+			// Swap test:
+			std::vector<std::string> v2(5, "v2");
+			std::vector<std::string> v3(2, "v3");
+			for (std::vector<std::string>::iterator it = v2.begin(); it != v2.end(); it++)
 				std::cout << *it << " ";
 			NL();	
+			for (std::vector<std::string>::iterator it = v3.begin(); it != v3.end(); it++)
+				std::cout << *it << " ";
+			NL();
+			v2.swap(v3);
+			for (std::vector<std::string>::iterator it = v2.begin(); it != v2.end(); it++)
+				std::cout << *it << " ";
+			NL();	
+			for (std::vector<std::string>::iterator it = v3.begin(); it != v3.end(); it++)
+				std::cout << *it << " ";
+			NL();
 		}
 		catch(const std::exception &e)
 		{
@@ -199,12 +216,29 @@ void vectorTest()
 			for (ft::vector<int>::iterator it = v.begin(); it != v.end(); it++)
 				std::cout << *it << " ";
 			NL();
+			v.clear();
+			std::cout << v.empty() << std::endl;
 			v.push_back(84);
 			v.push_back(84);
 			v.erase(v.begin(), v.end());
-			for (ft::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+			std::cout << v.empty() << std::endl;
+			NL();	
+			// Swap test:
+			ft::vector<std::string> v2(5, "v2");
+			ft::vector<std::string> v3(2, "v3");
+			for (ft::vector<std::string>::iterator it = v2.begin(); it != v2.end(); it++)
 				std::cout << *it << " ";
 			NL();	
+			for (ft::vector<std::string>::iterator it = v3.begin(); it != v3.end(); it++)
+				std::cout << *it << " ";
+			NL();
+			v2.swap(v3);
+			for (ft::vector<std::string>::iterator it = v2.begin(); it != v2.end(); it++)
+				std::cout << *it << " ";
+			NL();	
+			for (ft::vector<std::string>::iterator it = v3.begin(); it != v3.end(); it++)
+				std::cout << *it << " ";
+			NL();
 		}
 		catch(const std::exception &e)
 		{
