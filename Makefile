@@ -18,6 +18,13 @@ CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
 
 all: $(NAME)
 
+mli:
+	@if [ -d "./containers_test" ]; then \
+			cd containers_test && ./do.sh; \
+	else \
+		git clone https://github.com/mli42/containers_test.git && cd containers_test && ./do.sh; \
+	fi
+
 .cpp.o: $(SRCS)
 	@printf $(GREEN)"\r\033[KCreating object files 👉 "$(YELLOW)"<$<> "$(RESET)
 	@c++ $(CPPFLAGS) -c $< -o $(<:.cpp=.o)

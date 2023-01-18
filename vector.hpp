@@ -243,15 +243,15 @@ public:
 		// Save old capacity to deallocate and destroy the previous array
 		size_type old_capacity = _capacity;
 		if (_size == _capacity)
-			if ((_capacity *= 2) > max_size())
+			if ((_capacity * 2) > max_size())
 				throw std::bad_alloc();
-
 		// If the position is end() and there is enough space, we don't reallocate
 		if (position == end())
 		{
 			push_back(val);
 			return end() - 1;
 		}
+		_capacity *= 2;
 		T *new_array = _alloc.allocate(_capacity);
 		T *ptr = NULL; size_type i = 0;
 		for (iterator it = begin(); it != end(); i++)
@@ -400,11 +400,11 @@ bool operator>(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
 
 template< class T, class Alloc >
 bool operator<=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
-{return lhs == rhs || lhs < rhs;}
+{return !(lhs > rhs);}
 
 template< class T, class Alloc >
 bool operator>=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
-{return rhs <= lhs;}
+{return !(lhs < rhs);}
 /* ---------------------------------*/
 
 }
