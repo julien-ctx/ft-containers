@@ -195,8 +195,8 @@ public:
 			_size = count;
 		}
 		else
-			while (--_size != count)
-				_alloc.destroy(&_array[_size]);
+			while (_size != count)
+				_alloc.destroy(&_array[--_size]);
 	}
 
 	void push_back(const value_type &val)
@@ -301,7 +301,7 @@ public:
 		else
 		{
 			size_type old_capacity = _capacity;
-			size_type n = last - first;
+			size_type n = ft::distance(first, last);
 			if (_size + n > _capacity)
 				if ((_capacity = _size + n) > max_size())
 					throw std::bad_alloc();

@@ -107,24 +107,46 @@ range (3)
 //         std::cout << std::endl;
 // }
 
-int main ()
+// int main ()
+// {
+//         TESTED_NAMESPACE::vector<TESTED_TYPE> foo(3, 15);
+//         TESTED_NAMESPACE::vector<TESTED_TYPE> bar(5, 42);
+//         TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator it_foo = foo.begin();
+//         TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator it_bar = bar.begin();
+//         foo.swap(bar);
+
+//         std::cout << "AFTER SWAP" << std::endl;
+
+//         std::cout << "foo contains:" << std::endl;
+//         printSize(foo);
+//         std::cout << "bar contains:" << std::endl;
+//         printSize(bar);
+
+//         std::cout << "Iterator validity:" << std::endl;
+//         std::cout << (it_foo == bar.begin()) << std::endl;
+//         std::cout << (it_bar == foo.begin()) << std::endl;
+
+//         return (0);
+// }
+
+#include <list>
+int             main(void)
 {
-        TESTED_NAMESPACE::vector<TESTED_TYPE> foo(3, 15);
-        TESTED_NAMESPACE::vector<TESTED_TYPE> bar(5, 42);
-        TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator it_foo = foo.begin();
-        TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator it_bar = bar.begin();
-        foo.swap(bar);
+        std::list<TESTED_TYPE> lst;
+        std::list<TESTED_TYPE>::iterator lst_it;
+        for (int i = 1; i < 5; ++i)
+                lst.push_back(i * 3);
 
-        std::cout << "AFTER SWAP" << std::endl;
+        TESTED_NAMESPACE::vector<TESTED_TYPE> vct(lst.begin(), lst.end());
+        printSize(vct);
+        lst_it = lst.begin();
+        for (int i = 1; lst_it != lst.end(); ++i)
+                *lst_it++ = i * 5;
+        vct.assign(lst.begin(), lst.end());
+        std::cout << "test\n";
+        printSize(vct);
 
-        std::cout << "foo contains:" << std::endl;
-        printSize(foo);
-        std::cout << "bar contains:" << std::endl;
-        printSize(bar);
-
-        std::cout << "Iterator validity:" << std::endl;
-        std::cout << (it_foo == bar.begin()) << std::endl;
-        std::cout << (it_bar == foo.begin()) << std::endl;
-
+        vct.insert(vct.end(), lst.rbegin(), lst.rend());
+        printSize(vct);
         return (0);
 }
