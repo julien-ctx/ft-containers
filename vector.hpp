@@ -216,8 +216,6 @@ public:
 
 	void assign(size_type count, const T &value)
 	{
-		for (size_type i = 0; i < count; i++)
-			_alloc.destroy(&_array[i]);
 		resize(count);
 		for (size_type i = 0; i < count; i++)
 			_alloc.construct(&_array[i], value);
@@ -228,8 +226,6 @@ public:
 	typename ft::enable_if<!ft::is_integral<InputIterator>::value, bool>::type = false)
 	{
 		size_type count = ft::distance(first, last);
-		for (size_type i = 0; i < count; i++)
-			_alloc.destroy(&_array[i]);
 		resize(count);
 		for (size_type i = 0; i < count; i++, first++)
 			_alloc.construct(&_array[i], *first);
