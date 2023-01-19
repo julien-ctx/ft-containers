@@ -7,9 +7,13 @@ void vectorTest()
 	std::cout << BLUE << "*************** VECTOR TESTS ***************\n" << RESET;
 	NL();
 
+	std::stringstream ft_ss;
+	std::stringstream std_ss;
+	std::streambuf* cout_buf = std::cout.rdbuf();
+
 	std::cout << CYAN << "--------------- CONSTRUCTORS ---------------\n" << RESET;
-	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
 	{
+		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		std::vector<int> v2(10, 42);
 		std::vector<int> v3(v2.begin() + 2, v2.begin() + 5);
@@ -30,10 +34,11 @@ void vectorTest()
 		for (std::vector<int>::iterator it = v4.begin(); it != v4.end(); it++)
 			std::cout << *it << " ";
 		NL();
-		NL();
+		std::cout.rdbuf(cout_buf);
+
 	}
-	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
 	{
+		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		ft::vector<int> v2(10, 42);
 		ft::vector<int> v3(v2.begin() + 2, v2.begin() + 5);
@@ -54,11 +59,17 @@ void vectorTest()
 		for (ft::vector<int>::iterator it = v4.begin(); it != v4.end(); it++)
 			std::cout << *it << " ";
 		NL();
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
+	std::cout << BOLD;
+	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
+	std::cout << RESET;
+	ft_ss.clear();
+	std_ss.clear();
+
 	std::cout << CYAN << "------------------- SIZE -------------------\n" << RESET;
-	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
 	{
+		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		try
 		{
@@ -78,9 +89,10 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
 	{
+		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		try
 		{
@@ -100,11 +112,17 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
+	std::cout << BOLD;
+	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
+	std::cout << RESET;
+	ft_ss.clear();
+	std_ss.clear();
+
 	std::cout << CYAN << "----------------- CAPACITY -----------------\n" << RESET;
-	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
 	{
+		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		try
 		{
@@ -127,9 +145,10 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
 	{
+		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		try
 		{
@@ -152,11 +171,17 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
-	std::cout << CYAN << "------------------- ACCESS ------------------\n" << RESET;
-	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
+	std::cout << BOLD;
+	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
+	std::cout << RESET;
+	ft_ss.clear();
+	std_ss.clear();
+
+	std::cout << CYAN << "------------------ ACCESS ------------------\n" << RESET;
 	{
+		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		try
 		{
@@ -173,9 +198,10 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
 	{
+		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		try
 		{
@@ -192,11 +218,17 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
+	std::cout << BOLD;
+	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
+	std::cout << RESET;
+	ft_ss.clear();
+	std_ss.clear();
+
 	std::cout << CYAN << "----------------- MODIFIERS ----------------\n" << RESET;
-	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
 	{
+		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		try
 		{
@@ -245,9 +277,10 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
 	{
+		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		try
 		{
@@ -296,11 +329,17 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
+	std::cout << BOLD;
+	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
+	std::cout << RESET;
+	ft_ss.clear();
+	std_ss.clear();
+
 	std::cout << CYAN << "---------------- ITERATORS -----------------\n" << RESET;
-	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
 	{
+		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<unsigned int> v;
 		for (unsigned int i = 0; i < 10; i++)
 			v.push_back(i);
@@ -331,9 +370,10 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
 	{
+		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<unsigned int> v;
 		for (unsigned int i = 0; i < 10; i++)
 			v.push_back(i);
@@ -364,11 +404,17 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << CYAN << "--------------------------------------------\n\n" << RESET;
+	std::cout << BOLD;
+	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
+	std::cout << RESET;
+	ft_ss.clear();
+	std_ss.clear();
+
 	std::cout << CYAN << "----------- RELATIONAL OPERATORS -----------\n" << RESET;
-	std::cout << BOLD << "              ⇊ std::vector ⇊               \n" << RESET;
 	{
+		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		for (int i = 0; i < 10; i++)
 			v.push_back(i);
@@ -387,9 +433,10 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
-	std::cout << BOLD << "              ⇊ ft::vector ⇊                \n" << RESET;
 	{
+		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		for (int i = 0; i < 10; i++)
 			v.push_back(i);
@@ -408,5 +455,11 @@ void vectorTest()
 		{
 			std::cerr << e.what() << '\n';
 		}
+		std::cout.rdbuf(cout_buf);
 	}
+	std::cout << BOLD;
+	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
+	std::cout << RESET;
+	ft_ss.clear();
+	std_ss.clear();
 }

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <type_traits>
+#include <sstream>
 #include <limits>
 
 // My containers implementation includes
