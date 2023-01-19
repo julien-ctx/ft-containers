@@ -12,4 +12,6 @@
 int main()
 {
 	vectorTest();
+	stackTest();
+	NL();
 }

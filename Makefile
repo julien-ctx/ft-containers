@@ -10,7 +10,7 @@ NAME = ft_containers
 PROJECT = FT_CONTAINERS
 
 SRCS = main.cpp \
-		$(addprefix ./tests/, vectorTest.cpp) \
+		$(addprefix ./tests/, vectorTest.cpp stackTest.cpp) \
 		
 OBJS = $(SRCS:.cpp=.o)
 

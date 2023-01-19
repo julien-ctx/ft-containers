@@ -35,7 +35,6 @@ void vectorTest()
 			std::cout << *it << " ";
 		NL();
 		std::cout.rdbuf(cout_buf);
-
 	}
 	{
 		std::cout.rdbuf(ft_ss.rdbuf());

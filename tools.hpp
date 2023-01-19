@@ -14,6 +14,7 @@
 // STL containers includes
 #include <vector>
 #include <map>
+#include <stack>
 
 #define RESET   "\033[0m"
 #define BLACK   "\033[1m\033[30m"      /* Bold Black */
@@ -29,6 +30,7 @@
 #define NL() std::cout << std::endl;
 
 void vectorTest();
+void stackTest();
 
 namespace ft
 {
