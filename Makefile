@@ -10,13 +10,13 @@ NAME = ft_containers
 PROJECT = FT_CONTAINERS
 
 SRCS = main.cpp \
-		$(addprefix ./tests/, vectorTest.cpp stackTest.cpp) \
+		$(addprefix ./tests/, vectorTest.cpp stackTest.cpp mapTest.cpp) \
 		
 OBJS = $(SRCS:.cpp=.o)
 
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
 
-all: $(NAME)
+all: $(NAME) 
 
 mli:
 	@if [ -d "./containers_test" ]; then \
@@ -25,9 +25,11 @@ mli:
 		git clone https://github.com/mli42/containers_test.git && cd containers_test && ./do.sh; \
 	fi
 
-.cpp.o: $(SRCS)
+.cpp.o: $(SRCS) utils/pair.hpp
 	@printf $(GREEN)"\r\033[KCreating object files 👉 "$(YELLOW)"<$<> "$(RESET)
 	@c++ $(CPPFLAGS) -c $< -o $(<:.cpp=.o)
+
+$(OBJS): utils/*.hpp
 
 $(NAME): $(OBJS)
 	@c++ $(CPPFLAGS) -o $(NAME) $(SRCS)

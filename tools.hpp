@@ -32,6 +32,7 @@
 
 void vectorTest();
 void stackTest();
+void mapTest();
 
 namespace ft
 {
