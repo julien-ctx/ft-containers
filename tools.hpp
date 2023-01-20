@@ -10,6 +10,7 @@
 
 #include "utils/iterator_traits.hpp"
 #include "utils/reverse_iterator.hpp"
+#include "utils/pair.hpp"
 
 // STL containers includes
 #include <vector>
