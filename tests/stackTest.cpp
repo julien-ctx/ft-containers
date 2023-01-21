@@ -1,5 +1,5 @@
-#include "../tools.hpp"
-#include "../stack.hpp"
+#include "../includes/tools.hpp"
+#include "../includes/stack.hpp"
 
 void stackTest()
 {

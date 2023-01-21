@@ -1,5 +1,5 @@
-#include "../tools.hpp"
-#include "../vector.hpp"
+#include "../includes/tools.hpp"
+#include "../includes/vector.hpp"
 
 void vectorTest()
 {

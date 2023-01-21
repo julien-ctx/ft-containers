@@ -1,5 +1,5 @@
-#include "../tools.hpp"
-#include "../map.hpp"
+#include "../includes/tools.hpp"
+#include "../includes/map.hpp"
 
 void mapTest()
 {

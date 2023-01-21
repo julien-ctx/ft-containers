@@ -8,9 +8,9 @@
 
 // My containers implementation includes
 
-#include "utils/iterator_traits.hpp"
-#include "utils/reverse_iterator.hpp"
-#include "utils/pair.hpp"
+#include "iterator_traits.hpp"
+#include "reverse_iterator.hpp"
+#include "pair.hpp"
 
 // STL containers includes
 #include <vector>
@@ -27,7 +27,7 @@
 #define CYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define BOLD    "\033[1m\033[37m"      /* Bold White */
 
-#define PRINT(x) std::cout << BOLD << x << std::endl << RESET; 
+#define PRINTF(x) std::cout << BOLD << x << std::endl << RESET; 
 #define NL() std::cout << std::endl;
 
 void vectorTest();

@@ -1,12 +1,12 @@
 #pragma once
 
 #include "tools.hpp"
-#include "utils/reverse_iterator.hpp"
-#include "utils/iterator_traits.hpp"
-#include "utils/enable_if.hpp"
-#include "utils/random_access_iterator.hpp"
-#include "utils/is_integral.hpp"
-#include "utils/lexicographical_compare.hpp"
+#include "reverse_iterator.hpp"
+#include "iterator_traits.hpp"
+#include "enable_if.hpp"
+#include "random_access_iterator.hpp"
+#include "is_integral.hpp"
+#include "lexicographical_compare.hpp"
 
 #define VEC_DATA() std::cout << _size << " <- size | capacity -> " << _capacity << std::endl;
 
