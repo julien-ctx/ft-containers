@@ -66,6 +66,14 @@ public:
 	// {
 		
 	// }
+	// Copy constructor
+	map(const map &x)
+	{
+		_root = x._root;
+		_sentinel = x._sentinel;
+		_size = x._size;
+		_comp = x._comp;
+	}
 	/* -------------------------*/
 };
 
