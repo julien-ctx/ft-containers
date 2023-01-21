@@ -1,4 +1,5 @@
 #include "vector.hpp"
+#include "map.hpp"
 #include "stack.hpp"
 
 #include "tools.hpp"
@@ -17,5 +18,3 @@ int main()
 	stackTest();
 	mapTest();
 }
-
-

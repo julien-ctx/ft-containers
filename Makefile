@@ -25,11 +25,11 @@ mli:
 		git clone https://github.com/mli42/containers_test.git && cd containers_test && ./do.sh; \
 	fi
 
-.cpp.o: $(SRCS) utils/pair.hpp
+.cpp.o: $(SRCS)
 	@printf $(GREEN)"\r\033[KCreating object files 👉 "$(YELLOW)"<$<> "$(RESET)
 	@c++ $(CPPFLAGS) -c $< -o $(<:.cpp=.o)
 
-$(OBJS): utils/*.hpp
+$(OBJS): utils/*.hpp *.hpp
 
 $(NAME): $(OBJS)
 	@c++ $(CPPFLAGS) -o $(NAME) $(SRCS)
