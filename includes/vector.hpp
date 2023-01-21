@@ -98,7 +98,6 @@ public:
 		for (size_type i = 0; i < _size; i++)
 			_alloc.destroy(&_array[i]);
 		_alloc.deallocate(_array, _capacity);
-
 		_capacity = other.capacity();
 		_size = other.size();
 
@@ -124,7 +123,6 @@ public:
 		else
 			return operator[](n);
 	}
-
 
 	T* data() {return _array;}
 
@@ -169,7 +167,7 @@ public:
 	void reserve(size_type new_cap)
 	{
 		if (new_cap > max_size())
-			throw std::bad_alloc();
+			throw std::length_error("allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size");
 		if (new_cap > _capacity)
 		{
 			T *new_array = _alloc.allocate(new_cap);

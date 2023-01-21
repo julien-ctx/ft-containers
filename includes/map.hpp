@@ -9,6 +9,9 @@
 #include "lexicographical_compare.hpp"
 #include "pair.hpp"
 
+#define RED_NODE 42
+#define BLACK_NODE 43
+
 namespace ft
 {
 
@@ -35,7 +38,17 @@ public:
 	typedef std::size_t size_type;
 
 private:
-	value_type *_pair;
+	struct Node
+	{
+		value_type pair;
+		Node *left;
+		Node *right;
+		Node *root;
+		bool color;
+	};
+	Node *_root;
+	Node *_sentinel;
+	size_type _size;
 	Compare _comp;
 	Allocator _alloc;
 
@@ -43,8 +56,16 @@ public:
 	/* ----- Constructors ----- */
 	// Default constructor
 	explicit map(const key_compare &comp = key_compare(),
-	const allocator_type &alloc = allocator_type()) : _pair(NULL), _comp(comp), _alloc(alloc){}
+	const allocator_type &alloc = allocator_type()) :
+	_root(NULL), _sentinel(NULL), _size(0), _comp(comp), _alloc(alloc) {}
 
+	// Range constructor
+	// template <class InputIterator>
+	// map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), 
+	// const allocator_type &alloc = allocator_type())
+	// {
+		
+	// }
 	/* -------------------------*/
 };
 
