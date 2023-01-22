@@ -27,7 +27,7 @@
 #define CYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define BOLD    "\033[1m\033[37m"      /* Bold White */
 
-#define PRINTF(x) std::cout << BOLD << x << std::endl << RESET; 
+#define PRINT(x) std::cout << BOLD << x << std::endl << RESET; 
 #define NL() std::cout << std::endl;
 
 void vectorTest();

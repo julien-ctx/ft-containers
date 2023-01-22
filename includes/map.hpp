@@ -41,11 +41,12 @@ private:
 	struct Node
 	{
 		value_type pair;
+		Node *root;
 		Node *left;
 		Node *right;
-		Node *root;
 		bool color;
 	};
+
 	Node *_root;
 	Node *_sentinel;
 	size_type _size;
@@ -60,21 +61,30 @@ public:
 	_root(NULL), _sentinel(NULL), _size(0), _comp(comp), _alloc(alloc) {}
 
 	// Range constructor
-	// template <class InputIterator>
-	// map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), 
-	// const allocator_type &alloc = allocator_type())
-	// {
-		
-	// }
+	template <class InputIterator>
+	map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), 
+	const allocator_type &alloc = allocator_type()) : _comp(comp), _alloc(alloc)
+	{
+		(void)first;
+		(void)last;
+		// Need to use insert in a loop
+	}
+
 	// Copy constructor
-	map(const map &x)
+	map(const map &x) {*this = x;}
+	/* -------------------------*/
+
+	/* ------ Members Overloads ------- */
+	map &operator=(const map &x)
 	{
 		_root = x._root;
 		_sentinel = x._sentinel;
 		_size = x._size;
 		_comp = x._comp;
+		return *this;
 	}
-	/* -------------------------*/
+
+	/* ---------------------------------*/
 };
 
 }
