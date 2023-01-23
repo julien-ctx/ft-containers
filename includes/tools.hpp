@@ -31,6 +31,8 @@
 #define PRINT(x) std::cout << BOLD << x << std::endl << RESET; 
 #define NL() std::cout << std::endl;
 
+void timeDiff(clock_t &ft_diff, clock_t &std_diff);
+
 void vectorTest();
 void stackTest();
 void mapTest();
