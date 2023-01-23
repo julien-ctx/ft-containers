@@ -1,6 +1,20 @@
 #include "../includes/tools.hpp"
 #include "../includes/vector.hpp"
 
+void timeDiff(clock_t &ft_diff, clock_t &std_diff)
+{
+	if (ft_diff > std_diff)
+	{
+		std::cout << "My implementation is " << ft_diff - std_diff << " ms slower."<< std::endl;
+		std::cout << (ft_diff - std_diff) * 100 / std_diff << "\% slower" << std::endl;
+	}
+	else
+	{
+		std::cout << "STL implementation is " << std_diff - ft_diff << " ms slower."<< std::endl;
+		std::cout << (std_diff - ft_diff) * 100 / ft_diff << "\% slower" << std::endl;
+	}
+}
+
 void vectorTest()
 {
 	NL();
@@ -10,9 +24,13 @@ void vectorTest()
 	std::stringstream ft_ss;
 	std::stringstream std_ss;
 	std::streambuf* cout_buf = std::cout.rdbuf();
+	clock_t begin_time;
+	clock_t ft_diff;
+	clock_t std_diff;
 
 	std::cout << CYAN << "--------------- CONSTRUCTORS ---------------\n" << RESET;
 	{
+		begin_time = clock();
 		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		std::vector<int> v2(10, 42);
@@ -35,8 +53,10 @@ void vectorTest()
 			std::cout << *it << " ";
 		NL();
 		std::cout.rdbuf(cout_buf);
+		std_diff = begin_time - clock();
 	}
 	{
+		begin_time = clock();
 		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		ft::vector<int> v2(10, 42);
@@ -59,15 +79,20 @@ void vectorTest()
 			std::cout << *it << " ";
 		NL();
 		std::cout.rdbuf(cout_buf);
+		ft_diff = begin_time - clock();
 	}
 	std::cout << BOLD;
 	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
 	std::cout << RESET;
 	ft_ss.clear();
 	std_ss.clear();
+	std::cout << BOLD;
+	timeDiff(ft_diff, std_diff);
+	std::cout << RESET;
 
 	std::cout << CYAN << "------------------- SIZE -------------------\n" << RESET;
 	{
+		begin_time = clock();
 		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		try
@@ -89,8 +114,10 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		std_diff = begin_time - clock();
 	}
 	{
+		begin_time = clock();
 		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		try
@@ -112,15 +139,20 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		ft_diff = begin_time - clock();
 	}
 	std::cout << BOLD;
 	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
 	std::cout << RESET;
 	ft_ss.clear();
 	std_ss.clear();
+	std::cout << BOLD;
+	timeDiff(ft_diff, std_diff);
+	std::cout << RESET;
 
 	std::cout << CYAN << "----------------- CAPACITY -----------------\n" << RESET;
 	{
+		begin_time = clock();
 		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		try
@@ -145,8 +177,10 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		std_diff = begin_time - clock();
 	}
 	{
+		begin_time = clock();
 		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		try
@@ -171,15 +205,20 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		ft_diff = begin_time - clock();
 	}
 	std::cout << BOLD;
 	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
 	std::cout << RESET;
 	ft_ss.clear();
 	std_ss.clear();
+	std::cout << BOLD;
+	timeDiff(ft_diff, std_diff);
+	std::cout << RESET;
 
 	std::cout << CYAN << "------------------ ACCESS ------------------\n" << RESET;
 	{
+		begin_time = clock();
 		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		try
@@ -198,8 +237,10 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		std_diff = begin_time - clock();
 	}
 	{
+		begin_time = clock();
 		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		try
@@ -218,15 +259,20 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		ft_diff = begin_time - clock();
 	}
 	std::cout << BOLD;
 	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
 	std::cout << RESET;
 	ft_ss.clear();
 	std_ss.clear();
+	std::cout << BOLD;
+	timeDiff(ft_diff, std_diff);
+	std::cout << RESET;
 
 	std::cout << CYAN << "----------------- MODIFIERS ----------------\n" << RESET;
 	{
+		begin_time = clock();
 		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		try
@@ -277,8 +323,10 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		std_diff = begin_time - clock();
 	}
 	{
+		begin_time = clock();
 		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		try
@@ -329,15 +377,20 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		ft_diff = begin_time - clock();
 	}
 	std::cout << BOLD;
 	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
 	std::cout << RESET;
 	ft_ss.clear();
 	std_ss.clear();
+	std::cout << BOLD;
+	timeDiff(ft_diff, std_diff);
+	std::cout << RESET;
 
 	std::cout << CYAN << "---------------- ITERATORS -----------------\n" << RESET;
 	{
+		begin_time = clock();
 		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<unsigned int> v;
 		for (unsigned int i = 0; i < 10; i++)
@@ -370,8 +423,10 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		std_diff = begin_time - clock();
 	}
 	{
+		begin_time = clock();
 		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<unsigned int> v;
 		for (unsigned int i = 0; i < 10; i++)
@@ -404,15 +459,20 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		ft_diff = begin_time - clock();
 	}
 	std::cout << BOLD;
 	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
 	std::cout << RESET;
 	ft_ss.clear();
 	std_ss.clear();
+	std::cout << BOLD;
+	timeDiff(ft_diff, std_diff);
+	std::cout << RESET;
 
 	std::cout << CYAN << "----------- RELATIONAL OPERATORS -----------\n" << RESET;
 	{
+		begin_time = clock();
 		std::cout.rdbuf(std_ss.rdbuf());
 		std::vector<int> v;
 		for (int i = 0; i < 10; i++)
@@ -433,8 +493,10 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		std_diff = begin_time - clock();
 	}
 	{
+		begin_time = clock();
 		std::cout.rdbuf(ft_ss.rdbuf());
 		ft::vector<int> v;
 		for (int i = 0; i < 10; i++)
@@ -455,10 +517,14 @@ void vectorTest()
 			std::cerr << e.what() << '\n';
 		}
 		std::cout.rdbuf(cout_buf);
+		ft_diff = begin_time - clock();
 	}
 	std::cout << BOLD;
 	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
 	std::cout << RESET;
 	ft_ss.clear();
 	std_ss.clear();
+	std::cout << BOLD;
+	timeDiff(ft_diff, std_diff);
+	std::cout << RESET;
 }
