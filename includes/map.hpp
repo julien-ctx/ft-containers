@@ -12,6 +12,8 @@
 #define RED_NODE 42
 #define BLACK_NODE 43
 
+// https://brilliant.org/wiki/red-black-tree/
+
 /*
 Properties:
  * The black height of the red-black tree is the number of black nodes on a path
@@ -22,6 +24,8 @@ Properties:
  * The black depth of a node is defined as the number of black nodes from the
  root to that node i.e the number of black ancestors.
  * Every red-black tree is a special case of a binary tree.
+ * If a node is red, then its parent is black. A red node cannot have a red parent or red child)
+ * An inserted node is always red
 */
 
 namespace ft
@@ -50,32 +54,44 @@ public:
 	typedef std::size_t size_type;
 
 private:
-	struct Node
+	typedef struct Node
 	{
 		value_type pair;
 		Node *root;
 		Node *left;
 		Node *right;
 		bool color;
-	};
+	} Node;
 
 	Node *_root;
 	Node *_sentinel;
 	size_type _size;
 	Compare _comp;
-	Allocator _alloc;
+	Allocator _allocPair;
+	std::allocator<Node> _allocNode;
+
+	void insertNewChild(Node *node, int color)
+	{
+		node->right = NULL;
+		node->left = NULL;
+		if (color)
+			node->color = color;
+	}
 
 public:
 	/* ----- Constructors ----- */
 	// Default constructor
 	explicit map(const key_compare &comp = key_compare(),
 	const allocator_type &alloc = allocator_type()) :
-	_root(NULL), _sentinel(NULL), _size(0), _comp(comp), _alloc(alloc) {}
+	_root(NULL), _sentinel(NULL), _size(0), _comp(comp), _allocPair(alloc)
+	{
+
+	}
 
 	// Range constructor
 	template <class InputIterator>
 	map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), 
-	const allocator_type &alloc = allocator_type()) : _comp(comp), _alloc(alloc)
+	const allocator_type &alloc = allocator_type()) : _comp(comp), _allocPair(alloc)
 	{
 		(void)first;
 		(void)last;
@@ -95,8 +111,49 @@ public:
 		_comp = x._comp;
 		return *this;
 	}
-
 	/* ---------------------------------*/
+
+	T &at(const Key &key)
+	{
+		(void)key;
+		return _root->pair.second;
+	}
+
+	const T &at(const Key &key) const
+	{
+		(void)key;
+		return _root->pair.second;
+	}
+
+	ft::pair<iterator, bool> insert(const value_type &value)
+	{
+		Node *node = _allocNode.allocate(1);
+
+		if (!_root)
+		{
+			insertNewChild(node, BLACK_NODE);
+			node->pair = _allocPair.allocate(1);
+			_allocPair.construct(&node->pair, value);
+		}
+		return node->pair;
+	}
+
+	iterator find(const Key &key)
+	{
+		Node *curr = _root;
+		for (Node *curr = _root; curr && key != curr->pair;)
+			curr = key < curr->pair.first ? curr->left : curr->right;
+		return curr;
+	}
+
+	const_iterator find(const Key &key) const
+	{
+		Node *curr = _root;
+		for (Node *curr = _root; curr && key != curr->pair;)
+			curr = key < curr->pair.first ? curr->left : curr->right;
+		return curr;
+	}
+
 };
 
 }

@@ -22,7 +22,8 @@ struct pair
 	// Copy constructor
 	template<class U, class V> pair(const pair<U, V> &pr)
 	{
-		*this = pr;
+		first = pr.first;
+		second = pr.second;
 	}
 
 	// Initialization constructor
@@ -32,7 +33,7 @@ struct pair
 		second = b;
 	}
 	/* -------------------------*/
-	
+
 	/* ------ Members Overloads ------- */
 	pair &operator=(const pair &pr)
 	{
@@ -72,6 +73,6 @@ bool operator>=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs)
 
 template<class T1, class T2>
 ft::pair<T1, T2> make_pair(T1 x, T2 y)
-{return ft::pair<T1, T2>(x,y);}
+{return ft::pair<T1, T2>(x, y);}
 
 }

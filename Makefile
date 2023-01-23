@@ -41,7 +41,8 @@ mazoise:
 	@printf $(GREEN)"\r\033[KCreating object files 👉 "$(YELLOW)"<$<> "$(RESET)
 	@c++ $(CPPFLAGS) -c $< -o $(<:.cpp=.o)
 
-$(OBJS): includes/*.hpp
+# $(OBJS): includes/*.hpp
+main.o: includes/*.hpp
 
 $(NAME): $(OBJS)
 	@c++ $(CPPFLAGS) -o $(NAME) $(SRCS)
