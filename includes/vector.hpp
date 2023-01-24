@@ -111,7 +111,7 @@ public:
 	reference at(size_type n)
 	{
 		if (n >= _size)
-			throw std::out_of_range("Index out of range");
+			throw std::out_of_range("vector: index out of range");
 		else
 			return operator[](n);
 	}
@@ -119,7 +119,7 @@ public:
 	const_reference at(size_type n) const
 	{
 		if (n >= _size)
-			throw std::out_of_range("Index out of range");
+			throw std::out_of_range("vector: index out of range");
 		else
 			return operator[](n);
 	}

@@ -11,7 +11,7 @@
 #include "includes/reverse_iterator.hpp"
 #include "includes/lexicographical_compare.hpp"
 
-#define TEST ft
+#define TEST std
 
 int main()
 {
@@ -19,9 +19,14 @@ int main()
 	std::string test = "Test";
 	TEST::pair<std::string, int> mypair(test, 42);
 	mymap.insert(mypair);
+	mymap.insert(TEST::make_pair("lol", 24));
+	mymap.insert(TEST::make_pair("lsl", 55));
 	try
 	{
 		std::cout << mymap.at("Test") << std::endl;
+		std::cout << mymap.at("lol") << std::endl;
+		std::cout << mymap["a"] << std::endl;
+		std::cout << mymap["a"] << std::endl;
 	}
 	catch(const std::exception& e)
 	{

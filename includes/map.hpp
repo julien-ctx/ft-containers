@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "tools.hpp"
@@ -9,8 +10,11 @@
 #include "lexicographical_compare.hpp"
 #include "pair.hpp"
 
-#define RED_NODE 42
-#define BLACK_NODE 43
+#define RED_NODE 0
+#define BLACK_NODE 1
+#define UNDEFINED_NODE 2
+#define LEFT_ROT 0
+#define RIGHT_ROT 1
 
 // https://brilliant.org/wiki/red-black-tree/
 
@@ -61,28 +65,114 @@ private:
 		Node *root;
 		Node *left;
 		Node *right;
-		bool color;
+		Node *parent;
+		char color;
 	} Node;
 
 	// Template rebind allows to use the given allocator with another type
 	// Allocator::template is necessary because rebind is a template inside std::allocator class
 	typedef typename Allocator::template rebind<Node>::other NodeAllocator;
 
-	Node *_root;
-	Node *_sentinel;
+	Node *_origin;
 	size_type _size;
 	Compare _comp;
 	NodeAllocator _alloc;
+
+	void rotate(Node *node, bool rotate)
+	{
+		Node *sibiling = rotate == LEFT_ROT ? node->right : node->left;
+		if (rotate == LEFT_ROT)
+			node->right = sibiling->left;
+		else
+			node->left = sibiling->right;
+		if (rotate == LEFT_ROT && sibiling->left)
+			sibiling->left->parent = node;
+		else if (rotate == RIGHT_ROT && sibiling->right)
+			sibiling->right->parent = node;
+		sibiling->parent = node->parent;
+		if (!node->parent)
+			_origin = sibiling;
+		else
+		{
+			if (rotate == LEFT_ROT)
+			{
+				if (node == node->parent->left)
+					node->parent->left = sibiling;
+				else
+					node->parent->right = sibiling;
+			}
+			else
+			{
+				if (node == node->parent->right)
+					node->parent->right = sibiling;
+				else
+					node->parent->left = sibiling;
+			}
+		}
+		if (rotate == LEFT_ROT)
+			sibiling->left = node;
+		else
+			sibiling->right = node;
+		node->parent = sibiling;
+	}
+
+	void rebalance(Node *node)
+	{
+		while (node != _origin && node->parent.color == RED_NODE)
+		{
+			if (node->parent == node->parent->parent.right)
+			{
+				Node *uncle = node->parent->parent.left;
+				if (uncle->color == RED_NODE)
+				{
+					uncle->color = BLACK_NODE;
+					uncle->parent.color = RED_NODE;
+					node->parent.color = BLACK_NODE;
+					node = node->parent->parent;
+				}
+				else if (uncle->color == BLACK_NODE)
+				{
+					if (node == node->parent.left)
+					{
+						node = node->parent;
+						rotate(node, RIGHT_ROT);
+					}
+					uncle->parent.color = RED_NODE;
+					node->parent.color = BLACK_NODE;
+					rotate(uncle->parent, LEFT_ROT);
+				}
+			}
+			else
+			{
+				Node *uncle = node->parent->parent.right;
+				if (uncle->color == RED_NODE)
+				{
+					uncle->color = BLACK_NODE;
+					uncle->parent.color = RED_NODE;
+					node->parent.color = BLACK_NODE;
+					node = node->parent->parent;
+				}
+				else if (uncle->color == BLACK_NODE)
+				{
+					if (node == node->parent.right)
+					{
+						node = node->parent;
+						rotate(node, LEFT_ROT);
+					}
+					uncle->parent.color = RED_NODE;
+					node->parent.color = BLACK_NODE;
+					rotate(uncle->parent, RIGHT_ROT);
+				}
+			}
+		}
+	}
 
 public:
 	/* ----- Constructors ----- */
 	// Default constructor
 	explicit map(const key_compare &comp = key_compare(),
 	const allocator_type &alloc = allocator_type()) :
-	_root(NULL), _sentinel(NULL), _size(0), _comp(comp), _alloc(alloc)
-	{
-
-	}
+	_origin(NULL), _size(0), _comp(comp), _alloc(alloc) {}
 
 	// Range constructor
 	template <class InputIterator>
@@ -100,49 +190,102 @@ public:
 	/* ------ Members Overloads ------- */
 	map &operator=(const map &x)
 	{
-		_root = x._root;
-		_sentinel = x._sentinel;
+		_origin = x._origin;
 		_size = x._size;
 		_comp = x._comp;
 		return *this;
+	}
+
+	T &operator[](const key_type &key)
+	{
+		Node *curr = _origin; Node *parent = _origin;
+		while (curr && key != curr->pair.first)
+		{
+			parent = curr;
+			curr = key < curr->pair.first ? curr->left : curr->right;
+		}
+		if (!curr)
+		{
+			_size++;
+			Node *node = _alloc.allocate(1);
+			_alloc.construct(node, (Node){ft::make_pair(key, mapped_type(),
+				_origin, NULL, NULL, parent, UNDEFINED_NODE)});
+			if (key < parent->pair.first)
+				parent->left = node;
+			else
+				parent->right = node;
+			rebalance(node);
+			return node->pair.first;
+		}
+		return curr->pair.second;
 	}
 	/* ---------------------------------*/
 
 	T &at(const Key &key)
 	{
-		(void)key;
-		return _root->pair.second;
+		Node *curr = _origin;
+		while (curr && key != curr->pair.first)
+			curr = key < curr->pair.first ? curr->left : curr->right;
+		if (!curr)
+			throw std::out_of_range("map::at: key not found");
+		return curr->pair.second;
 	}
 
 	const T &at(const Key &key) const
 	{
-		(void)key;
-		return _root->pair.second;
+		Node *curr = _origin;
+		while (curr && key != curr->pair.first)
+			curr = key < curr->pair.first ? curr->left : curr->right;
+		if (!curr)
+			throw std::out_of_range("map::at: key not found");
+		return curr->pair.second;
 	}
 
 	void /* ft::pair<iterator, bool> */ insert(const value_type &value)
 	{
 		Node *node = _alloc.allocate(1);
-		// bool inserted = false;
-		if (!_root)
+		bool inserted = false;
+		if (!_origin)
 		{
-			_alloc.construct(node, (Node){value, NULL, NULL, NULL, BLACK_NODE});	
-			_root = node;
+			_alloc.construct(node, (Node){value, node, NULL, NULL, node, BLACK_NODE});	
+			_origin = node;
 		}
+		else
+		{
+			Node *curr = _origin; Node *parent = _origin;
+			while (curr)
+			{
+				parent = curr;
+				curr = value.first < curr->pair.first ? curr->left : curr->right;
+			}
+			_alloc.construct(node, (Node){value, _origin, NULL, NULL, parent, UNDEFINED_NODE});
+			if (value.first < parent->pair.first)
+				parent->left = node;
+			else
+				parent->right = node;
+			rebalance(node);
+		}
+		if (!inserted)
+		{
+			_alloc.deallocate(node, 1);
+			// Need to return correct boolean here
+		}
+		else
+			_size++;
 	}
 
 	iterator find(const Key &key)
 	{
-		Node *curr = _root;
-		for (Node *curr = _root; curr && key != curr->pair;)
+		Node *curr = _origin;
+		while (curr && key != curr->pair.first)
 			curr = key < curr->pair.first ? curr->left : curr->right;
 		return curr;
 	}
 
 	const_iterator find(const Key &key) const
 	{
-		Node *curr = _root;
-		for (Node *curr = _root; curr && key != curr->pair;)
+		Node *curr = _origin;
+		while (curr && key != curr->pair.first)
 			curr = key < curr->pair.first ? curr->left : curr->right;
 		return curr;
 	}
