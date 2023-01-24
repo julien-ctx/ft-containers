@@ -74,14 +74,6 @@ private:
 	Compare _comp;
 	NodeAllocator _alloc;
 
-	void insertNewChild(Node *node, int color)
-	{
-		node->right = NULL;
-		node->left = NULL;
-		if (color)
-			node->color = color;
-	}
-
 public:
 	/* ----- Constructors ----- */
 	// Default constructor
@@ -128,17 +120,16 @@ public:
 		return _root->pair.second;
 	}
 
-	// ft::pair<iterator, bool> insert(const value_type &value)
-	// {
-	// 	Node *node = _alloc.allocate(1);
-
-	// 	if (!_root)
-	// 	{
-	// 		insertNewChild(node, BLACK_NODE);
-	// 		_alloc.construct(&node->pair, value);
-	// 	}
-	// 	return node->pair;
-	// }
+	void /* ft::pair<iterator, bool> */ insert(const value_type &value)
+	{
+		Node *node = _alloc.allocate(1);
+		// bool inserted = false;
+		if (!_root)
+		{
+			_alloc.construct(node, (Node){value, NULL, NULL, NULL, BLACK_NODE});	
+			_root = node;
+		}
+	}
 
 	iterator find(const Key &key)
 	{

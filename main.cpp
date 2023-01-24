@@ -16,8 +16,9 @@
 int main()
 {
 	TEST::map<std::string, int> mymap;
-	TEST::pair<std::string, int> mypair("Test", 42);
-	// mymap.insert(mypair);
+	std::string test = "Test";
+	TEST::pair<std::string, int> mypair(test, 42);
+	mymap.insert(mypair);
 	try
 	{
 		std::cout << mymap.at("Test") << std::endl;

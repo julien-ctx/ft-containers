@@ -20,18 +20,11 @@ struct pair
 	pair() {}
 
 	// Copy constructor
-	template<class U, class V> pair(const pair<U, V> &pr)
-	{
-		first = pr.first;
-		second = pr.second;
-	}
+	template<class U, class V>
+	pair(const pair<U, V> &pr) : first(pr.first), second(pr.second) {}
 
 	// Initialization constructor
-	pair(const first_type &a, const second_type &b)
-	{
-		first = a;
-		second = b;
-	}
+	pair(const first_type &a, const second_type &b) : first(a), second(b) {}
 	/* -------------------------*/
 
 	/* ------ Members Overloads ------- */
