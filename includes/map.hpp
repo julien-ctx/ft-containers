@@ -52,6 +52,7 @@ public:
 	typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 	typedef std::ptrdiff_t difference_type;
 	typedef std::size_t size_type;
+	
 
 private:
 	typedef struct Node
@@ -63,12 +64,15 @@ private:
 		bool color;
 	} Node;
 
+	// Template rebind allows to use the given allocator with another type
+	// Allocator::template is necessary because rebind is a template inside std::allocator class
+	typedef typename Allocator::template rebind<Node>::other NodeAllocator;
+
 	Node *_root;
 	Node *_sentinel;
 	size_type _size;
 	Compare _comp;
-	Allocator _allocPair;
-	std::allocator<Node> _allocNode;
+	NodeAllocator _alloc;
 
 	void insertNewChild(Node *node, int color)
 	{
@@ -83,7 +87,7 @@ public:
 	// Default constructor
 	explicit map(const key_compare &comp = key_compare(),
 	const allocator_type &alloc = allocator_type()) :
-	_root(NULL), _sentinel(NULL), _size(0), _comp(comp), _allocPair(alloc)
+	_root(NULL), _sentinel(NULL), _size(0), _comp(comp), _alloc(alloc)
 	{
 
 	}
@@ -91,13 +95,12 @@ public:
 	// Range constructor
 	template <class InputIterator>
 	map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), 
-	const allocator_type &alloc = allocator_type()) : _comp(comp), _allocPair(alloc)
+	const allocator_type &alloc = allocator_type()) : _comp(comp), _alloc(alloc)
 	{
 		(void)first;
 		(void)last;
 		// Need to use insert in a loop
 	}
-
 	// Copy constructor
 	map(const map &x) {*this = x;}
 	/* -------------------------*/
@@ -125,18 +128,17 @@ public:
 		return _root->pair.second;
 	}
 
-	ft::pair<iterator, bool> insert(const value_type &value)
-	{
-		Node *node = _allocNode.allocate(1);
+	// ft::pair<iterator, bool> insert(const value_type &value)
+	// {
+	// 	Node *node = _alloc.allocate(1);
 
-		if (!_root)
-		{
-			insertNewChild(node, BLACK_NODE);
-			node->pair = _allocPair.allocate(1);
-			_allocPair.construct(&node->pair, value);
-		}
-		return node->pair;
-	}
+	// 	if (!_root)
+	// 	{
+	// 		insertNewChild(node, BLACK_NODE);
+	// 		_alloc.construct(&node->pair, value);
+	// 	}
+	// 	return node->pair;
+	// }
 
 	iterator find(const Key &key)
 	{
