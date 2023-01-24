@@ -244,7 +244,7 @@ public:
 	void /* ft::pair<iterator, bool> */ insert(const value_type &value)
 	{
 		Node *node = _alloc.allocate(1);
-		bool inserted = false;
+		// bool inserted = false;
 		if (!_origin)
 		{
 			_alloc.construct(node, (Node){value, node, NULL, NULL, node, BLACK_NODE});	
@@ -265,12 +265,12 @@ public:
 				parent->right = node;
 			rebalance(node);
 		}
-		if (!inserted)
-		{
-			_alloc.deallocate(node, 1);
-			// Need to return correct boolean here
-		}
-		else
+		// if (!inserted)
+		// {
+		// 	_alloc.deallocate(node, 1);
+		// 	// Need to return correct boolean here
+		// }
+		// else
 			_size++;
 	}
 
