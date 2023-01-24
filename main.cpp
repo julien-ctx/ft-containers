@@ -11,7 +11,7 @@
 #include "includes/reverse_iterator.hpp"
 #include "includes/lexicographical_compare.hpp"
 
-#define TEST std
+#define TEST ft
 
 int main()
 {
@@ -25,8 +25,8 @@ int main()
 	{
 		std::cout << mymap.at("Test") << std::endl;
 		std::cout << mymap.at("lol") << std::endl;
-		std::cout << mymap["a"] << std::endl;
-		std::cout << mymap["a"] << std::endl;
+		// std::cout << mymap["a"] << std::endl;
+		// std::cout << mymap["a"] << std::endl;
 	}
 	catch(const std::exception& e)
 	{

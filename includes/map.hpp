@@ -118,49 +118,49 @@ private:
 
 	void rebalance(Node *node)
 	{
-		while (node != _origin && node->parent.color == RED_NODE)
+		while (node != _origin && node->parent->color == RED_NODE)
 		{
-			if (node->parent == node->parent->parent.right)
+			if (node->parent == node->parent->parent->right)
 			{
-				Node *uncle = node->parent->parent.left;
+				Node *uncle = node->parent->parent->left;
 				if (uncle->color == RED_NODE)
 				{
 					uncle->color = BLACK_NODE;
-					uncle->parent.color = RED_NODE;
-					node->parent.color = BLACK_NODE;
+					uncle->parent->color = RED_NODE;
+					node->parent->color = BLACK_NODE;
 					node = node->parent->parent;
 				}
 				else if (uncle->color == BLACK_NODE)
 				{
-					if (node == node->parent.left)
+					if (node == node->parent->left)
 					{
 						node = node->parent;
 						rotate(node, RIGHT_ROT);
 					}
-					uncle->parent.color = RED_NODE;
-					node->parent.color = BLACK_NODE;
+					uncle->parent->color = RED_NODE;
+					node->parent->color = BLACK_NODE;
 					rotate(uncle->parent, LEFT_ROT);
 				}
 			}
 			else
 			{
-				Node *uncle = node->parent->parent.right;
+				Node *uncle = node->parent->parent->right;
 				if (uncle->color == RED_NODE)
 				{
 					uncle->color = BLACK_NODE;
-					uncle->parent.color = RED_NODE;
-					node->parent.color = BLACK_NODE;
+					uncle->parent->color = RED_NODE;
+					node->parent->color = BLACK_NODE;
 					node = node->parent->parent;
 				}
 				else if (uncle->color == BLACK_NODE)
 				{
-					if (node == node->parent.right)
+					if (node == node->parent->right)
 					{
 						node = node->parent;
 						rotate(node, LEFT_ROT);
 					}
-					uncle->parent.color = RED_NODE;
-					node->parent.color = BLACK_NODE;
+					uncle->parent->color = RED_NODE;
+					node->parent->color = BLACK_NODE;
 					rotate(uncle->parent, RIGHT_ROT);
 				}
 			}
@@ -208,14 +208,14 @@ public:
 		{
 			_size++;
 			Node *node = _alloc.allocate(1);
-			_alloc.construct(node, (Node){ft::make_pair(key, mapped_type(),
-				_origin, NULL, NULL, parent, UNDEFINED_NODE)});
+			_alloc.construct(node, (Node){ft::make_pair(key, mapped_type()),
+				_origin, NULL, NULL, parent, UNDEFINED_NODE});
 			if (key < parent->pair.first)
 				parent->left = node;
 			else
 				parent->right = node;
 			rebalance(node);
-			return node->pair.first;
+			return node->pair.second;
 		}
 		return curr->pair.second;
 	}
