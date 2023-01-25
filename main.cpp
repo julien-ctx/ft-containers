@@ -13,14 +13,27 @@
 
 #define TEST ft
 
-int main()
+TEST::map<std::string, int>  trash()
 {
 	TEST::map<std::string, int> mymap;
-	TEST::pair<std::string, int> mypair("Test", 42);
-	TEST::pair<std::string, int> mypair2("Test2", 43);
-	TEST::map<std::string, int>::iterator it = mymap.insert(mypair).first;
-	TEST::map<std::string, int>::iterator it2 = mymap.insert(mypair2).first;
+	mymap.insert(TEST::make_pair("test", 1));
+	mymap.insert(TEST::make_pair("tenjhmst2", 1));
+	mymap.insert(TEST::make_pair("tvfdest2", 1));
+	mymap.insert(TEST::make_pair("vfdtest2", 1));
+	mymap.insert(TEST::make_pair("tsdvdfest2", 1));
+	mymap.insert(TEST::make_pair("teswt2", 1));
+	mymap.insert(TEST::make_pair("tacest2", 1));
+	mymap.insert(TEST::make_pair("teedest2", 1));
+	mymap.insert(TEST::make_pair("tesbfgbfgbt2", 1));
+	mymap.insert(TEST::make_pair("tebgbfb", 1));
+	return mymap;
+}
 
-std::cout <<  mymap.value_comp()(*it, *it2) << std::endl;
-  return 0;
+int main()
+{
+	TEST::map<std::string, int>  t = trash();
+	t.clear();
+	std::cout << t.size() << std::endl;
+	system("leaks ft_containers");
+	return 0;
 }

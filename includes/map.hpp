@@ -32,7 +32,6 @@ Properties:
  * If a node is red, then its parent is black. A red node cannot have a red parent or red child)
  * An inserted node is always red
 */
-
 namespace ft
 {
 
@@ -59,11 +58,9 @@ public:
 	
 	class value_compare : public std::binary_function<value_type,value_type,bool>
 	{  
-		friend class map;
-	protected:
-		Compare comp;
-		value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
 	public:
+		Compare comp;
+		value_compare (Compare c) : comp(c) {}
 		bool operator()(const value_type &x, const value_type &y) const
 		{return comp(x.first, y.first);}
 	};
@@ -178,6 +175,17 @@ private:
 			}
 		}
 	}
+
+	void deleteAll(Node *node)
+	{
+		if (node)
+		{
+			deleteAll(node->left);
+			deleteAll(node->right);
+			_alloc.destroy(node);
+			_alloc.deallocate(node, 1);
+		}
+	}
 	/* -------------------------- */	
 
 public:
@@ -201,7 +209,7 @@ public:
 
 	~map()
 	{
-		
+		deleteAll(_root);
 	}
 	/* -------------------------*/
 
@@ -318,7 +326,7 @@ public:
 
 	key_compare key_comp() const {return _comp;}
 
-	value_compare value_comp() const {return _comp;}
+	value_compare value_comp() const {return value_compare(_comp);}
 
 	size_type max_size() const {return _alloc.max_size();}
 
@@ -326,6 +334,12 @@ public:
 
 	bool empty() const {return !_size;}
 
+	void clear() 
+	{
+		deleteAll(_root);
+		_size = 0;
+		_root = NULL;
+	}
 };
 
 }
