@@ -62,7 +62,6 @@ private:
 	typedef struct Node
 	{
 		value_type pair;
-		Node *root;
 		Node *left;
 		Node *right;
 		Node *parent;
@@ -73,7 +72,7 @@ private:
 	// Allocator::template is necessary because rebind is a template inside std::allocator class
 	typedef typename Allocator::template rebind<Node>::other NodeAllocator;
 
-	Node *_origin;
+	Node *_root;
 	size_type _size;
 	Compare _comp;
 	NodeAllocator _alloc;
@@ -91,7 +90,7 @@ private:
 			sibiling->right->parent = node;
 		sibiling->parent = node->parent;
 		if (!node->parent)
-			_origin = sibiling;
+			_root = sibiling;
 		else
 		{
 			if (rotate == LEFT_ROT)
@@ -118,7 +117,7 @@ private:
 
 	void rebalance(Node *node)
 	{
-		while (node != _origin && node->parent->color == RED_NODE)
+		while (node != _root && node->parent->color == RED_NODE)
 		{
 			if (node->parent == node->parent->parent->right)
 			{
@@ -172,7 +171,7 @@ public:
 	// Default constructor
 	explicit map(const key_compare &comp = key_compare(),
 	const allocator_type &alloc = allocator_type()) :
-	_origin(NULL), _size(0), _comp(comp), _alloc(alloc) {}
+	_root(NULL), _size(0), _comp(comp), _alloc(alloc) {}
 
 	// Range constructor
 	template <class InputIterator>
@@ -190,7 +189,7 @@ public:
 	/* ------ Members Overloads ------- */
 	map &operator=(const map &x)
 	{
-		_origin = x._origin;
+		_root = x._root;
 		_size = x._size;
 		_comp = x._comp;
 		return *this;
@@ -198,7 +197,7 @@ public:
 
 	T &operator[](const key_type &key)
 	{
-		Node *curr = _origin; Node *parent = _origin;
+		Node *curr = _root; Node *parent = _root;
 		while (curr && key != curr->pair.first)
 		{
 			parent = curr;
@@ -209,7 +208,7 @@ public:
 			_size++;
 			Node *node = _alloc.allocate(1);
 			_alloc.construct(node, (Node){ft::make_pair(key, mapped_type()),
-				_origin, NULL, NULL, parent, UNDEFINED_NODE});
+			NULL, NULL, parent, UNDEFINED_NODE});
 			if (key < parent->pair.first)
 				parent->left = node;
 			else
@@ -223,7 +222,7 @@ public:
 
 	T &at(const Key &key)
 	{
-		Node *curr = _origin;
+		Node *curr = _root;
 		while (curr && key != curr->pair.first)
 			curr = key < curr->pair.first ? curr->left : curr->right;
 		if (!curr)
@@ -233,7 +232,7 @@ public:
 
 	const T &at(const Key &key) const
 	{
-		Node *curr = _origin;
+		Node *curr = _root;
 		while (curr && key != curr->pair.first)
 			curr = key < curr->pair.first ? curr->left : curr->right;
 		if (!curr)
@@ -241,42 +240,40 @@ public:
 		return curr->pair.second;
 	}
 
-	void /* ft::pair<iterator, bool> */ insert(const value_type &value)
+	ft::pair<iterator, bool> insert(const value_type &value)
 	{
-		Node *node = _alloc.allocate(1);
-		// bool inserted = false;
-		if (!_origin)
+		Node *node = NULL;
+		if (!_root)
 		{
-			_alloc.construct(node, (Node){value, node, NULL, NULL, node, BLACK_NODE});	
-			_origin = node;
+			node = _alloc.allocate(1);
+			_alloc.construct(node, (Node){value, NULL, NULL, node, BLACK_NODE});	
+			_root = node;
+			return ft::make_pair<iterator, bool>(iterator(&node->pair), ++_size);
 		}
 		else
 		{
-			Node *curr = _origin; Node *parent = _origin;
+			Node *curr = _root; Node *parent = _root;
 			while (curr)
 			{
+				if (curr->pair.first == value.first)
+					return ft::make_pair<iterator, bool>(iterator(&curr->pair), false);
 				parent = curr;
 				curr = value.first < curr->pair.first ? curr->left : curr->right;
 			}
-			_alloc.construct(node, (Node){value, _origin, NULL, NULL, parent, UNDEFINED_NODE});
+			node = _alloc.allocate(1);
+			_alloc.construct(node, (Node){value, NULL, NULL, parent, UNDEFINED_NODE});
 			if (value.first < parent->pair.first)
 				parent->left = node;
 			else
 				parent->right = node;
 			rebalance(node);
 		}
-		// if (!inserted)
-		// {
-		// 	_alloc.deallocate(node, 1);
-		// 	// Need to return correct boolean here
-		// }
-		// else
-			_size++;
+		return ft::make_pair<iterator, bool>(iterator(&node->pair), ++_size);
 	}
 
 	iterator find(const Key &key)
 	{
-		Node *curr = _origin;
+		Node *curr = _root;
 		while (curr && key != curr->pair.first)
 			curr = key < curr->pair.first ? curr->left : curr->right;
 		return curr;
@@ -284,7 +281,7 @@ public:
 
 	const_iterator find(const Key &key) const
 	{
-		Node *curr = _origin;
+		Node *curr = _root;
 		while (curr && key != curr->pair.first)
 			curr = key < curr->pair.first ? curr->left : curr->right;
 		return curr;
