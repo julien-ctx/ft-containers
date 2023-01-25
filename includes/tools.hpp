@@ -43,6 +43,16 @@ namespace ft
 	typedef std::ptrdiff_t difference_type;
 	typedef std::size_t size_type;
 
+	template<class T>
+	struct Node
+	{
+		T pair;
+		Node *left;
+		Node *right;
+		Node *parent;
+		char color;
+	};
+
 	template<class It>
 	difference_type distance(It first, It last)
 	{

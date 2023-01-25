@@ -13,29 +13,31 @@
 
 #define TEST ft
 
-TEST::map<std::string, int>  trash()
+TEST::map<int, int>  trash()
 {
-	TEST::map<std::string, int> mymap;
-	mymap.insert(TEST::make_pair("test", 1));
-	mymap.insert(TEST::make_pair("tenjhmst2", 1));
-	mymap.insert(TEST::make_pair("tvfdest2", 1));
-	mymap.insert(TEST::make_pair("vfdtest2", 1));
-	mymap.insert(TEST::make_pair("tsdvdfest2", 1));
-	mymap.insert(TEST::make_pair("teswt2", 1));
-	mymap.insert(TEST::make_pair("tacest2", 1));
-	mymap.insert(TEST::make_pair("teedest2", 1));
-	mymap.insert(TEST::make_pair("tesbfgbfgbt2", 1));
-	mymap.insert(TEST::make_pair("tebgbfb", 1));
+	TEST::map<int, int> mymap;
+	mymap.insert(TEST::make_pair(34, 1));
+	// mymap.insert(TEST::make_pair(65, 1));
+	// mymap.insert(TEST::make_pair(23, 1));
+	// mymap.insert(TEST::make_pair(2, 1));
+	// mymap.insert(TEST::make_pair(657, 1));
+	// mymap.insert(TEST::make_pair(76, 1));
+	// mymap.insert(TEST::make_pair(4, 1));
+	// mymap.insert(TEST::make_pair(1, 1));
+	// mymap.insert(TEST::make_pair(345, 1));
 	return mymap;
 }
 
 int main()
 {
-	TEST::map<std::string, int>  t = trash();
-	TEST::map<std::string, int>::iterator it = t.begin();
-	std::cout << it->first << std::endl;
-	it++;
-	std::cout << it->first << std::endl;
-	std::cout << std::endl;
-	return 0;
+	TEST::map<int, int>  t = trash();
+	TEST::map<int, int>::iterator it = t.begin();
+		// std::cout << it->first << std::endl;
+		// it++;
+		// std::cout << it->first << std::endl;
+		// it--;
+		// std::cout << it->first << std::endl;
+	for (; it != t.end(); it++)
+		std::cout << it->first << std::endl;
+	// system("leaks ft_containers");
 }

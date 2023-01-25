@@ -13,9 +13,6 @@ template <class T>
 class bidirectional_iterator
 {
 
-private:
-	T *_curr;
-
 public:
 
 	typedef T value_type;
@@ -23,12 +20,21 @@ public:
 	typedef T* pointer;
 	typedef std::ptrdiff_t difference_type;
 	typedef ft::bidirectional_iterator_tag iterator_category;
-	
+	typedef ft::Node<value_type> Node;
+
+private:
+	T *_curr;
+	Node *_node;
+
+public:
+
 	/* ----- Constructors ----- */
 	bidirectional_iterator() {}
 
 	bidirectional_iterator(T *ptr) : _curr(ptr) {}
-
+	
+	bidirectional_iterator(T *ptr, Node *node) : _curr(ptr), _node(node) {}
+	
 	bidirectional_iterator (const bidirectional_iterator &it) : _curr(it._curr) {}
 
 	template<class U>
@@ -43,6 +49,7 @@ public:
 	bidirectional_iterator &operator=(const bidirectional_iterator<U> &rhs)
 	{
 		_curr = rhs.operator->();
+		_node = rhs._node;
 		return *this;
 	}
 
@@ -53,7 +60,7 @@ public:
 	// Prefix
 	bidirectional_iterator &operator++()
 	{
-		++_curr;
+		_node = _node->parent;
 		return *this;
 	}
 	// Suffix
@@ -61,13 +68,17 @@ public:
 	bidirectional_iterator operator++(int)
 	{
 		bidirectional_iterator tmp = *this;
-		_curr++;
+		if (_node->right)
+			_node = _node->right;
+		else if (_node->parent != _node)
+			_node = _node->parent;
+		_curr = &_node->pair;
 		return tmp;
 	}
 	
 	bidirectional_iterator &operator--()
 	{
-		--_curr;
+		_node = _node->parent;
 		return *this;
 	}
 	// Suffix
@@ -75,7 +86,11 @@ public:
 	bidirectional_iterator operator--(int)
 	{
 		bidirectional_iterator tmp = *this;
-		_curr--;
+		if (_node->right)
+			_node = _node->left;
+		else if (_node->parent != _node)
+			_node = _node->parent;
+		_curr = &_node->pair;
 		return tmp;
 	}
 

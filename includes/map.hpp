@@ -55,6 +55,7 @@ public:
 	typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 	typedef std::ptrdiff_t difference_type;
 	typedef std::size_t size_type;
+	typedef ft::Node<value_type> Node;
 	
 	class value_compare : public std::binary_function<value_type,value_type,bool>
 	{  
@@ -66,20 +67,13 @@ public:
 	};
 
 private:
-	typedef struct Node
-	{
-		value_type pair;
-		Node *left;
-		Node *right;
-		Node *parent;
-		char color;
-	} Node;
-
+ 
 	// Template rebind allows to use the given allocator with another type
 	// Allocator::template is necessary because rebind is a template inside std::allocator class
 	typedef typename Allocator::template rebind<Node>::other NodeAllocator;
 
 	Node *_root;
+	Node *_sentinel;
 	size_type _size;
 	Compare _comp;
 	NodeAllocator _alloc;
@@ -193,7 +187,12 @@ public:
 	// Default constructor
 	explicit map(const key_compare &comp = key_compare(),
 	const allocator_type &alloc = allocator_type()) :
-	_root(NULL), _size(0), _comp(comp), _alloc(alloc) {}
+	_root(NULL), _size(0), _comp(comp), _alloc(alloc)
+	{
+		_sentinel = _alloc.allocate(1);
+		_alloc.construct(_sentinel, (Node){ft::make_pair(key_type(),
+		mapped_type()), NULL, NULL, NULL, UNDEFINED_NODE});
+	}
 
 	// Range constructor
 	template <class InputIterator>
@@ -202,14 +201,19 @@ public:
 	{
 		(void)first;
 		(void)last;
+		_sentinel = _alloc.allocate(1);
+		_alloc.construct(_sentinel, (Node){ft::make_pair(key_type(),
+		mapped_type()), NULL, NULL, NULL, UNDEFINED_NODE});
 		// Need to use insert in a loop
 	}
 	// Copy constructor
 	map(const map &x) {*this = x;}
 
-	~map()
+	~map() 
 	{
 		deleteAll(_root);
+		_alloc.deallocate(_sentinel, 1);
+		_alloc.destroy(_sentinel);
 	}
 	/* -------------------------*/
 
@@ -217,6 +221,7 @@ public:
 	map &operator=(const map &x)
 	{
 		_root = x._root;
+		_sentinel = x._sentinel;
 		_size = x._size;
 		_comp = x._comp;
 		return *this;
@@ -346,7 +351,7 @@ public:
 		Node *curr = _root;
 		while (curr->left)
 			curr = curr->left;
-		return iterator(&curr->pair);	
+		return iterator(&curr->pair, curr);	
 	}
 
 	const_iterator begin() const
@@ -354,7 +359,7 @@ public:
 		Node *curr = _root;
 		while (curr->left)
 			curr = curr->left;
-		return iterator(&curr->pair);	
+		return iterator(&curr->pair, curr);	
 	}
 
 	iterator end()
@@ -362,7 +367,9 @@ public:
 		Node *curr = _root;
 		while (curr->right)
 			curr = curr->right;
-		return iterator(&curr->right->pair);	
+		curr->right = _sentinel;
+		_sentinel->parent = curr;
+		return iterator(&_sentinel->pair);	
 	}
 
 	const_iterator end() const
@@ -370,7 +377,9 @@ public:
 		Node *curr = _root;
 		while (curr->right)
 			curr = curr->right;
-		return iterator(&curr->right->pair);	
+		curr->right = _sentinel;
+		_sentinel->parent = curr;
+		return iterator(&_sentinel->pair);	
 	}
 
 };
