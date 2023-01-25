@@ -23,10 +23,11 @@ mli:
 			cd containers_test && ./do.sh; \
 	else \
 		git clone https://github.com/mli42/containers_test.git; \
+		awk '{if(NR==3) {print "# include \"../../../includes/vector.hpp\""} else {print}}' containers_test/srcs/vector/common.hpp > tmp && mv tmp containers_test/srcs/vector/common.hpp; \
+		awk '{if(NR==3) {print "# include \"../../../includes/stack.hpp\""} else {print}}' containers_test/srcs/stack/common.hpp > tmp && mv tmp containers_test/srcs/stack/common.hpp; \
+		awk '{if(NR==3) {print "# include \"../../../includes/map.hpp\""} else {print}}' containers_test/srcs/map/common.hpp > tmp && mv tmp containers_test/srcs/map/common.hpp; \
 	fi
-	@awk '{if(NR==3) {print "# include \"../../../includes/vector.hpp\""} else {print}}' containers_test/srcs/vector/common.hpp > tmp && mv tmp containers_test/srcs/vector/common.hpp; \
-	awk '{if(NR==3) {print "# include \"../../../includes/stack.hpp\""} else {print}}' containers_test/srcs/stack/common.hpp > tmp && mv tmp containers_test/srcs/stack/common.hpp; \
-	awk '{if(NR==3) {print "# include \"../../../includes/map.hpp\""} else {print}}' containers_test/srcs/map/common.hpp > tmp && mv tmp containers_test/srcs/map/common.hpp; \
+	
 	cd containers_test && ./do.sh; \
 
 mazoise:

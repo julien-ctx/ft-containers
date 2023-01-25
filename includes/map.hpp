@@ -340,6 +340,39 @@ public:
 		_size = 0;
 		_root = NULL;
 	}
+
+	iterator begin()
+	{
+		Node *curr = _root;
+		while (curr->left)
+			curr = curr->left;
+		return iterator(&curr->pair);	
+	}
+
+	const_iterator begin() const
+	{
+		Node *curr = _root;
+		while (curr->left)
+			curr = curr->left;
+		return iterator(&curr->pair);	
+	}
+
+	iterator end()
+	{
+		Node *curr = _root;
+		while (curr->right)
+			curr = curr->right;
+		return iterator(&curr->right->pair);	
+	}
+
+	const_iterator end() const
+	{
+		Node *curr = _root;
+		while (curr->right)
+			curr = curr->right;
+		return iterator(&curr->right->pair);	
+	}
+
 };
 
 }

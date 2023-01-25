@@ -32,8 +32,10 @@ TEST::map<std::string, int>  trash()
 int main()
 {
 	TEST::map<std::string, int>  t = trash();
-	t.clear();
-	std::cout << t.size() << std::endl;
-	system("leaks ft_containers");
+	TEST::map<std::string, int>::iterator it = t.begin();
+	std::cout << it->first << std::endl;
+	it++;
+	std::cout << it->first << std::endl;
+	std::cout << std::endl;
 	return 0;
 }
