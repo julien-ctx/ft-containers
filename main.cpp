@@ -16,8 +16,11 @@
 int main()
 {
 	TEST::map<std::string, int> mymap;
-	std::string test = "Test";
-	TEST::pair<std::string, int> mypair(test, 42);
-	std::map<std::string, int>::iterator it = mymap.insert(mypair).first;
-	std::cout << it->second << std::endl;	
+	TEST::pair<std::string, int> mypair("Test", 42);
+	TEST::pair<std::string, int> mypair2("Test2", 43);
+	TEST::map<std::string, int>::iterator it = mymap.insert(mypair).first;
+	TEST::map<std::string, int>::iterator it2 = mymap.insert(mypair2).first;
+
+std::cout <<  mymap.value_comp()(*it, *it2) << std::endl;
+  return 0;
 }

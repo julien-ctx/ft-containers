@@ -17,6 +17,7 @@
 #define RIGHT_ROT 1
 
 // https://brilliant.org/wiki/red-black-tree/
+// https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
 
 /*
 Properties:
@@ -44,7 +45,6 @@ public:
 	typedef Key key_type;
 	typedef T mapped_type;
 	typedef Compare key_compare;
-	// typedef value_compare ???
 	typedef Allocator allocator_type;
 	typedef typename allocator_type::reference reference;
 	typedef typename allocator_type::const_reference const_reference;
@@ -57,6 +57,16 @@ public:
 	typedef std::ptrdiff_t difference_type;
 	typedef std::size_t size_type;
 	
+	class value_compare : public std::binary_function<value_type,value_type,bool>
+	{  
+		friend class map;
+	protected:
+		Compare comp;
+		value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
+	public:
+		bool operator()(const value_type &x, const value_type &y) const
+		{return comp(x.first, y.first);}
+	};
 
 private:
 	typedef struct Node
@@ -77,6 +87,8 @@ private:
 	Compare _comp;
 	NodeAllocator _alloc;
 
+	/* ----- Red Black Tree ----- */	
+	// Rotation of elements to maintain the tree's order.
 	void rotate(Node *node, bool rotate)
 	{
 		Node *sibiling = rotate == LEFT_ROT ? node->right : node->left;
@@ -115,6 +127,7 @@ private:
 		node->parent = sibiling;
 	}
 
+	// Change colors to maintain RBT properties.
 	void rebalance(Node *node)
 	{
 		while (node != _root && node->parent->color == RED_NODE)
@@ -165,6 +178,7 @@ private:
 			}
 		}
 	}
+	/* -------------------------- */	
 
 public:
 	/* ----- Constructors ----- */
@@ -184,6 +198,11 @@ public:
 	}
 	// Copy constructor
 	map(const map &x) {*this = x;}
+
+	~map()
+	{
+		
+	}
 	/* -------------------------*/
 
 	/* ------ Members Overloads ------- */
@@ -286,6 +305,26 @@ public:
 			curr = key < curr->pair.first ? curr->left : curr->right;
 		return curr;
 	}
+	
+	size_type count(const Key &key) const
+	{
+		Node *curr = _root;
+		while (curr && key != curr->pair.first)
+			curr = key < curr->pair.first ? curr->left : curr->right;
+		return curr ? 1 : 0;
+	}
+
+	allocator_type get_allocator() const {return _alloc;}
+
+	key_compare key_comp() const {return _comp;}
+
+	value_compare value_comp() const {return _comp;}
+
+	size_type max_size() const {return _alloc.max_size();}
+
+	size_type size() const {return _size;}
+
+	bool empty() const {return !_size;}
 
 };
 
