@@ -198,12 +198,11 @@ public:
 	map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), 
 	const allocator_type &alloc = allocator_type()) : _comp(comp), _alloc(alloc)
 	{
-		(void)first;
-		(void)last;
 		_sentinel = _alloc.allocate(1);
 		_alloc.construct(_sentinel, (Node){ft::make_pair(key_type(),
 		mapped_type()), NULL, NULL, NULL, UNDEFINED_NODE});
-		// Need to use insert in a loop
+		for (; first != last; first++)
+			insert(*first);
 	}
 	// Copy constructor
 	map(const map &x) {*this = x;}
@@ -353,7 +352,7 @@ public:
 		Node *curr = _root;
 		while (curr->left)
 			curr = curr->left;
-		return iterator(curr);	
+		return const_iterator(curr);	
 	}
 
 	iterator end()
@@ -372,12 +371,12 @@ public:
 	{
 		Node *curr = _root;
 		if (_sentinel->parent)
-			return iterator(_sentinel);
+			return const_iterator(_sentinel);
 		while (curr->right)
 			curr = curr->right;
 		curr->right = _sentinel;
 		_sentinel->parent = curr;	
-		return iterator(_sentinel);	
+		return const_iterator(_sentinel);	
 	}
 
 	reverse_iterator rbegin()
