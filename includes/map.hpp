@@ -404,4 +404,25 @@ public:
 
 };
 
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator==(const map<Key, T, Compare, Alloc> &lhs,
+const map<Key, T, Compare, Alloc> &rhs)
+{
+	typedef typename ft::map<Key, T>::const_iterator const_iterator;
+
+	if (lhs.size() != rhs.size())
+		return false;
+	const_iterator it_lhs = lhs.begin();
+	const_iterator it_rhs = rhs.begin();
+	for (; it_lhs != lhs.end(); it_lhs++, it_rhs++)
+	{
+		if (it_rhs == rhs.end())
+			return false;
+		if (it_lhs->first != it_rhs->first || it_lhs->second != it_rhs->second)
+			return false;
+	}
+	return it_rhs != rhs.end() ? false : true;
+}
+
 }

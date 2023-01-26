@@ -36,8 +36,9 @@ private:
 
 public:
 
-	/* ----- Constructors ----- */
 	operator bidirectional_iterator<T, true>() {return bidirectional_iterator<T, true>();}
+	
+	/* ----- Constructors ----- */
 
 	bidirectional_iterator() {}
 

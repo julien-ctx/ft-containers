@@ -52,8 +52,16 @@ int main()
 	// for (TEST::map<std::string, int>::iterator it = map2.begin(); it != map2.end(); it++)
 	// 	std::cout << it->first << std::endl;
 	TEST::map<int, int> mp;
+	mp.insert(TEST::make_pair<int, int>(24, 5));
+	mp.insert(TEST::make_pair<int, int>(211, 443));
+	mp.insert(TEST::make_pair<int, int>(23, 345));
 
-	// TEST::map<int, int>::const_iterator it = mp.begin();
+	TEST::map<int, int> mp2(mp);
+	mp2.insert(TEST::make_pair<int, int>(233, 345));
+
+	std::cout << (mp == mp2) << std::endl;
 	// (void)it;
-	TEST::map<int, int>::reverse_iterator it = mp.rbegin()//, ite = mp.rend();
+	std::cout << "i am here\n";
+	// Maybe i need to make a deep copy?
+	// TEST::map<int, int>::reverse_iterator it = mp.rbegin();//, ite = mp.rend();
 }
