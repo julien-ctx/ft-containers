@@ -45,9 +45,6 @@ public:
 	
 	bidirectional_iterator (const bidirectional_iterator &it) : _curr(it._curr) {}
 
-	template<class U>
-	bidirectional_iterator (const bidirectional_iterator &it) : _curr(it.getCurr()) {}
-
 	~bidirectional_iterator() {}
 	/* -------------------------*/
 

@@ -11,8 +11,7 @@
 #include "includes/reverse_iterator.hpp"
 #include "includes/lexicographical_compare.hpp"
 
-#define TEST std
-
+#define TEST ft
 // TEST::map<int, int>  trash()
 // {
 // 	TEST::map<int, int> mymap;
@@ -52,7 +51,9 @@ int main()
 	// TEST::map<std::string, int> map2(map1.begin(), map1.end());
 	// for (TEST::map<std::string, int>::iterator it = map2.begin(); it != map2.end(); it++)
 	// 	std::cout << it->first << std::endl;
-	ft::map<int, int> mp;
+	TEST::map<int, int> mp;
 
-	ft::map<int, int>::const_iterator it = mp.begin();
+	// TEST::map<int, int>::const_iterator it = mp.begin();
+	// (void)it;
+	TEST::map<int, int>::const_iterator it = mp.begin(), ite = mp.end();
 }

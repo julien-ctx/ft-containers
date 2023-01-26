@@ -81,7 +81,7 @@ public:
 	}
 
 	// Destructor
-	~vector()
+	virtual ~vector()
 	{
 		for (size_type i = 0; i < _size; i++)
 			_alloc.destroy(&_array[i]);

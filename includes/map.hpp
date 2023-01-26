@@ -343,6 +343,8 @@ public:
 	iterator begin()
 	{
 		Node *curr = _root;
+		if (!curr)
+			return iterator(curr);
 		while (curr->left)
 			curr = curr->left;
 		return iterator(curr);	
@@ -351,6 +353,8 @@ public:
 	const_iterator begin() const
 	{
 		Node *curr = _root;
+		if (!curr)
+			return const_iterator(curr);
 		while (curr->left)
 			curr = curr->left;
 		return const_iterator(curr);	
