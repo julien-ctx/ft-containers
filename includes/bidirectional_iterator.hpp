@@ -23,17 +23,14 @@ public:
 	typedef ft::Node<value_type> Node;
 
 private:
-	T *_curr;
-	Node *_node;
+	Node *_curr;
 
 public:
 
 	/* ----- Constructors ----- */
 	bidirectional_iterator() {}
 
-	bidirectional_iterator(T *ptr) : _curr(ptr) {}
-	
-	bidirectional_iterator(T *ptr, Node *node) : _curr(ptr), _node(node) {}
+	bidirectional_iterator(Node *ptr) : _curr(ptr) {}
 	
 	bidirectional_iterator (const bidirectional_iterator &it) : _curr(it._curr) {}
 
@@ -49,18 +46,28 @@ public:
 	bidirectional_iterator &operator=(const bidirectional_iterator<U> &rhs)
 	{
 		_curr = rhs.operator->();
-		_node = rhs._node;
 		return *this;
 	}
 
-	reference operator*() const {return *_curr;}
+	reference operator*() const {return _curr->pair;}
 
 	pointer operator->() const {return &(operator*());}
 
 	// Prefix
 	bidirectional_iterator &operator++()
 	{
-		_node = _node->parent;
+		if (_curr->right)
+		{
+			_curr = _curr->right;
+			while (_curr->left)
+				_curr = _curr->left;
+		}
+		else
+		{
+			while (_curr->parent && _curr == _curr->parent->right)
+				_curr = _curr->parent;
+			_curr = _curr->parent;
+		}
 		return *this;
 	}
 	// Suffix
@@ -68,17 +75,35 @@ public:
 	bidirectional_iterator operator++(int)
 	{
 		bidirectional_iterator tmp = *this;
-		if (_node->right)
-			_node = _node->right;
-		else if (_node->parent != _node)
-			_node = _node->parent;
-		_curr = &_node->pair;
+		if (_curr->right)
+		{
+			_curr = _curr->right;
+			while (_curr->left)
+				_curr = _curr->left;
+		}
+		else
+		{
+			while (_curr->parent && _curr == _curr->parent->right)
+				_curr = _curr->parent;
+			_curr = _curr->parent;
+		}
 		return tmp;
 	}
-	
+
 	bidirectional_iterator &operator--()
 	{
-		_node = _node->parent;
+		if (_curr->left)
+		{
+			_curr = _curr->left;
+			while (_curr->right)
+				_curr = _curr->right;
+		}
+		else
+		{
+			while (_curr->parent && _curr == _curr->parent->left)
+				_curr = _curr->parent;
+			_curr = _curr->parent;
+		}
 		return *this;
 	}
 	// Suffix
@@ -86,11 +111,18 @@ public:
 	bidirectional_iterator operator--(int)
 	{
 		bidirectional_iterator tmp = *this;
-		if (_node->right)
-			_node = _node->left;
-		else if (_node->parent != _node)
-			_node = _node->parent;
-		_curr = &_node->pair;
+		if (_curr->left)
+		{
+			_curr = _curr->left;
+			while (_curr->right)
+				_curr = _curr->right;
+		}
+		else
+		{
+			while (_curr->parent && _curr == _curr->parent->left)
+				_curr = _curr->parent;
+			_curr = _curr->parent;
+		}
 		return tmp;
 	}
 

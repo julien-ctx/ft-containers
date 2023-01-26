@@ -10,12 +10,6 @@
 #include "lexicographical_compare.hpp"
 #include "pair.hpp"
 
-#define RED_NODE 0
-#define BLACK_NODE 1
-#define UNDEFINED_NODE 2
-#define LEFT_ROT 0
-#define RIGHT_ROT 1
-
 // https://brilliant.org/wiki/red-black-tree/
 // https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
 
@@ -57,13 +51,17 @@ public:
 	typedef std::size_t size_type;
 	typedef ft::Node<value_type> Node;
 	
-	class value_compare : public std::binary_function<value_type,value_type,bool>
-	{  
-	public:
+	class value_compare : public std::binary_function<value_type, value_type, bool>
+	{
+		friend class map;
+	protected:
 		Compare comp;
 		value_compare (Compare c) : comp(c) {}
-		bool operator()(const value_type &x, const value_type &y) const
-		{return comp(x.first, y.first);}
+	public:
+		typedef bool result_type;
+		typedef value_type first_argument_type;
+		typedef value_type second_argument_type;
+		bool operator() (const value_type& x, const value_type& y) const {return comp(x.first, y.first);}
 	};
 
 private:
@@ -76,7 +74,7 @@ private:
 	Node *_sentinel;
 	size_type _size;
 	Compare _comp;
-	NodeAllocator _alloc;
+	NodeAllocator _alloc;	
 
 	/* ----- Red Black Tree ----- */	
 	// Rotation of elements to maintain the tree's order.
@@ -174,12 +172,13 @@ private:
 	{
 		if (node)
 		{
-			deleteAll(node->left);
-			deleteAll(node->right);
-			_alloc.destroy(node);
-			_alloc.deallocate(node, 1);
+			// deleteAll(node->left);
+			// deleteAll(node->right);
+			// _alloc.destroy(node);
+			// _alloc.deallocate(node, 1);
 		}
 	}
+
 	/* -------------------------- */	
 
 public:
@@ -209,12 +208,7 @@ public:
 	// Copy constructor
 	map(const map &x) {*this = x;}
 
-	~map() 
-	{
-		deleteAll(_root);
-		_alloc.deallocate(_sentinel, 1);
-		_alloc.destroy(_sentinel);
-	}
+	~map() {deleteAll(_root);}
 	/* -------------------------*/
 
 	/* ------ Members Overloads ------- */
@@ -280,7 +274,7 @@ public:
 			node = _alloc.allocate(1);
 			_alloc.construct(node, (Node){value, NULL, NULL, node, BLACK_NODE});	
 			_root = node;
-			return ft::make_pair<iterator, bool>(iterator(&node->pair), ++_size);
+			return ft::make_pair<iterator, bool>(iterator(node), ++_size);
 		}
 		else
 		{
@@ -288,7 +282,7 @@ public:
 			while (curr)
 			{
 				if (curr->pair.first == value.first)
-					return ft::make_pair<iterator, bool>(iterator(&curr->pair), false);
+					return ft::make_pair<iterator, bool>(iterator(curr), false);
 				parent = curr;
 				curr = value.first < curr->pair.first ? curr->left : curr->right;
 			}
@@ -300,7 +294,7 @@ public:
 				parent->right = node;
 			rebalance(node);
 		}
-		return ft::make_pair<iterator, bool>(iterator(&node->pair), ++_size);
+		return ft::make_pair<iterator, bool>(iterator(node), ++_size);
 	}
 
 	iterator find(const Key &key)
@@ -351,7 +345,7 @@ public:
 		Node *curr = _root;
 		while (curr->left)
 			curr = curr->left;
-		return iterator(&curr->pair, curr);	
+		return iterator(curr);	
 	}
 
 	const_iterator begin() const
@@ -359,27 +353,31 @@ public:
 		Node *curr = _root;
 		while (curr->left)
 			curr = curr->left;
-		return iterator(&curr->pair, curr);	
+		return iterator(curr);	
 	}
 
 	iterator end()
 	{
 		Node *curr = _root;
+		if (_sentinel->parent)
+			return iterator(_sentinel);
 		while (curr->right)
 			curr = curr->right;
 		curr->right = _sentinel;
-		_sentinel->parent = curr;
-		return iterator(&_sentinel->pair, _sentinel);	
+		_sentinel->parent = curr;	
+		return iterator(_sentinel);	
 	}
 
 	const_iterator end() const
 	{
 		Node *curr = _root;
+		if (_sentinel->parent)
+			return iterator(_sentinel);
 		while (curr->right)
 			curr = curr->right;
 		curr->right = _sentinel;
-		_sentinel->parent = curr;
-		return iterator(&_sentinel->pair, _sentinel);	
+		_sentinel->parent = curr;	
+		return iterator(_sentinel);	
 	}
 
 };

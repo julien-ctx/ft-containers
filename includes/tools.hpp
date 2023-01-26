@@ -28,6 +28,12 @@
 #define CYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define BOLD    "\033[1m\033[37m"      /* Bold White */
 
+#define RED_NODE 0
+#define BLACK_NODE 1
+#define UNDEFINED_NODE 2
+#define LEFT_ROT 0
+#define RIGHT_ROT 1
+
 #define PRINT(x) std::cout << BOLD << x << std::endl << RESET; 
 #define NL() std::cout << std::endl;
 

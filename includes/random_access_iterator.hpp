@@ -91,8 +91,6 @@ public:
 	
 	random_access_iterator operator-(difference_type n) {return random_access_iterator(_curr - n);}
 
-	// difference_type operator-(random_access_iterator &rhs) {return _curr - rhs.operator->();}
-
 	reference operator[](difference_type n) const {return _curr[n];}
 
 };	
