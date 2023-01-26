@@ -196,7 +196,7 @@ public:
 	// Range constructor
 	template <class InputIterator>
 	map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), 
-	const allocator_type &alloc = allocator_type()) : _comp(comp), _alloc(alloc)
+	const allocator_type &alloc = allocator_type()) : _size(0), _comp(comp), _alloc(alloc)
 	{
 		_sentinel = _alloc.allocate(1);
 		_alloc.construct(_sentinel, (Node){ft::make_pair(key_type(),
