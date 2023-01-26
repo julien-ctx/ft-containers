@@ -126,6 +126,8 @@ public:
 		return tmp;
 	}
 
+	Node *getCurr() {return _curr;}
+
 	/* -------------------------*/
 
 };

@@ -11,7 +11,7 @@
 #include "includes/reverse_iterator.hpp"
 #include "includes/lexicographical_compare.hpp"
 
-#define TEST std
+#define TEST ft
 
 TEST::map<int, int>  trash()
 {
@@ -33,13 +33,8 @@ TEST::map<int, int>  trash()
 int main()
 {
 	TEST::map<int, int>  t = trash();
-	TEST::map<int, int>::iterator it = t.begin();
-		// std::cout << it->first << std::endl;
-		// it++;
-		// std::cout << it->first << std::endl;
-		// it--;
-		// std::cout << it->first << std::endl;
-	for (int i = 0; it != t.end(); it++, i++)
+	TEST::map<int, int>::reverse_iterator it = t.rbegin();
+	for (int i = 0; it != t.rend(); it++, i++)
 	{
 		std::cout << it->first << std::endl;
 	}

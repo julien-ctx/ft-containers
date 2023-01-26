@@ -50,7 +50,7 @@ public:
 
 	reference operator*() const
 	{
-		Iter tmp = base() - 1;
+		Iter tmp = --base();
 		return *tmp;
 	}
 

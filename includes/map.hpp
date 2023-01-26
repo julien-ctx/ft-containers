@@ -172,10 +172,10 @@ private:
 	{
 		if (node)
 		{
-			// deleteAll(node->left);
-			// deleteAll(node->right);
-			// _alloc.destroy(node);
-			// _alloc.deallocate(node, 1);
+			deleteAll(node->left);
+			deleteAll(node->right);
+			_alloc.destroy(node);
+			_alloc.deallocate(node, 1);
 		}
 	}
 
@@ -378,6 +378,16 @@ public:
 		curr->right = _sentinel;
 		_sentinel->parent = curr;	
 		return iterator(_sentinel);	
+	}
+
+	reverse_iterator rbegin()
+	{
+		return reverse_iterator(iterator(end().getCurr()->parent));
+	}
+
+	reverse_iterator rend()
+	{
+		return reverse_iterator(begin());
 	}
 
 };
