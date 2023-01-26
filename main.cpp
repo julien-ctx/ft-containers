@@ -55,5 +55,5 @@ int main()
 
 	// TEST::map<int, int>::const_iterator it = mp.begin();
 	// (void)it;
-	TEST::map<int, int>::const_iterator it = mp.begin(), ite = mp.end();
+	TEST::map<int, int>::reverse_iterator it = mp.rbegin(), ite = mp.rend();
 }

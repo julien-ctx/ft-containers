@@ -363,6 +363,8 @@ public:
 	iterator end()
 	{
 		Node *curr = _root;
+		if (!curr)
+			return iterator(curr);
 		if (_sentinel->parent)
 			return iterator(_sentinel);
 		while (curr->right)
@@ -375,6 +377,8 @@ public:
 	const_iterator end() const
 	{
 		Node *curr = _root;
+		if (!curr)
+			return const_iterator(curr);
 		if (_sentinel->parent)
 			return const_iterator(_sentinel);
 		while (curr->right)
@@ -386,11 +390,15 @@ public:
 
 	reverse_iterator rbegin()
 	{
+		if (!_size)
+			return (reverse_iterator(iterator(_root)));
 		return reverse_iterator(iterator(end().getCurr()->parent));
 	}
 
 	reverse_iterator rend()
 	{
+		if (!_size)
+			return (reverse_iterator(iterator(_root)));
 		return reverse_iterator(begin());
 	}
 
