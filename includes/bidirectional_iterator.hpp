@@ -9,15 +9,24 @@
 namespace ft
 {
 
-template <class T>
+template<bool B, class NoConst, class IsConst>
+struct GetType {};
+
+template <class NoConst, class IsConst>
+struct GetType <false, NoConst, IsConst> {typedef NoConst type;};
+
+template <class NoConst, class IsConst>
+struct GetType <true, NoConst, IsConst> {typedef IsConst type;};
+
+template <class T, bool cst>
 class bidirectional_iterator
 {
 
 public:
 
 	typedef T value_type;
-	typedef T& reference;
-	typedef T* pointer;
+	typedef typename GetType<cst, T*, const T*>::type pointer;
+	typedef typename GetType<cst, T&, const T&>::type reference;
 	typedef std::ptrdiff_t difference_type;
 	typedef ft::bidirectional_iterator_tag iterator_category;
 	typedef ft::Node<value_type> Node;
@@ -28,6 +37,8 @@ private:
 public:
 
 	/* ----- Constructors ----- */
+	operator bidirectional_iterator<T, true>() {return bidirectional_iterator<T, true>();}
+
 	bidirectional_iterator() {}
 
 	bidirectional_iterator(Node *ptr) : _curr(ptr) {}
@@ -43,7 +54,7 @@ public:
 	/* ------ Overloads ------- */
 
 	template <class U>
-	bidirectional_iterator &operator=(const bidirectional_iterator<U> &rhs)
+	bidirectional_iterator &operator=(const bidirectional_iterator<U, false> &rhs)
 	{
 		_curr = rhs.operator->();
 		return *this;
@@ -133,11 +144,11 @@ public:
 };
 
 template<class Iterator1, class Iterator2>
-bool operator==(const bidirectional_iterator<Iterator1> &lhs,
-	const bidirectional_iterator<Iterator2> &rhs) {return lhs.operator->() == rhs.operator->();}
+bool operator==(const bidirectional_iterator<Iterator1, false> &lhs,
+	const bidirectional_iterator<Iterator2, false> &rhs) {return lhs.operator->() == rhs.operator->();}
 
 template<class Iterator1, class Iterator2>
-bool operator!=(const bidirectional_iterator<Iterator1> &lhs,
-	const bidirectional_iterator<Iterator2> &rhs) {return !operator==(lhs, rhs);}
+bool operator!=(const bidirectional_iterator<Iterator1, false> &lhs,
+	const bidirectional_iterator<Iterator2, false> &rhs) {return !operator==(lhs, rhs);}
 
 }

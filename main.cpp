@@ -44,12 +44,15 @@
 
 int main()
 {
-	TEST::map<std::string, int> map1;
-	map1.insert(TEST::make_pair("test1", 4));
-	map1.insert(TEST::make_pair("test2", 5));
-	map1.insert(TEST::make_pair("test0", 5));
+	// TEST::map<std::string, int> map1;
+	// map1.insert(TEST::make_pair("test1", 4));
+	// map1.insert(TEST::make_pair("test2", 5));
+	// map1.insert(TEST::make_pair("test0", 5));
 
-	TEST::map<std::string, int> map2(map1.begin(), map1.end());
-	for (TEST::map<std::string, int>::iterator it = map2.begin(); it != map2.end(); it++)
-		std::cout << it->first << std::endl;
+	// TEST::map<std::string, int> map2(map1.begin(), map1.end());
+	// for (TEST::map<std::string, int>::iterator it = map2.begin(); it != map2.end(); it++)
+	// 	std::cout << it->first << std::endl;
+	ft::map<int, int> mp;
+
+	ft::map<int, int>::const_iterator it = mp.begin();
 }

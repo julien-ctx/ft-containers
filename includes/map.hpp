@@ -43,8 +43,8 @@ public:
 	typedef typename allocator_type::const_reference const_reference;
 	typedef typename allocator_type::pointer pointer;
 	typedef typename allocator_type::const_pointer const_pointer;
-	typedef typename ft::bidirectional_iterator<value_type> iterator;
-	typedef typename ft::bidirectional_iterator<const value_type> const_iterator;
+	typedef typename ft::bidirectional_iterator<value_type, false> iterator;
+	typedef typename ft::bidirectional_iterator<value_type, true> const_iterator;
 	typedef typename ft::reverse_iterator<iterator> reverse_iterator;
 	typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 	typedef std::ptrdiff_t difference_type;
@@ -204,6 +204,7 @@ public:
 		for (; first != last; first++)
 			insert(*first);
 	}
+
 	// Copy constructor
 	map(const map &x) {*this = x;}
 
