@@ -369,7 +369,7 @@ public:
 			curr = curr->right;
 		curr->right = _sentinel;
 		_sentinel->parent = curr;
-		return iterator(&_sentinel->pair);	
+		return iterator(&_sentinel->pair, _sentinel);	
 	}
 
 	const_iterator end() const
@@ -379,7 +379,7 @@ public:
 			curr = curr->right;
 		curr->right = _sentinel;
 		_sentinel->parent = curr;
-		return iterator(&_sentinel->pair);	
+		return iterator(&_sentinel->pair, _sentinel);	
 	}
 
 };
