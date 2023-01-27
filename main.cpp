@@ -41,28 +41,30 @@
 // 	// system("leaks ft_containers");
 // }
 
-int main()
-{
-	// TEST::map<std::string, int> map1;
-	// map1.insert(TEST::make_pair("test1", 4));
-	// map1.insert(TEST::make_pair("test2", 5));
-	// map1.insert(TEST::make_pair("test0", 5));
 
-	// TEST::map<std::string, int> map2(map1.begin(), map1.end());
-	// for (TEST::map<std::string, int>::iterator it = map2.begin(); it != map2.end(); it++)
-	// 	std::cout << it->first << std::endl;
+void trash()
+{
 	TEST::map<int, int> mp;
 	mp.insert(TEST::make_pair<int, int>(24, 5));
 	mp.insert(TEST::make_pair<int, int>(211, 443));
 	mp.insert(TEST::make_pair<int, int>(23, 345));
 
-	// TEST::map<int, int> mp2(mp);
+	TEST::map<int, int> mp2(mp);
 	// mp2.insert(TEST::make_pair<int, int>(233, 345));
 
-	// std::cout << (mp == mp2) << std::endl;
-	// (void)it;
-	// Maybe i need to make a deep copy?
-	TEST::map<int, int>::reverse_iterator it = mp.rbegin();//, ite = mp.rend();
-	for (; it != mp.rend(); it++)
-		std::cout << it->first << std::endl;
+
+
+	std::cout << "---------------\n";
+	TEST::map<int, int>::iterator it2 = mp2.begin();
+	std::cout << mp2.size() << std::endl;
+	mp2.end();
+	mp = mp2;
+	// mp = mp2;
+	for (; it2 != mp2.end(); it2++)
+		std::cout << it2->first << std::endl;
+}
+
+int main()
+{
+	trash();
 }

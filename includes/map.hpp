@@ -170,7 +170,7 @@ private:
 
 	void deleteAll(Node *node)
 	{
-		if (node)
+		if (node && node != _sentinel)
 		{
 			deleteAll(node->left);
 			deleteAll(node->right);
@@ -213,8 +213,12 @@ public:
 	/* ------ Members Overloads ------- */
 	map &operator=(const map &x)
 	{
+		clear();
+		_sentinel = _alloc.allocate(1);
+		_alloc.construct(_sentinel, (Node){ft::make_pair(key_type(),
+		mapped_type()), NULL, NULL, NULL, UNDEFINED_NODE});
 		for (const_iterator it = x.begin(); it != x.end(); it++)
-			insert(*it);
+			insert(value_type(*it));
 		_comp = x._comp;
 		return *this;
 	}
@@ -333,6 +337,12 @@ public:
 
 	void clear() 
 	{
+		if (_sentinel)
+		{
+			_sentinel->parent = NULL;
+			_alloc.deallocate(_sentinel, 1);
+		}
+		_sentinel = NULL;
 		deleteAll(_root);
 		_size = 0;
 		_root = NULL;
@@ -378,7 +388,7 @@ public:
 		if (!curr)
 			return const_iterator(curr);
 		if (_sentinel->parent)
-			return const_iterator(_sentinel);
+			return iterator(_sentinel);
 		while (curr->right)
 			curr = curr->right;
 		curr->right = _sentinel;

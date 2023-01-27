@@ -39,7 +39,6 @@ public:
 	operator bidirectional_iterator<T, true>() {return bidirectional_iterator<T, true>();}
 	
 	/* ----- Constructors ----- */
-
 	bidirectional_iterator() {}
 
 	bidirectional_iterator(Node *ptr) : _curr(ptr) {}
