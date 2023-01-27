@@ -71,11 +71,13 @@ private:
 	typedef typename Allocator::template rebind<Node>::other NodeAllocator;
 
 	Node *_root;
-	Node *_sentinel;
 	size_type _size;
 	Compare _comp;
 	NodeAllocator _alloc;	
 
+	Node *_min;
+	Node *_max;
+	
 	/* ----- Red Black Tree ----- */	
 	// Rotation of elements to maintain the tree's order.
 	void rotate(Node *node, bool rotate)
@@ -170,7 +172,7 @@ private:
 
 	void deleteAll(Node *node)
 	{
-		if (node && node != _sentinel)
+		if (node)
 		{
 			deleteAll(node->left);
 			deleteAll(node->right);
@@ -185,27 +187,26 @@ public:
 	// Default constructor
 	explicit map(const key_compare &comp = key_compare(),
 	const allocator_type &alloc = allocator_type()) :
-	_root(NULL), _size(0), _comp(comp), _alloc(alloc)
-	{
-		_sentinel = _alloc.allocate(1);
-		_alloc.construct(_sentinel, (Node){ft::make_pair(key_type(),
-		mapped_type()), NULL, NULL, NULL, UNDEFINED_NODE});
-	}
+	_root(NULL), _size(0), _comp(comp), _alloc(alloc), _min(NULL), _max(NULL) {}
 
 	// Range constructor
 	template <class InputIterator>
 	map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), 
-	const allocator_type &alloc = allocator_type()) : _size(0), _comp(comp), _alloc(alloc)
+	const allocator_type &alloc = allocator_type()) :
+	_size(0), _comp(comp), _alloc(alloc), _min(NULL), _max(NULL)
 	{
-		_sentinel = _alloc.allocate(1);
-		_alloc.construct(_sentinel, (Node){ft::make_pair(key_type(),
-		mapped_type()), NULL, NULL, NULL, UNDEFINED_NODE});
 		for (; first != last; first++)
 			insert(*first);
 	}
 
 	// Copy constructor
-	map(const map &x) {*this = x;}
+	map(const map &x)
+	{
+		const_iterator it = x.begin();
+		for (; it != x.end(); it++)
+			insert(value_type(*it));
+		_comp = x._comp;
+	}
 
 	~map() {deleteAll(_root);}
 	/* -------------------------*/
@@ -214,10 +215,8 @@ public:
 	map &operator=(const map &x)
 	{
 		clear();
-		_sentinel = _alloc.allocate(1);
-		_alloc.construct(_sentinel, (Node){ft::make_pair(key_type(),
-		mapped_type()), NULL, NULL, NULL, UNDEFINED_NODE});
-		for (const_iterator it = x.begin(); it != x.end(); it++)
+		const_iterator it = x.begin();
+		for (; it != x.end(); it++)
 			insert(value_type(*it));
 		_comp = x._comp;
 		return *this;
@@ -276,7 +275,7 @@ public:
 			node = _alloc.allocate(1);
 			_alloc.construct(node, (Node){value, NULL, NULL, node, BLACK_NODE});	
 			_root = node;
-			return ft::make_pair<iterator, bool>(iterator(node), ++_size);
+			return ft::make_pair<iterator, bool>(iterator(node, _min, _max), ++_size);
 		}
 		else
 		{
@@ -284,7 +283,7 @@ public:
 			while (curr)
 			{
 				if (curr->pair.first == value.first)
-					return ft::make_pair<iterator, bool>(iterator(curr), false);
+					return ft::make_pair<iterator, bool>(iterator(curr, _min, _max), false);
 				parent = curr;
 				curr = value.first < curr->pair.first ? curr->left : curr->right;
 			}
@@ -294,9 +293,13 @@ public:
 				parent->left = node;
 			else
 				parent->right = node;
+			if (!_min || value.first < _min->pair.first)
+				_min = node;
+			if (!_max || value.first > _max->pair.first)
+				_max = node;
 			rebalance(node);
 		}
-		return ft::make_pair<iterator, bool>(iterator(node), ++_size);
+		return ft::make_pair<iterator, bool>(iterator(node, _min, _max), ++_size);
 	}
 
 	iterator find(const Key &key)
@@ -304,7 +307,7 @@ public:
 		Node *curr = _root;
 		while (curr && key != curr->pair.first)
 			curr = key < curr->pair.first ? curr->left : curr->right;
-		return curr;
+		return iterator(curr, _min, _max);
 	}
 
 	const_iterator find(const Key &key) const
@@ -312,7 +315,7 @@ public:
 		Node *curr = _root;
 		while (curr && key != curr->pair.first)
 			curr = key < curr->pair.first ? curr->left : curr->right;
-		return curr;
+		return const_iterator(curr, _min, _max);
 	}
 	
 	size_type count(const Key &key) const
@@ -337,14 +340,10 @@ public:
 
 	void clear() 
 	{
-		if (_sentinel)
-		{
-			_sentinel->parent = NULL;
-			_alloc.deallocate(_sentinel, 1);
-		}
-		_sentinel = NULL;
 		deleteAll(_root);
 		_size = 0;
+		_min = NULL;
+		_max = NULL;
 		_root = NULL;
 	}
 
@@ -352,62 +351,40 @@ public:
 	{
 		Node *curr = _root;
 		if (!curr)
-			return iterator(curr);
+			return iterator(curr, _min, _max);
 		while (curr->left)
 			curr = curr->left;
-		return iterator(curr);	
+		return iterator(curr, _min, _max);	
 	}
 
 	const_iterator begin() const
 	{
 		Node *curr = _root;
 		if (!curr)
-			return const_iterator(curr);
+			return const_iterator(curr, _min, _max);
 		while (curr->left)
 			curr = curr->left;
-		return const_iterator(curr);	
+		return const_iterator(curr, _min, _max);	
 	}
 
 	iterator end()
-	{
-		Node *curr = _root;
-		if (!curr)
-			return iterator(curr);
-		if (_sentinel->parent)
-			return iterator(_sentinel);
-		while (curr->right)
-			curr = curr->right;
-		curr->right = _sentinel;
-		_sentinel->parent = curr;	
-		return iterator(_sentinel);	
-	}
+	{return iterator(NULL, _min, _max);}
 
 	const_iterator end() const
-	{
-		Node *curr = _root;
-		if (!curr)
-			return const_iterator(curr);
-		if (_sentinel->parent)
-			return iterator(_sentinel);
-		while (curr->right)
-			curr = curr->right;
-		curr->right = _sentinel;
-		_sentinel->parent = curr;	
-		return const_iterator(_sentinel);	
-	}
+	{return const_iterator(NULL, _min, _max);}
 
 	reverse_iterator rbegin()
 	{
 		if (!_size)
-			return (reverse_iterator(iterator(_root)));
-		return reverse_iterator(iterator(end().getCurr()->parent));
+			return (reverse_iterator(iterator(_root, _min, _max), _min, _max));
+		return reverse_iterator(iterator(end().getCurr()->parent, _min, _max), _min, _max);
 	}
 
 	reverse_iterator rend()
 	{
 		if (!_size)
-			return (reverse_iterator(iterator(_root)));
-		return reverse_iterator(begin());
+			return (reverse_iterator(iterator(_root, _min, _max), _min, _max));
+		return reverse_iterator(begin(), _min, _max);
 	}
 
 };

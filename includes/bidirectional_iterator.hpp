@@ -33,17 +33,21 @@ public:
 
 private:
 	Node *_curr;
+	Node *_min;
+	Node *_max;
 
 public:
 
 	operator bidirectional_iterator<T, true>() {return bidirectional_iterator<T, true>();}
 	
 	/* ----- Constructors ----- */
-	bidirectional_iterator() {}
+	bidirectional_iterator() : _curr(NULL), _min(NULL), _max(NULL) {}
 
-	bidirectional_iterator(Node *ptr) : _curr(ptr) {}
+	bidirectional_iterator(Node *ptr, Node *min, Node *max) :
+	_curr(ptr), _min(min), _max(max) {}
 	
-	bidirectional_iterator (const bidirectional_iterator &it) : _curr(it._curr) {}
+	bidirectional_iterator (const bidirectional_iterator &it) :
+	_curr(it._curr), _min(it._min), _max(it._max) {}
 
 	~bidirectional_iterator() {}
 	/* -------------------------*/
@@ -64,7 +68,9 @@ public:
 	// Prefix
 	bidirectional_iterator &operator++()
 	{
-		if (_curr->right)
+		if (_curr == _max)
+			_curr = NULL;
+		else if (_curr->right)
 		{
 			_curr = _curr->right;
 			while (_curr->left)
@@ -83,7 +89,9 @@ public:
 	bidirectional_iterator operator++(int)
 	{
 		bidirectional_iterator tmp = *this;
-		if (_curr->right)
+		if (_curr == _max)
+			_curr = NULL;
+		else if (_curr->right)
 		{
 			_curr = _curr->right;
 			while (_curr->left)
@@ -100,7 +108,9 @@ public:
 
 	bidirectional_iterator &operator--()
 	{
-		if (_curr->left)
+		if (!_curr)
+			_curr = _max;
+		else if (_curr->left)
 		{
 			_curr = _curr->left;
 			while (_curr->right)
@@ -119,7 +129,9 @@ public:
 	bidirectional_iterator operator--(int)
 	{
 		bidirectional_iterator tmp = *this;
-		if (_curr->left)
+		if (!_curr)
+			_curr = _max;
+		else if (_curr->left)
 		{
 			_curr = _curr->left;
 			while (_curr->right)
@@ -135,6 +147,8 @@ public:
 	}
 
 	Node *getCurr() const {return _curr;}
+	Node *getMin() const {return _min;}
+	Node *getMax() const {return _max;}
 
 	/* -------------------------*/
 

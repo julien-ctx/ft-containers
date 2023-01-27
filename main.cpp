@@ -45,21 +45,20 @@
 void trash()
 {
 	TEST::map<int, int> mp;
-	mp.insert(TEST::make_pair<int, int>(24, 5));
+	mp.insert(TEST::make_pair<int, int>(25, 5));
 	mp.insert(TEST::make_pair<int, int>(211, 443));
 	mp.insert(TEST::make_pair<int, int>(23, 345));
 
 	TEST::map<int, int> mp2(mp);
 	// mp2.insert(TEST::make_pair<int, int>(233, 345));
 
-
-
 	std::cout << "---------------\n";
 	TEST::map<int, int>::iterator it2 = mp2.begin();
-	std::cout << mp2.size() << std::endl;
+	std::cout << "Size: " << mp2.size() << std::endl;
 	mp2.end();
 	mp = mp2;
-	// mp = mp2;
+	std::cout << "Size: " << mp.size() << std::endl;
+	mp = mp2;
 	for (; it2 != mp2.end(); it2++)
 		std::cout << it2->first << std::endl;
 }
