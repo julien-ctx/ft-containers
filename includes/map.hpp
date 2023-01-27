@@ -178,7 +178,6 @@ private:
 			_alloc.deallocate(node, 1);
 		}
 	}
-
 	/* -------------------------- */	
 
 public:
@@ -214,9 +213,8 @@ public:
 	/* ------ Members Overloads ------- */
 	map &operator=(const map &x)
 	{
-		_root = x._root;
-		_sentinel = x._sentinel;
-		_size = x._size;
+		for (const_iterator it = x.begin(); it != x.end(); it++)
+			insert(*it);
 		_comp = x._comp;
 		return *this;
 	}
@@ -404,7 +402,6 @@ public:
 
 };
 
-
 template<class Key, class T, class Compare, class Alloc>
 bool operator==(const map<Key, T, Compare, Alloc> &lhs,
 const map<Key, T, Compare, Alloc> &rhs)
@@ -424,5 +421,30 @@ const map<Key, T, Compare, Alloc> &rhs)
 	}
 	return it_rhs != rhs.end() ? false : true;
 }
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator!=(const map<Key, T, Compare, Alloc> &lhs,
+const map<Key, T, Compare, Alloc> &rhs)
+{return !(lhs == rhs);}
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator<(const map<Key, T, Compare, Alloc> &lhs,
+const map<Key, T, Compare, Alloc> &rhs)
+{return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.begin());}
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator>(const map<Key, T, Compare, Alloc> &lhs,
+const map<Key, T, Compare, Alloc> &rhs)
+{return rhs < lhs;}
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator<=(const map<Key, T, Compare, Alloc> &lhs,
+const map<Key, T, Compare, Alloc> &rhs)
+{return !(lhs > rhs);}
+
+template<class Key, class T, class Compare, class Alloc>
+bool operator>=(const map<Key, T, Compare, Alloc> &lhs,
+const map<Key, T, Compare, Alloc> &rhs)
+{return !(lhs < rhs);}
 
 }

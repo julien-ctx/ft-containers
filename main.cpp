@@ -56,12 +56,13 @@ int main()
 	mp.insert(TEST::make_pair<int, int>(211, 443));
 	mp.insert(TEST::make_pair<int, int>(23, 345));
 
-	TEST::map<int, int> mp2(mp);
-	mp2.insert(TEST::make_pair<int, int>(233, 345));
+	// TEST::map<int, int> mp2(mp);
+	// mp2.insert(TEST::make_pair<int, int>(233, 345));
 
-	std::cout << (mp == mp2) << std::endl;
+	// std::cout << (mp == mp2) << std::endl;
 	// (void)it;
-	std::cout << "i am here\n";
 	// Maybe i need to make a deep copy?
-	// TEST::map<int, int>::reverse_iterator it = mp.rbegin();//, ite = mp.rend();
+	TEST::map<int, int>::reverse_iterator it = mp.rbegin();//, ite = mp.rend();
+	for (; it != mp.rend(); it++)
+		std::cout << it->first << std::endl;
 }
