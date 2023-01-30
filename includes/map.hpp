@@ -303,6 +303,46 @@ public:
 		return ft::make_pair<iterator, bool>(iterator(node, _min, _max), ++_size);
 	}
 
+	iterator insertionCheck(iterator start, iterator end, const value_type &value)
+	{
+		iterator it = start, it2 = ++start;
+		for (;it2 != end; it++, it2++)
+		{
+			if ((*it).first == value.first)
+				return it;
+			if ((*it).first < value.first && (*it2).first > value.first)
+			{
+				Node *node = _alloc.allocate(1);
+				Node *parent = (it).getCurr();
+				_alloc.construct(node, (Node){value, NULL, NULL, parent, UNDEFINED_NODE});
+				if (value.first < parent->pair.first)
+					parent->left = node;
+				else
+					parent->right = node;
+				if (!_min || value.first < _min->pair.first)
+				_min = node;
+				if (!_max || value.first > _max->pair.first)
+					_max = node;
+				rebalance(node);
+				return iterator(node, _min, _max);
+			}
+		}
+		return iterator(NULL, NULL, NULL);
+	}
+
+	iterator insert(iterator position, const value_type &value)
+	{
+		iterator it = insertionCheck(position, end(), value);
+		return it.getCurr() ? it : insertionCheck(begin(), position, value);
+	}
+
+	// template <class InputIterator> 
+	// void insert(InputIterator first, InputIterator last)
+	// {
+
+	// }
+
+
 	iterator find(const Key &key)
 	{
 		Node *curr = _root;
