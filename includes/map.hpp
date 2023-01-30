@@ -193,14 +193,15 @@ public:
 	template <class InputIterator>
 	map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), 
 	const allocator_type &alloc = allocator_type()) :
-	_size(0), _comp(comp), _alloc(alloc), _min(NULL), _max(NULL)
+	_root(NULL), _size(0), _comp(comp), _alloc(alloc), _min(NULL), _max(NULL)
 	{
 		for (; first != last; first++)
 			insert(*first);
 	}
 
 	// Copy constructor
-	map(const map &x)
+	map(const map &x) :
+	_root(NULL), _size(0), _comp(x._comp), _alloc(x.get_allocator()), _min(NULL), _max(NULL)
 	{
 		const_iterator it = x.begin();
 		for (; it != x.end(); it++)

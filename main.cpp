@@ -11,7 +11,7 @@
 #include "includes/reverse_iterator.hpp"
 #include "includes/lexicographical_compare.hpp"
 
-#define TEST ft
+#define TEST std
 // TEST::map<int, int>  trash()
 // {
 // 	TEST::map<int, int> mymap;
