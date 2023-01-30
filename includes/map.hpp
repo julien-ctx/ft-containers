@@ -358,7 +358,39 @@ public:
 			curr = key < curr->pair.first ? curr->left : curr->right;
 		return const_iterator(curr, _min, _max);
 	}
-	
+
+	iterator lower_bound(const Key &key)
+	{
+		for (iterator it = begin(); it != end(); it++)
+			if ((*it).first >= key)
+				return it;
+		return end();
+	}
+
+	const_iterator lower_bound(const Key &key) const
+	{
+		for (const_iterator it = begin(); it != end(); it++)
+			if ((*it).first >= key)
+				return it;
+		return end();
+	}
+
+	iterator upper_bound(const Key &key)
+	{
+		for (iterator it = begin(); it != end(); it++)
+			if ((*it).first > key)
+				return it;
+		return end();
+	}
+
+	const_iterator upper_bound(const Key &key) const
+	{
+		for (const_iterator it = begin(); it != end(); it++)
+			if ((*it).first > key)
+				return it;
+		return end();
+	}
+
 	size_type count(const Key &key) const
 	{
 		Node *curr = _root;

@@ -82,4 +82,6 @@ int main()
 	 std::cout << "after insertion\n";
 	for (TEST::map<int, int>::iterator it = m.begin(); it != m.end(); it++)
 		std::cout << (*it).first << std::endl;
+	std::cout << "lower bound\n";
+	std::cout << (*m.upper_bound(30)).first << std::endl;
 }
