@@ -61,3 +61,4 @@ dkms.conf
 test.cpp
 containers_test
 42TESTERS-CONTAINERS
+expected
