@@ -63,23 +63,22 @@ typedef ft::pair<const T1, T2> T3;
 // {
 // 	trash();
 // }
-#define TEST std
+#define TEST ft
 int main ()
 {
-  TEST::map<char,int> mymap;
+	TEST::map<int,int> mymap;
+	mymap.insert(TEST::make_pair(17, 1));
+	mymap.insert(TEST::make_pair(543, 1));
+	mymap.insert(TEST::make_pair(1437, 1));
+	mymap.insert(TEST::make_pair(147, 1));
+	mymap.insert(TEST::make_pair(12, 1));
+	mymap.insert(TEST::make_pair(1543, 1));
+	mymap.insert(TEST::make_pair(1337, 1));
+	mymap.insert(TEST::make_pair(15, 1));
+	mymap.insert(TEST::make_pair(7, 1));
 
-  mymap.insert(TEST::make_pair('a', 10));
-  mymap.insert(TEST::make_pair('b', 20));
-  mymap.insert(TEST::make_pair('c', 30));
-
-  TEST::pair<TEST::map<char,int>::iterator,TEST::map<char,int>::iterator> ret;
-  ret = mymap.equal_range('b');
-
-  std::cout << "lower bound points to: ";
-  std::cout << ret.first->first << " => " << ret.first->second << '\n';
-
-  std::cout << "upper bound points to: ";
-  std::cout << ret.second->first << " => " << ret.second->second << '\n';
-
-  return 0;
+	TEST::map<int, int> mymap2;
+	mymap2.insert(mymap.begin(), mymap.end());
+	for (TEST::map<int, int>::iterator it = mymap.begin(); it != mymap.end(); it++)
+		std::cout << (*it).first << std::endl;
 }

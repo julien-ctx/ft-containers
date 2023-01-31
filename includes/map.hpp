@@ -121,6 +121,8 @@ private:
 	// Change colors to maintain RBT properties.
 	void rebalance(Node *node)
 	{
+		if (node->parent == _root)
+			return ;
 		while (node != _root && node->parent->color == RED_NODE)
 		{
 			if (node->parent == node->parent->parent->right)
@@ -180,8 +182,44 @@ private:
 			_alloc.deallocate(node, 1);
 		}
 	}
-	/* -------------------------- */	
+	/* -------------------------- */
 
+	iterator insertionCheck(iterator start, iterator end, const value_type &value)
+	{
+		iterator it = start, it2 = ++start;
+		for (;it2 != end; it++, it2++)
+		{
+			if ((*it).first == value.first)
+				return it;
+			if ((*it).first < value.first && (*it2).first > value.first)
+			{
+				Node *node = _alloc.allocate(1);
+				Node *parent = (it).getCurr();
+				_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
+				if (value.first < parent->pair.first)
+					parent->left = node;
+				else
+					parent->right = node;
+				if (!_min || value.first < _min->pair.first)
+				_min = node;
+				if (!_max || value.first > _max->pair.first)
+					_max = node;
+				rebalance(node);
+				_size++;
+				return iterator(node, _min, _max);
+			}
+		}
+		return iterator(NULL, NULL, NULL);
+	}
+
+	void setMinMax(key_type key, Node *node)
+	{
+		if (!_min || key < _min->pair.first)
+			_min = node;
+		if (!_max || key > _max->pair.first)
+			_max = node;
+	}
+	
 public:
 	/* ----- Constructors ----- */
 	// Default constructor
@@ -225,26 +263,11 @@ public:
 
 	T &operator[](const key_type &key)
 	{
-		Node *curr = _root; Node *parent = _root;
-		while (curr && key != curr->pair.first)
-		{
-			parent = curr;
-			curr = key < curr->pair.first ? curr->left : curr->right;
-		}
-		if (!curr)
-		{
-			_size++;
-			Node *node = _alloc.allocate(1);
-			_alloc.construct(node, (Node){ft::make_pair(key, mapped_type()),
-			NULL, NULL, parent, UNDEFINED_NODE});
-			if (key < parent->pair.first)
-				parent->left = node;
-			else
-				parent->right = node;
-			rebalance(node);
-			return node->pair.second;
-		}
-		return curr->pair.second;
+		for (iterator it = begin(); it != end(); it++)
+			if ((*it).first == key)
+				return (*it).second;
+		ft::pair<key_type, mapped_type> pair = ft::make_pair(key, mapped_type());
+		return ((*((insert(pair)).first)).second);
 	}
 	/* ---------------------------------*/
 
@@ -276,6 +299,7 @@ public:
 			node = _alloc.allocate(1);
 			_alloc.construct(node, (Node){value, NULL, NULL, node, BLACK_NODE});	
 			_root = node;
+			setMinMax(value.first, node);
 			return ft::make_pair<iterator, bool>(iterator(node, _min, _max), ++_size);
 		}
 		else
@@ -289,45 +313,15 @@ public:
 				curr = value.first < curr->pair.first ? curr->left : curr->right;
 			}
 			node = _alloc.allocate(1);
-			_alloc.construct(node, (Node){value, NULL, NULL, parent, UNDEFINED_NODE});
+			_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
 			if (value.first < parent->pair.first)
 				parent->left = node;
 			else
 				parent->right = node;
-			if (!_min || value.first < _min->pair.first)
-				_min = node;
-			if (!_max || value.first > _max->pair.first)
-				_max = node;
+			setMinMax(value.first, node);
 			rebalance(node);
 		}
 		return ft::make_pair<iterator, bool>(iterator(node, _min, _max), ++_size);
-	}
-
-	iterator insertionCheck(iterator start, iterator end, const value_type &value)
-	{
-		iterator it = start, it2 = ++start;
-		for (;it2 != end; it++, it2++)
-		{
-			if ((*it).first == value.first)
-				return it;
-			if ((*it).first < value.first && (*it2).first > value.first)
-			{
-				Node *node = _alloc.allocate(1);
-				Node *parent = (it).getCurr();
-				_alloc.construct(node, (Node){value, NULL, NULL, parent, UNDEFINED_NODE});
-				if (value.first < parent->pair.first)
-					parent->left = node;
-				else
-					parent->right = node;
-				if (!_min || value.first < _min->pair.first)
-				_min = node;
-				if (!_max || value.first > _max->pair.first)
-					_max = node;
-				rebalance(node);
-				return iterator(node, _min, _max);
-			}
-		}
-		return iterator(NULL, NULL, NULL);
 	}
 
 	iterator insert(iterator position, const value_type &value)
@@ -336,12 +330,12 @@ public:
 		return it.getCurr() ? it : insertionCheck(begin(), position, value);
 	}
 
-	// template <class InputIterator> 
-	// void insert(InputIterator first, InputIterator last)
-	// {
-
-	// }
-
+	template <class InputIterator> 
+	void insert(InputIterator first, InputIterator last)
+	{
+		for (; first != last; first++)
+			insert(*first);
+	}
 
 	iterator find(const Key &key)
 	{
