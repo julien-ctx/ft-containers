@@ -391,6 +391,12 @@ public:
 		return end();
 	}
 
+	ft::pair<iterator, iterator> equal_range(const Key &key)
+	{return make_pair(lower_bound(key), upper_bound(key));}
+
+	ft::pair<const_iterator,const_iterator> equal_range(const Key &key) const
+	{return make_pair(lower_bound(key), upper_bound(key));}
+
 	size_type count(const Key &key) const
 	{
 		Node *curr = _root;
@@ -418,6 +424,15 @@ public:
 		_min = NULL;
 		_max = NULL;
 		_root = NULL;
+	}
+
+	void swap(map &x)
+	{
+		ft::swapData(_root, x._root);
+		ft::swapData(_size, x._size);
+		ft::swapData(_comp, x._comp);
+		ft::swapData(_min, x._min);
+		ft::swapData(_max, x._max);
 	}
 
 	iterator begin()

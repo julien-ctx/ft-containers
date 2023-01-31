@@ -64,24 +64,22 @@ typedef ft::pair<const T1, T2> T3;
 // 	trash();
 // }
 #define TEST std
-int main()
+int main ()
 {
-    TEST::map<int, int> m;
-	m.insert(TEST::make_pair(10, 20));
-	m.insert(TEST::make_pair(30, 10));
-	m.insert(TEST::make_pair(1, 4));
-	m.insert(TEST::make_pair(143, 44));
+  TEST::map<char,int> mymap;
 
-	for (TEST::map<int, int>::iterator it = m.begin(); it != m.end(); it++)
-		std::cout << (*it).first << std::endl;
-	// for (TEST::map<int, int>::iterator it = m.begin(); it != m.end(); it++)
-	// 	std::cout << (*it).first << std::endl;
-	TEST::map<int, int>::iterator test2 = ++m.begin();	
-	test2++;
-	 m.insert(test2, TEST::make_pair(2, 42));
-	 std::cout << "after insertion\n";
-	for (TEST::map<int, int>::iterator it = m.begin(); it != m.end(); it++)
-		std::cout << (*it).first << std::endl;
-	std::cout << "lower bound\n";
-	std::cout << (*m.upper_bound(30)).first << std::endl;
+  mymap.insert(TEST::make_pair('a', 10));
+  mymap.insert(TEST::make_pair('b', 20));
+  mymap.insert(TEST::make_pair('c', 30));
+
+  TEST::pair<TEST::map<char,int>::iterator,TEST::map<char,int>::iterator> ret;
+  ret = mymap.equal_range('b');
+
+  std::cout << "lower bound points to: ";
+  std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+  std::cout << "upper bound points to: ";
+  std::cout << ret.second->first << " => " << ret.second->second << '\n';
+
+  return 0;
 }

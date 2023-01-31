@@ -1,6 +1,27 @@
 #include "../includes/tools.hpp"
 #include "../includes/map.hpp"
 
+// equal range test
+// int main ()
+// {
+//   TEST::map<char,int> mymap;
+
+//   mymap.insert(TEST::make_pair('a', 10));
+//   mymap.insert(TEST::make_pair('b', 20));
+//   mymap.insert(TEST::make_pair('c', 30));
+
+//   TEST::pair<TEST::map<char,int>::iterator,TEST::map<char,int>::iterator> ret;
+//   ret = mymap.equal_range('b');
+
+//   std::cout << "lower bound points to: ";
+//   std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+//   std::cout << "upper bound points to: ";
+//   std::cout << ret.second->first << " => " << ret.second->second << '\n';
+
+//   return 0;
+// }
+
 void mapTest()
 {
 
