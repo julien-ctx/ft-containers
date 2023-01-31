@@ -121,53 +121,61 @@ private:
 	// Change colors to maintain RBT properties.
 	void rebalance(Node *node)
 	{
-		if (node->parent == _root)
-			return ;
 		while (node != _root && node->parent->color == RED_NODE)
 		{
 			if (node->parent == node->parent->parent->right)
 			{
 				Node *uncle = node->parent->parent->left;
-				if (uncle->color == RED_NODE)
+				if (uncle)
 				{
-					uncle->color = BLACK_NODE;
-					uncle->parent->color = RED_NODE;
-					node->parent->color = BLACK_NODE;
-					node = node->parent->parent;
-				}
-				else if (uncle->color == BLACK_NODE)
-				{
-					if (node == node->parent->left)
+					if (uncle->color == RED_NODE)
 					{
-						node = node->parent;
-						rotate(node, RIGHT_ROT);
+						uncle->color = BLACK_NODE;
+						uncle->parent->color = RED_NODE;
+						node->parent->color = BLACK_NODE;
+						node = node->parent->parent;
 					}
-					uncle->parent->color = RED_NODE;
-					node->parent->color = BLACK_NODE;
-					rotate(uncle->parent, LEFT_ROT);
+					else if (uncle->color == BLACK_NODE)
+					{
+						if (node == node->parent->left)
+						{
+							node = node->parent;
+							rotate(node, RIGHT_ROT);
+						}
+						uncle->parent->color = RED_NODE;
+						node->parent->color = BLACK_NODE;
+						rotate(uncle->parent, LEFT_ROT);
+					}
 				}
+				else
+					node = node->parent;
 			}
 			else
 			{
 				Node *uncle = node->parent->parent->right;
-				if (uncle->color == RED_NODE)
+				if (uncle)
 				{
-					uncle->color = BLACK_NODE;
-					uncle->parent->color = RED_NODE;
-					node->parent->color = BLACK_NODE;
-					node = node->parent->parent;
-				}
-				else if (uncle->color == BLACK_NODE)
-				{
-					if (node == node->parent->right)
+					if (uncle->color == RED_NODE)
 					{
-						node = node->parent;
-						rotate(node, LEFT_ROT);
+						uncle->color = BLACK_NODE;
+						uncle->parent->color = RED_NODE;
+						node->parent->color = BLACK_NODE;
+						node = node->parent->parent;
 					}
-					uncle->parent->color = RED_NODE;
-					node->parent->color = BLACK_NODE;
-					rotate(uncle->parent, RIGHT_ROT);
+					else if (uncle->color == BLACK_NODE)
+					{
+						if (node == node->parent->right)
+						{
+							node = node->parent;
+							rotate(node, LEFT_ROT);
+						}
+						uncle->parent->color = RED_NODE;
+						node->parent->color = BLACK_NODE;
+						rotate(uncle->parent, RIGHT_ROT);
+					}
 				}
+				else
+					node = node->parent;
 			}
 		}
 	}

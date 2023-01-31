@@ -78,7 +78,9 @@ int main ()
 	mymap.insert(TEST::make_pair(7, 1));
 
 	TEST::map<int, int> mymap2;
-	mymap2.insert(mymap.begin(), mymap.end());
+	TEST::map<int, int>::iterator it = mymap.begin();
+	it++;it++;it++;
+	mymap2.insert(it, mymap.end());
 	for (TEST::map<int, int>::iterator it = mymap.begin(); it != mymap.end(); it++)
 		std::cout << (*it).first << std::endl;
 }
