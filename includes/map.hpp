@@ -248,7 +248,7 @@ public:
 	{
 		const_iterator it = x.begin();
 		for (; it != x.end(); it++)
-			insert(value_type(*it));
+			insert(*it);
 		_comp = x._comp;
 	}
 
@@ -467,11 +467,25 @@ public:
 		return reverse_iterator(iterator(_max, _min, _max));
 	}
 
+	const_reverse_iterator rbegin() const
+	{
+		if (!_size)
+			return (const_reverse_iterator(iterator(_root, _min, _max)));
+		return const_reverse_iterator(iterator(_max, _min, _max));	
+	}
+
 	reverse_iterator rend()
 	{
 		if (!_size)
 			return (reverse_iterator(iterator(_root, _min, _max)));
 		return reverse_iterator(begin());
+	}
+
+	const_reverse_iterator rend() const
+	{
+		if (!_size)
+			return (const_reverse_iterator(iterator(_root, _min, _max)));
+		return const_reverse_iterator(begin());	
 	}
 
 };

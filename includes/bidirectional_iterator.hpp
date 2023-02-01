@@ -38,7 +38,7 @@ private:
 
 public:
 
-	operator bidirectional_iterator<T, true>() {return bidirectional_iterator<T, true>();}
+	operator bidirectional_iterator<T, true>() {return bidirectional_iterator<T, true>(_curr, _min, _max);}
 	
 	/* ----- Constructors ----- */
 	bidirectional_iterator() : _curr(NULL), _min(NULL), _max(NULL) {}
@@ -61,7 +61,10 @@ public:
 		return *this;
 	}
 
-	reference operator*() const {return _curr->pair;}
+	reference operator*() const
+	{
+		return _curr->pair;
+	}
 
 	pointer operator->() const {return &(operator*());}
 

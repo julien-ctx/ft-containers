@@ -30,14 +30,6 @@ mli:
 	
 	cd containers_test && ./do.sh vector && ./do.sh stack && ./do.sh map; \
 
-mazoise:
-	@if [ -d "./42TESTERS-CONTAINERS" ]; then \
-			cd 42TESTERS-CONTAINERS && ./do.sh; \
-	else \
-		git clone https://github.com/Mazoise/42TESTERS-CONTAINERS.git; \
-	fi
-	@cd 42TESTERS-CONTAINERS && ./Run_tests.sh; \	
-
 .cpp.o: $(SRCS)
 	@printf $(GREEN)"\r\033[KCreating object files 👉 "$(YELLOW)"<$<> "$(RESET)
 	@c++ $(CPPFLAGS) -c $< -o $(<:.cpp=.o)
