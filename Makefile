@@ -20,7 +20,7 @@ all: $(NAME)
 
 mli:
 	@if [ -d "./containers_test" ]; then \
-			cd containers_test && ./do.sh; \
+			cd containers_test && ./do.sh vector && ./do.sh stack && ./do.sh map; \
 	else \
 		git clone https://github.com/mli42/containers_test.git; \
 		awk '{if(NR==3) {print "# include \"../../../includes/vector.hpp\""} else {print}}' containers_test/srcs/vector/common.hpp > tmp && mv tmp containers_test/srcs/vector/common.hpp; \
@@ -28,7 +28,7 @@ mli:
 		awk '{if(NR==3) {print "# include \"../../../includes/map.hpp\""} else {print}}' containers_test/srcs/map/common.hpp > tmp && mv tmp containers_test/srcs/map/common.hpp; \
 	fi
 	
-	cd containers_test && ./do.sh; \
+	cd containers_test && ./do.sh vector && ./do.sh stack && ./do.sh map; \
 
 mazoise:
 	@if [ -d "./42TESTERS-CONTAINERS" ]; then \

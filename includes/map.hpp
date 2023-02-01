@@ -192,6 +192,14 @@ private:
 	}
 	/* -------------------------- */
 
+	void setMinMax(key_type key, Node *node)
+	{
+		if (!_min || _comp(key, _min->pair.first))
+			_min = node;
+		if (!_max || _comp(_max->pair.first, key))
+			_max = node;
+	}
+
 	iterator insertionCheck(iterator start, iterator end, const value_type &value)
 	{
 		iterator it = start, it2 = ++start;
@@ -204,28 +212,17 @@ private:
 				Node *node = _alloc.allocate(1);
 				Node *parent = (it).getCurr();
 				_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
-				if (value.first < parent->pair.first)
+				if (_comp(value.first, parent->pair.first))
 					parent->left = node;
 				else
 					parent->right = node;
-				if (!_min || value.first < _min->pair.first)
-				_min = node;
-				if (!_max || value.first > _max->pair.first)
-					_max = node;
+				setMinMax(value.first, node);
 				rebalance(node);
 				_size++;
 				return iterator(node, _min, _max);
 			}
 		}
 		return iterator(NULL, NULL, NULL);
-	}
-
-	void setMinMax(key_type key, Node *node)
-	{
-		if (!_min || key < _min->pair.first)
-			_min = node;
-		if (!_max || key > _max->pair.first)
-			_max = node;
 	}
 	
 public:
@@ -283,7 +280,7 @@ public:
 	{
 		Node *curr = _root;
 		while (curr && key != curr->pair.first)
-			curr = key < curr->pair.first ? curr->left : curr->right;
+			curr = _comp(key, curr->pair.first) ? curr->left : curr->right;
 		if (!curr)
 			throw std::out_of_range("map::at: key not found");
 		return curr->pair.second;
@@ -293,7 +290,7 @@ public:
 	{
 		Node *curr = _root;
 		while (curr && key != curr->pair.first)
-			curr = key < curr->pair.first ? curr->left : curr->right;
+			curr = _comp(key, curr->pair.first) ? curr->left : curr->right;
 		if (!curr)
 			throw std::out_of_range("map::at: key not found");
 		return curr->pair.second;
@@ -318,11 +315,11 @@ public:
 				if (curr->pair.first == value.first)
 					return ft::make_pair<iterator, bool>(iterator(curr, _min, _max), false);
 				parent = curr;
-				curr = value.first < curr->pair.first ? curr->left : curr->right;
+				curr = _comp(value.first, curr->pair.first) ? curr->left : curr->right;
 			}
 			node = _alloc.allocate(1);
 			_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
-			if (value.first < parent->pair.first)
+			if (_comp(value.first, parent->pair.first))
 				parent->left = node;
 			else
 				parent->right = node;
@@ -349,7 +346,7 @@ public:
 	{
 		Node *curr = _root;
 		while (curr && key != curr->pair.first)
-			curr = key < curr->pair.first ? curr->left : curr->right;
+			curr = _comp(key, curr->pair.first) ? curr->left : curr->right;
 		return iterator(curr, _min, _max);
 	}
 
@@ -357,7 +354,7 @@ public:
 	{
 		Node *curr = _root;
 		while (curr && key != curr->pair.first)
-			curr = key < curr->pair.first ? curr->left : curr->right;
+			curr = _comp(key, curr->pair.first) ? curr->left : curr->right;
 		return const_iterator(curr, _min, _max);
 	}
 
@@ -403,7 +400,7 @@ public:
 	{
 		Node *curr = _root;
 		while (curr && key != curr->pair.first)
-			curr = key < curr->pair.first ? curr->left : curr->right;
+			curr = _comp(key, curr->pair.first) ? curr->left : curr->right;
 		return curr ? 1 : 0;
 	}
 
