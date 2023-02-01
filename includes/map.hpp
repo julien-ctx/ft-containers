@@ -222,7 +222,7 @@ private:
 				return iterator(node, _min, _max);
 			}
 		}
-		return iterator(NULL, NULL, NULL);
+		return (insert(value)).first;
 	}
 	
 public:
@@ -463,15 +463,15 @@ public:
 	reverse_iterator rbegin()
 	{
 		if (!_size)
-			return (reverse_iterator(iterator(_root, _min, _max), _min, _max));
-		return reverse_iterator(iterator(end().getCurr()->parent, _min, _max), _min, _max);
+			return (reverse_iterator(iterator(_root, _min, _max)));
+		return reverse_iterator(iterator(_max, _min, _max));
 	}
 
 	reverse_iterator rend()
 	{
 		if (!_size)
-			return (reverse_iterator(iterator(_root, _min, _max), _min, _max));
-		return reverse_iterator(begin(), _min, _max);
+			return (reverse_iterator(iterator(_root, _min, _max)));
+		return reverse_iterator(begin());
 	}
 
 };
