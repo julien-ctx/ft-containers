@@ -202,7 +202,8 @@ private:
 
 	iterator insertionCheck(iterator start, iterator end, const value_type &value)
 	{
-		iterator it = start, it2 = ++start;
+		iterator it = start;
+		iterator it2 = it == end ? end : ++start;
 		for (;it2 != end; it++, it2++)
 		{
 			if ((*it).first == value.first)
@@ -464,14 +465,14 @@ public:
 	{
 		if (!_size)
 			return (reverse_iterator(iterator(_root, _min, _max)));
-		return reverse_iterator(iterator(_max, _min, _max));
+		return reverse_iterator(iterator(NULL, _min, _max));
 	}
 
 	const_reverse_iterator rbegin() const
 	{
 		if (!_size)
 			return (const_reverse_iterator(iterator(_root, _min, _max)));
-		return const_reverse_iterator(iterator(_max, _min, _max));	
+		return const_reverse_iterator(iterator(NULL, _min, _max));	
 	}
 
 	reverse_iterator rend()

@@ -166,11 +166,28 @@ bool operator==(const bidirectional_iterator<Iterator1, true> &lhs,
 	const bidirectional_iterator<Iterator2, true> &rhs) {return lhs.operator->() == rhs.operator->();}
 
 template<class Iterator1, class Iterator2>
+bool operator==(const bidirectional_iterator<Iterator1, true> &lhs,
+	const bidirectional_iterator<Iterator2, false> &rhs) {return lhs.operator->() == rhs.operator->();}
+
+template<class Iterator1, class Iterator2>
+bool operator==(const bidirectional_iterator<Iterator1, false> &lhs,
+	const bidirectional_iterator<Iterator2, true> &rhs) {return lhs.operator->() == rhs.operator->();}
+
+template<class Iterator1, class Iterator2>
 bool operator!=(const bidirectional_iterator<Iterator1, false> &lhs,
 	const bidirectional_iterator<Iterator2, false> &rhs) {return !operator==(lhs, rhs);}
 
 template<class Iterator1, class Iterator2>
 bool operator!=(const bidirectional_iterator<Iterator1, true> &lhs,
 	const bidirectional_iterator<Iterator2, true> &rhs) {return !operator==(lhs, rhs);}
+
+template<class Iterator1, class Iterator2>
+bool operator!=(const bidirectional_iterator<Iterator1, true> &lhs,
+	const bidirectional_iterator<Iterator2, false> &rhs) {return !operator==(lhs, rhs);}
+
+template<class Iterator1, class Iterator2>
+bool operator!=(const bidirectional_iterator<Iterator1, false> &lhs,
+	const bidirectional_iterator<Iterator2, true> &rhs) {return !operator==(lhs, rhs);}
+
 
 }
