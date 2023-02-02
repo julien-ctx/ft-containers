@@ -103,12 +103,7 @@ public:
 	// Copy constructor
 	map(const map &x) :
 	_root(NULL), _size(0), _comp(x._comp), _alloc(x.get_allocator()), _min(NULL), _max(NULL)
-	{
-		const_iterator it = x.begin();
-		for (; it != x.end(); it++)
-			insert(*it);
-		_comp = x._comp;
-	}
+	{*this = x;}
 
 	~map() {deleteAll(_root);}
 	/* -------------------------*/
@@ -117,10 +112,7 @@ public:
 	map &operator=(const map &x)
 	{
 		clear();
-		const_iterator it = x.begin();
-		for (; it != x.end(); it++)
-			insert(*it);
-		_comp = x._comp;
+		insert(x.begin(), x.end());
 		return *this;
 	}
 
@@ -157,9 +149,10 @@ public:
 	ft::pair<iterator, bool> insert(const value_type &value)
 	{
 		Node *curr = _root;
-		Node *parent = _root;
+		Node *parent = NULL;
 		while (curr)
 		{
+			parent = curr;
 			if (_comp(curr->pair.first, value.first))
 				curr = curr->right;
 			else if (_comp(value.first, curr->pair.first))
@@ -169,7 +162,7 @@ public:
 		}
 		Node *node = _alloc.allocate(1);
 		_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
-		if (!_root || !parent)
+		if (!_root)
 		{
 			_root = node;
 			_root->color = BLACK_NODE;

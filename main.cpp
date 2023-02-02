@@ -19,8 +19,8 @@
 
 #include <stdlib.h>
 
-#define MAX_RAM 4294967296
-#define BUFFER_SIZE 4096
+#define MAX_RAM 425465
+#define BUFFER_SIZE 4
 struct Buffer
 {
 	int idx;
@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
 	std::cout << "Insert finished\n";
 
 	int sum = 0;
-	for (int i = 0; i < 10000; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		int access = rand();
 		sum += map_int[access];
