@@ -10,22 +10,8 @@
 #include "lexicographical_compare.hpp"
 #include "pair.hpp"
 
-// https://brilliant.org/wiki/red-black-tree/
 // https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
 
-/*
-Properties:
- * The black height of the red-black tree is the number of black nodes on a path
- from the root node to a leaf node. Leaf nodes are also counted as black nodes.
- So, a red-black tree of height h has black height >= h/2.
- * Height of a red-black tree with n nodes is h<= 2 log2(n + 1).
- * All leaves (NIL) are black.
- * The black depth of a node is defined as the number of black nodes from the
- root to that node i.e the number of black ancestors.
- * Every red-black tree is a special case of a binary tree.
- * If a node is red, then its parent is black. A red node cannot have a red parent or red child)
- * An inserted node is always red
-*/
 namespace ft
 {
 
@@ -61,7 +47,7 @@ public:
 		typedef bool result_type;
 		typedef value_type first_argument_type;
 		typedef value_type second_argument_type;
-		bool operator() (const value_type& x, const value_type& y) const {return comp(x.first, y.first);}
+		bool operator() (const value_type &x, const value_type &y) const {return comp(x.first, y.first);}
 	};
 
 private:
@@ -78,108 +64,6 @@ private:
 	Node *_min;
 	Node *_max;
 	
-	/* ----- Red Black Tree ----- */	
-	// Rotation of elements to maintain the tree's order.
-	void rotate(Node *node, bool rotate)
-	{
-		Node *sibiling = rotate == LEFT_ROT ? node->right : node->left;
-		if (rotate == LEFT_ROT)
-			node->right = sibiling->left;
-		else
-			node->left = sibiling->right;
-		if (rotate == LEFT_ROT && sibiling->left)
-			sibiling->left->parent = node;
-		else if (rotate == RIGHT_ROT && sibiling->right)
-			sibiling->right->parent = node;
-		sibiling->parent = node->parent;
-		if (!node->parent)
-			_root = sibiling;
-		else
-		{
-			if (rotate == LEFT_ROT)
-			{
-				if (node == node->parent->left)
-					node->parent->left = sibiling;
-				else
-					node->parent->right = sibiling;
-			}
-			else
-			{
-				if (node == node->parent->right)
-					node->parent->right = sibiling;
-				else
-					node->parent->left = sibiling;
-			}
-		}
-		if (rotate == LEFT_ROT)
-			sibiling->left = node;
-		else
-			sibiling->right = node;
-		node->parent = sibiling;
-	}
-
-	// Change colors to maintain RBT properties.
-	void rebalance(Node *node)
-	{
-		while (node != _root && node->parent->color == RED_NODE)
-		{
-			if (node->parent == node->parent->parent->right)
-			{
-				Node *uncle = node->parent->parent->left;
-				if (uncle)
-				{
-					if (uncle->color == RED_NODE)
-					{
-						uncle->color = BLACK_NODE;
-						uncle->parent->color = RED_NODE;
-						node->parent->color = BLACK_NODE;
-						node = node->parent->parent;
-					}
-					else if (uncle->color == BLACK_NODE)
-					{
-						if (node == node->parent->left)
-						{
-							node = node->parent;
-							rotate(node, RIGHT_ROT);
-						}
-						uncle->parent->color = RED_NODE;
-						node->parent->color = BLACK_NODE;
-						rotate(uncle->parent, LEFT_ROT);
-					}
-				}
-				else
-					node = node->parent;
-			}
-			else
-			{
-				Node *uncle = node->parent->parent->right;
-				if (uncle)
-				{
-					if (uncle->color == RED_NODE)
-					{
-						uncle->color = BLACK_NODE;
-						uncle->parent->color = RED_NODE;
-						node->parent->color = BLACK_NODE;
-						node = node->parent->parent;
-					}
-					else if (uncle->color == BLACK_NODE)
-					{
-						if (node == node->parent->right)
-						{
-							node = node->parent;
-							rotate(node, LEFT_ROT);
-						}
-						uncle->parent->color = RED_NODE;
-						node->parent->color = BLACK_NODE;
-						rotate(uncle->parent, RIGHT_ROT);
-					}
-				}
-				else
-					node = node->parent;
-			}
-		}
-	}
-
 	void deleteAll(Node *node)
 	{
 		if (node)
@@ -190,40 +74,13 @@ private:
 			_alloc.deallocate(node, 1);
 		}
 	}
-	/* -------------------------- */
-
+	
 	void setMinMax(key_type key, Node *node)
 	{
 		if (!_min || _comp(key, _min->pair.first))
 			_min = node;
 		if (!_max || _comp(_max->pair.first, key))
 			_max = node;
-	}
-
-	iterator insertionCheck(iterator start, iterator end, const value_type &value)
-	{
-		iterator it = start;
-		iterator it2 = it == end ? end : ++start;
-		for (;it2 != end; it++, it2++)
-		{
-			if (it->first == value.first)
-				return it;
-			if (it->first < value.first && it2->first > value.first)
-			{
-				Node *node = _alloc.allocate(1);
-				Node *parent = (it).getCurr();
-				_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
-				if (_comp(value.first, parent->pair.first))
-					parent->left = node;
-				else
-					parent->right = node;
-				setMinMax(value.first, node);
-				rebalance(node);
-				_size++;
-				return iterator(node, _min, _max);
-			}
-		}
-		return (insert(value)).first;
 	}
 	
 public:
@@ -297,16 +154,41 @@ public:
 		return curr->pair.second;
 	}
 
+	iterator insertionCheck(iterator start, iterator end, const value_type &value)
+	{
+		iterator it = start;
+		iterator it2 = it == end ? end : ++start;
+		for (;it2 != end; it++, it2++)
+		{
+			if (it->first == value.first)
+				return it;
+			if (it->first < value.first && it2->first > value.first)
+			{
+				Node *node = _alloc.allocate(1);
+				Node *parent = (it).getCurr();
+				_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
+				if (_comp(value.first, parent->pair.first))
+					parent->left = node;
+				else
+					parent->right = node;
+				setMinMax(value.first, node);
+				_size++;
+				return iterator(node, _min, _max);
+			}
+		}
+		return (insert(value)).first;
+	}
+
 	ft::pair<iterator, bool> insert(const value_type &value)
 	{
 		Node *node = NULL;
 		if (!_root)
 		{
 			node = _alloc.allocate(1);
-			_alloc.construct(node, (Node){value, NULL, NULL, node, BLACK_NODE});	
+			_alloc.construct(node, (Node){value, NULL, NULL, NULL, BLACK_NODE});	
 			_root = node;
-			setMinMax(value.first, node);
-			return ft::make_pair<iterator, bool>(iterator(node, _min, _max), ++_size);
+			_min = _root; _max = _root;
+			return ft::make_pair<iterator, bool>(iterator(_root, _root, _root), ++_size);
 		}
 		else
 		{
@@ -325,7 +207,6 @@ public:
 			else
 				parent->right = node;
 			setMinMax(value.first, node);
-			rebalance(node);
 		}
 		return ft::make_pair<iterator, bool>(iterator(node, _min, _max), ++_size);
 	}
