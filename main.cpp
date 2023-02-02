@@ -13,14 +13,13 @@
 #include "includes/lexicographical_compare.hpp"
 
 // #include "containers_test/srcs/map/common.hpp"
-
 #define TEST ft
 
 
 #include <stdlib.h>
 
-#define MAX_RAM 425465
-#define BUFFER_SIZE 4
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
 struct Buffer
 {
 	int idx;
@@ -97,10 +96,9 @@ int main(int argc, char** argv) {
 	{
 		map_int.insert(TEST::make_pair(rand(), rand()));
 	}
-	std::cout << "Insert finished\n";
 
 	int sum = 0;
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10000; i++)
 	{
 		int access = rand();
 		sum += map_int[access];
@@ -110,7 +108,6 @@ int main(int argc, char** argv) {
 	{
 		TEST::map<int, int> copy = map_int;
 	}
-	std::cout << "copy finished\n";
 	MutantStack<char> iterable_stack;
 	for (char letter = 'a'; letter <= 'z'; letter++)
 		iterable_stack.push(letter);

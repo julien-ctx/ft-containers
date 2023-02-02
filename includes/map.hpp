@@ -74,6 +74,99 @@ private:
 			_alloc.deallocate(node, 1);
 		}
 	}
+
+	/* ----- Red Black Tree ----- */	
+	// Rotation of elements to maintain the tree's order.
+void rotate_right(Node* X)
+		{
+			Node* Y = X->left;
+			X->left = Y->right;
+			if (Y->right != NULL)
+				Y->right->parent = X;
+			Y->parent = X->parent;
+			if (X->parent == NULL)
+				this->_root = Y;
+			else if (X == X->parent->right)
+				X->parent->right = Y;
+			else
+				X->parent->left = Y;
+			Y->right = X;
+			X->parent = Y;
+		}
+		void rotate_left(Node* X)
+		{
+			Node* Y = X->right;
+			X->right = Y->left;
+			if (Y->left != NULL)
+				Y->left->parent = X;
+			Y->parent = X->parent;
+			if (X->parent == NULL)
+				this->_root = Y;
+			else if (X == X->parent->left)
+				X->parent->left = Y;
+			else
+				X->parent->right = Y;
+			Y->left = X;
+			X->parent = Y;
+		}
+
+	// Change colors to maintain RBT properties.
+	void rebalance(Node *node)
+	{
+		if (!node->parent)
+			return;
+		
+		while (node != _root && node->parent != _root && node->parent->color == RED_NODE)
+		{
+			if (node->parent == node->parent->parent->right)
+			{
+				Node *uncle = node->parent->parent->left;
+					if (uncle && uncle->color  == RED_NODE)
+					{
+						uncle->color = BLACK_NODE;
+						node->parent->parent->color = RED_NODE;
+						node->parent->color = BLACK_NODE;
+						node = node->parent->parent;
+					}
+					else
+					{
+						if (node == node->parent->left)
+						{
+							node = node->parent;
+							rotate_right(node);
+						}
+						node->parent->parent->color = RED_NODE;
+						node->parent->color = BLACK_NODE;
+						rotate_left(node->parent->parent);
+					}
+			}
+			else
+			{
+				Node *uncle = node->parent->parent->right;
+					if (uncle && uncle->color == RED_NODE)
+					{
+						uncle->color = BLACK_NODE;
+						node->parent->parent->color = RED_NODE;
+						node->parent->color = BLACK_NODE;
+						node = node->parent->parent;
+					}
+					else
+					{
+						if (node == node->parent->right)
+						{
+							node = node->parent;
+							rotate_left(node);
+						}
+						node->parent->parent->color = RED_NODE;
+						node->parent->color = BLACK_NODE;
+						rotate_right(node->parent->parent);
+					}
+			}
+			if (node == _root)
+				return;
+			
+	}
+	}
 	
 	void setMinMax(key_type key, Node *node)
 	{
@@ -146,6 +239,32 @@ public:
 		return curr->pair.second;
 	}
 
+	iterator insertionCheck(iterator start, iterator end, const value_type &value)
+	{
+		iterator it = start;
+		iterator it2 = it == end ? end : ++start;
+		for (;it2 != end; it++, it2++)
+		{
+			if (it->first == value.first)
+				return it;
+			if (it->first < value.first && it2->first > value.first)
+			{
+				Node *node = _alloc.allocate(1);
+				Node *parent = (it).getCurr();
+				_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
+				if (_comp(value.first, parent->pair.first))
+					parent->left = node;
+				else
+					parent->right = node;
+				setMinMax(value.first, node);
+				rebalance(node);
+				_size++;
+				return iterator(node, _min, _max);
+			}
+		}
+		return (insert(value)).first;
+	}
+
 	ft::pair<iterator, bool> insert(const value_type &value)
 	{
 		Node *curr = _root;
@@ -166,19 +285,21 @@ public:
 		{
 			_root = node;
 			_root->color = BLACK_NODE;
+			_root->parent = NULL;
 		}
 		else if (_comp(value.first, parent->pair.first))
 			parent->left = node;
 		else
 			parent->right = node;
+		rebalance(node);
 		setMinMax(value.first, node);
 		return ft::make_pair(iterator(node, _min, _max), ++_size);
 	}
 
 	iterator insert(iterator position, const value_type &value)
 	{
-		(void)position;
-		return (insert(value)).first;
+		iterator it = insertionCheck(position, end(), value);
+		return it.getCurr() ? it : insertionCheck(begin(), position, value);
 	}
 
 	template <class InputIterator> 
