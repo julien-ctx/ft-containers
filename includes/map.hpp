@@ -154,67 +154,38 @@ public:
 		return curr->pair.second;
 	}
 
-	iterator insertionCheck(iterator start, iterator end, const value_type &value)
-	{
-		iterator it = start;
-		iterator it2 = it == end ? end : ++start;
-		for (;it2 != end; it++, it2++)
-		{
-			if (it->first == value.first)
-				return it;
-			if (it->first < value.first && it2->first > value.first)
-			{
-				Node *node = _alloc.allocate(1);
-				Node *parent = (it).getCurr();
-				_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
-				if (_comp(value.first, parent->pair.first))
-					parent->left = node;
-				else
-					parent->right = node;
-				setMinMax(value.first, node);
-				_size++;
-				return iterator(node, _min, _max);
-			}
-		}
-		return (insert(value)).first;
-	}
-
 	ft::pair<iterator, bool> insert(const value_type &value)
 	{
-		Node *node = NULL;
-		if (!_root)
+		Node *curr = _root;
+		Node *parent = _root;
+		while (curr)
 		{
-			node = _alloc.allocate(1);
-			_alloc.construct(node, (Node){value, NULL, NULL, NULL, BLACK_NODE});	
-			_root = node;
-			_min = _root; _max = _root;
-			return ft::make_pair<iterator, bool>(iterator(_root, _root, _root), ++_size);
-		}
-		else
-		{
-			Node *curr = _root; Node *parent = _root;
-			while (curr)
-			{
-				if (curr->pair.first == value.first)
-					return ft::make_pair<iterator, bool>(iterator(curr, _min, _max), false);
-				parent = curr;
-				curr = _comp(value.first, curr->pair.first) ? curr->left : curr->right;
-			}
-			node = _alloc.allocate(1);
-			_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
-			if (_comp(value.first, parent->pair.first))
-				parent->left = node;
+			if (_comp(curr->pair.first, value.first))
+				curr = curr->right;
+			else if (_comp(value.first, curr->pair.first))
+            	curr = curr->left;
 			else
-				parent->right = node;
-			setMinMax(value.first, node);
+				return ft::make_pair(iterator(curr, _min, _max), false);
 		}
-		return ft::make_pair<iterator, bool>(iterator(node, _min, _max), ++_size);
+		Node *node = _alloc.allocate(1);
+		_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
+		if (!_root || !parent)
+		{
+			_root = node;
+			_root->color = BLACK_NODE;
+		}
+		else if (_comp(value.first, parent->pair.first))
+			parent->left = node;
+		else
+			parent->right = node;
+		setMinMax(value.first, node);
+		return ft::make_pair(iterator(node, _min, _max), ++_size);
 	}
 
 	iterator insert(iterator position, const value_type &value)
 	{
-		iterator it = insertionCheck(position, end(), value);
-		return it.getCurr() ? it : insertionCheck(begin(), position, value);
+		(void)position;
+		return (insert(value)).first;
 	}
 
 	template <class InputIterator> 
