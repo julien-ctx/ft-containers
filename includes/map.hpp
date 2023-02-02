@@ -77,7 +77,7 @@ private:
 
 	/* ----- Red Black Tree ----- */	
 	// Rotation of elements to maintain the tree's order.
-void rotate_right(Node* X)
+	void rotate_right(Node* X)
 		{
 			Node* Y = X->left;
 			X->left = Y->right;
@@ -162,10 +162,7 @@ void rotate_right(Node* X)
 						rotate_right(node->parent->parent);
 					}
 			}
-			if (node == _root)
-				return;
-			
-	}
+		}
 	}
 	
 	void setMinMax(key_type key, Node *node)
@@ -211,12 +208,13 @@ public:
 
 	T &operator[](const key_type &key)
 	{
-		for (iterator it = begin(); it != end(); it++)
-			if (it->first == key)
-				return it->second;
+		iterator it = find(key);
+		if (it != end())
+			return it->second;
 		ft::pair<key_type, mapped_type> pair = ft::make_pair(key, mapped_type());
-		return ((*((insert(pair)).first)).second);
+		return ((*(insert(pair)).first).second);
 	}
+
 	/* ---------------------------------*/
 
 	T &at(const Key &key)

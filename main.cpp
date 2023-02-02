@@ -13,8 +13,7 @@
 #include "includes/lexicographical_compare.hpp"
 
 // #include "containers_test/srcs/map/common.hpp"
-#define TEST ft
-
+#define TEST std
 
 #include <stdlib.h>
 
