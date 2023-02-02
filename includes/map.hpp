@@ -206,9 +206,9 @@ private:
 		iterator it2 = it == end ? end : ++start;
 		for (;it2 != end; it++, it2++)
 		{
-			if ((*it).first == value.first)
+			if (it->first == value.first)
 				return it;
-			if ((*it).first < value.first && (*it2).first > value.first)
+			if (it->first < value.first && it2->first > value.first)
 			{
 				Node *node = _alloc.allocate(1);
 				Node *parent = (it).getCurr();
@@ -262,7 +262,7 @@ public:
 		clear();
 		const_iterator it = x.begin();
 		for (; it != x.end(); it++)
-			insert(value_type(*it));
+			insert(*it);
 		_comp = x._comp;
 		return *this;
 	}
@@ -270,8 +270,8 @@ public:
 	T &operator[](const key_type &key)
 	{
 		for (iterator it = begin(); it != end(); it++)
-			if ((*it).first == key)
-				return (*it).second;
+			if (it->first == key)
+				return it->second;
 		ft::pair<key_type, mapped_type> pair = ft::make_pair(key, mapped_type());
 		return ((*((insert(pair)).first)).second);
 	}
@@ -343,6 +343,21 @@ public:
 			insert(*first);
 	}
 
+	// iterator erase(iterator pos)
+	// {
+
+	// }
+
+	// iterator erase(iterator first, iterator last)
+	// {
+
+	// }
+
+	// size_type erase(const Key &key)
+	// {
+
+	// }
+
 	iterator find(const Key &key)
 	{
 		Node *curr = _root;
@@ -362,7 +377,7 @@ public:
 	iterator lower_bound(const Key &key)
 	{
 		for (iterator it = begin(); it != end(); it++)
-			if ((*it).first >= key)
+			if (it->first >= key)
 				return it;
 		return end();
 	}
@@ -370,7 +385,7 @@ public:
 	const_iterator lower_bound(const Key &key) const
 	{
 		for (const_iterator it = begin(); it != end(); it++)
-			if ((*it).first >= key)
+			if (it->first >= key)
 				return it;
 		return end();
 	}
@@ -378,7 +393,7 @@ public:
 	iterator upper_bound(const Key &key)
 	{
 		for (iterator it = begin(); it != end(); it++)
-			if ((*it).first > key)
+			if (it->first > key)
 				return it;
 		return end();
 	}
@@ -386,7 +401,7 @@ public:
 	const_iterator upper_bound(const Key &key) const
 	{
 		for (const_iterator it = begin(); it != end(); it++)
-			if ((*it).first > key)
+			if (it->first > key)
 				return it;
 		return end();
 	}

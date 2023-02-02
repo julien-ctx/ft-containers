@@ -19,22 +19,18 @@ CPPFLAGS = -Wall -Wextra -Werror -std=c++98 #-g -fsanitize=address
 all: $(NAME) 
 
 mli:
-	@if [ -d "./containers_test" ]; then \
-			cd containers_test && ./do.sh vector && ./do.sh stack && ./do.sh map; \
-	else \
+	@if [ ! -d "./containers_test" ]; then \
 		git clone https://github.com/mli42/containers_test.git; \
 		awk '{if(NR==3) {print "# include \"../../../includes/vector.hpp\""} else {print}}' containers_test/srcs/vector/common.hpp > tmp && mv tmp containers_test/srcs/vector/common.hpp; \
 		awk '{if(NR==3) {print "# include \"../../../includes/stack.hpp\""} else {print}}' containers_test/srcs/stack/common.hpp > tmp && mv tmp containers_test/srcs/stack/common.hpp; \
 		awk '{if(NR==3) {print "# include \"../../../includes/map.hpp\""} else {print}}' containers_test/srcs/map/common.hpp > tmp && mv tmp containers_test/srcs/map/common.hpp; \
 	fi
-	
 	cd containers_test && ./do.sh vector && ./do.sh stack && ./do.sh map; \
 
 .cpp.o: $(SRCS)
 	@printf $(GREEN)"\r\033[KCreating object files 👉 "$(YELLOW)"<$<> "$(RESET)
 	@c++ $(CPPFLAGS) -c $< -o $(<:.cpp=.o)
 
-# $(OBJS): includes/*.hpp
 main.o: includes/*.hpp
 
 $(NAME): $(OBJS)
@@ -51,4 +47,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re mli mazoise
+.PHONY: all clean fclean re mli
