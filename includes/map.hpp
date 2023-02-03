@@ -176,6 +176,32 @@ private:
 		if (!_max || _comp(_max->pair.first, key))
 			_max = node;
 	}
+
+	iterator insertionCheck(iterator start, iterator end, const value_type &value)
+	{
+		iterator it = start;
+		iterator it2 = it == end ? end : ++start;
+		for (;it2 != end; it++, it2++)
+		{
+			if (it->first == value.first)
+				return it;
+			if (it->first < value.first && it2->first > value.first)
+			{
+				Node *node = _alloc.allocate(1);
+				Node *parent = (it).getCurr();
+				_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
+				if (_comp(value.first, parent->pair.first))
+					parent->left = node;
+				else
+					parent->right = node;
+				setMinMax(value.first, node);
+				rebalance(node);
+				_size++;
+				return iterator(node, _min, _max);
+			}
+		}
+		return (insert(value)).first;
+	}
 	
 public:
 	/* ----- Constructors ----- */
@@ -239,32 +265,6 @@ public:
 		if (!curr)
 			throw std::out_of_range("map::at: key not found");
 		return curr->pair.second;
-	}
-
-	iterator insertionCheck(iterator start, iterator end, const value_type &value)
-	{
-		iterator it = start;
-		iterator it2 = it == end ? end : ++start;
-		for (;it2 != end; it++, it2++)
-		{
-			if (it->first == value.first)
-				return it;
-			if (it->first < value.first && it2->first > value.first)
-			{
-				Node *node = _alloc.allocate(1);
-				Node *parent = (it).getCurr();
-				_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
-				if (_comp(value.first, parent->pair.first))
-					parent->left = node;
-				else
-					parent->right = node;
-				setMinMax(value.first, node);
-				rebalance(node);
-				_size++;
-				return iterator(node, _min, _max);
-			}
-		}
-		return (insert(value)).first;
 	}
 
 	ft::pair<iterator, bool> insert(const value_type &value)
