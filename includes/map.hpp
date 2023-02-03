@@ -91,7 +91,7 @@ private:
 
 	void eraseRebalance(Node *node)
 	{
-		while (node != _root && node->parent != _root && node->color == BLACK_NODE)
+		while (node != _root && node->color == BLACK_NODE)
 		{
 			if (node == node->parent->left)
 			{
@@ -398,6 +398,8 @@ public:
 			y->left->parent = y;
 			y->color = curr->color;
 		}
+		// _alloc.destroy(curr);
+		// _alloc.deallocate(curr, 1);
 		if (y_color == BLACK_NODE)
 			eraseRebalance(x);
 		_size--;
