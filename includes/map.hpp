@@ -77,45 +77,49 @@ private:
 
 	/* ----- Red Black Tree ----- */	
 	// Rotation of elements to maintain the tree's order.
-	void rotate_right(Node* X)
+	void rotate(Node *node, bool rotate)
+	{
+		Node *sibiling = rotate == LEFT_ROT ? node->right : node->left;
+		if (rotate == LEFT_ROT)
+			node->right = sibiling->left;
+		else
+			node->left = sibiling->right;
+		if (rotate == LEFT_ROT && sibiling->left)
+			sibiling->left->parent = node;
+		else if (rotate == RIGHT_ROT && sibiling->right)
+			sibiling->right->parent = node;
+		sibiling->parent = node->parent;
+		if (!node->parent)
+			_root = sibiling;
+		else
 		{
-			Node* Y = X->left;
-			X->left = Y->right;
-			if (Y->right != NULL)
-				Y->right->parent = X;
-			Y->parent = X->parent;
-			if (X->parent == NULL)
-				this->_root = Y;
-			else if (X == X->parent->right)
-				X->parent->right = Y;
+			if (rotate == LEFT_ROT)
+			{
+				if (node == node->parent->left)
+					node->parent->left = sibiling;
+				else
+					node->parent->right = sibiling;
+			}
 			else
-				X->parent->left = Y;
-			Y->right = X;
-			X->parent = Y;
+			{
+				if (node == node->parent->right)
+					node->parent->right = sibiling;
+				else
+					node->parent->left = sibiling;
+			}
 		}
-		void rotate_left(Node* X)
-		{
-			Node* Y = X->right;
-			X->right = Y->left;
-			if (Y->left != NULL)
-				Y->left->parent = X;
-			Y->parent = X->parent;
-			if (X->parent == NULL)
-				this->_root = Y;
-			else if (X == X->parent->left)
-				X->parent->left = Y;
-			else
-				X->parent->right = Y;
-			Y->left = X;
-			X->parent = Y;
-		}
+		if (rotate == LEFT_ROT)
+			sibiling->left = node;
+		else
+			sibiling->right = node;
+		node->parent = sibiling;
+	}
 
 	// Change colors to maintain RBT properties.
 	void rebalance(Node *node)
 	{
 		if (!node->parent)
 			return;
-		
 		while (node != _root && node->parent != _root && node->parent->color == RED_NODE)
 		{
 			if (node->parent == node->parent->parent->right)
@@ -133,11 +137,11 @@ private:
 						if (node == node->parent->left)
 						{
 							node = node->parent;
-							rotate_right(node);
+							rotate(node, RIGHT_ROT);
 						}
 						node->parent->parent->color = RED_NODE;
 						node->parent->color = BLACK_NODE;
-						rotate_left(node->parent->parent);
+						rotate(node->parent->parent, LEFT_ROT);
 					}
 			}
 			else
@@ -155,11 +159,11 @@ private:
 						if (node == node->parent->right)
 						{
 							node = node->parent;
-							rotate_left(node);
+							rotate(node, LEFT_ROT);
 						}
 						node->parent->parent->color = RED_NODE;
 						node->parent->color = BLACK_NODE;
-						rotate_right(node->parent->parent);
+						rotate(node->parent->parent, RIGHT_ROT);
 					}
 			}
 		}
