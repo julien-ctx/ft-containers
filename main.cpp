@@ -32,10 +32,9 @@ int main()
 	for (TEST::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
 		std::cout << it->first << std::endl;
 	TEST::map<int, int>::iterator it = mp.begin();
-	it++;it++;
+	it++;//it++;
 	// it++;it++;
 	std::cout << "erase ret: " << mp.erase(it)->first << std::endl;
-
 	std::cout << "-----------\n";
 	for (TEST::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
 		std::cout << it->first << std::endl;

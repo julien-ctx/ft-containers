@@ -91,6 +91,8 @@ private:
 
 	void eraseRebalance(Node *node)
 	{
+		if (!node)
+			return;
 		Node *sibling = NULL;
 		while (node != _root && node->color == BLACK_NODE)
 		{
