@@ -76,18 +76,30 @@ private:
 	}
 
 	/* ----- Red Black Tree ----- */
-	void transplant(Node *n1, Node *n2)
+	void transplant(Node *&n1, Node *&n2)
 	{
-		if (!n1 || !n2)
+		if (!n1)
 			return;
+		if (!n2)
+		{
+			if (n1 == _root)
+				_root = NULL;
+			else if (n1 == n1->parent->left)
+				n1->parent->left = NULL;
+			else
+				n1->parent->right = NULL;
+			return;
+		}
 		if (!n2->parent)
-            _root = n2;
+			_root = n2;
 		else if (n1 == n1->parent->left)
 			n1->parent->left = n2;
 		else
 			n1->parent->right = n2;
 		n2->parent = n1->parent;
 	}
+
+
 
 	void eraseRebalance(Node *node)
 	{
@@ -137,7 +149,7 @@ private:
 					rotate(node->parent, RIGHT_ROT);
 					sibling = node->parent->left;
 				}
-				if (sibling && sibling->right->color == BLACK_NODE && sibling->right->color == BLACK_NODE)
+				if (sibling && sibling->right->color == BLACK_NODE && sibling->left->color == BLACK_NODE)
 				{
 					sibling->color = RED_NODE;
 					node = node->parent;
@@ -443,8 +455,10 @@ public:
 		if (y_color == BLACK_NODE)
 			eraseRebalance(x);
 		_size--;
-		return begin();
+		return iterator((++pos).getCurr(), _min, _max);
 	}
+
+
 
 	iterator erase(iterator first, iterator last)
 	{
