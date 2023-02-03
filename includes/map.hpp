@@ -125,46 +125,46 @@ private:
 				}
 			}
 		}
-		node->color = BLACK;
+		node->color = BLACK_NODE;
 	}
 
 	// Rotation of elements to maintain the tree's order.
 	void rotate(Node *node, bool rotate)
 	{
-		Node *sibiling = rotate == LEFT_ROT ? node->right : node->left;
+		Node *sibling = rotate == LEFT_ROT ? node->right : node->left;
 		if (rotate == LEFT_ROT)
-			node->right = sibiling->left;
+			node->right = sibling->left;
 		else
-			node->left = sibiling->right;
-		if (rotate == LEFT_ROT && sibiling->left)
-			sibiling->left->parent = node;
-		else if (rotate == RIGHT_ROT && sibiling->right)
-			sibiling->right->parent = node;
-		sibiling->parent = node->parent;
+			node->left = sibling->right;
+		if (rotate == LEFT_ROT && sibling->left)
+			sibling->left->parent = node;
+		else if (rotate == RIGHT_ROT && sibling->right)
+			sibling->right->parent = node;
+		sibling->parent = node->parent;
 		if (!node->parent)
-			_root = sibiling;
+			_root = sibling;
 		else
 		{
 			if (rotate == LEFT_ROT)
 			{
 				if (node == node->parent->left)
-					node->parent->left = sibiling;
+					node->parent->left = sibling;
 				else
-					node->parent->right = sibiling;
+					node->parent->right = sibling;
 			}
 			else
 			{
 				if (node == node->parent->right)
-					node->parent->right = sibiling;
+					node->parent->right = sibling;
 				else
-					node->parent->left = sibiling;
+					node->parent->left = sibling;
 			}
 		}
 		if (rotate == LEFT_ROT)
-			sibiling->left = node;
+			sibling->left = node;
 		else
-			sibiling->right = node;
-		node->parent = sibiling;
+			sibling->right = node;
+		node->parent = sibling;
 	}
 
 	// Change colors to maintain RBT properties.
@@ -371,8 +371,8 @@ public:
 		{
 			x = curr->right;
 			transplant(curr, curr->right);
-		} // Second case : 1 child on the left
-		else if (!curr->right)
+		}
+		else if (!curr->right) // Second case : 1 child on the left
 		{
 			x = curr->left;
 			transplant(curr, curr->left);

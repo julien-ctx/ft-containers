@@ -17,20 +17,22 @@
 
 #include <stdlib.h>
 
-// int main()
-// {
-// 	TEST::map<int, int> mp;
-// 	mp.insert(TEST::make_pair(42, 234));
-// 	mp.insert(TEST::make_pair(5, 234));
-// 	mp.insert(TEST::make_pair(65, 234));
-// 	mp.insert(TEST::make_pair(43432, 234));
-// 	mp.insert(TEST::make_pair(34, 234));
-// 	mp.insert(TEST::make_pair(2, 234));
-// 	mp.insert(TEST::make_pair(7, 234));
-// 	for (TEST::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
-// 		std::cout << it->first << std::endl;
-// 	std::cout << "erase ret: " << mp.erase(mp.begin())->first << std::endl;
-// 	std::cout << "-----------\n";
-// 	for (TEST::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
-// 		std::cout << it->first << std::endl;
-// }
+int main()
+{
+	TEST::map<int, int> mp;
+	mp.insert(TEST::make_pair(42, 234));
+	mp.insert(TEST::make_pair(5, 234));
+	mp.insert(TEST::make_pair(65, 234));
+	mp.insert(TEST::make_pair(43432, 234));
+	mp.insert(TEST::make_pair(34, 234));
+	mp.insert(TEST::make_pair(2, 234));
+	mp.insert(TEST::make_pair(7, 234));
+	TEST::map<int, int> mp2;
+	mp2.insert(TEST::make_pair(7, 234));
+	for (TEST::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
+		std::cout << it->first << std::endl;
+	std::cout << "erase ret: " << mp.erase(mp.begin())->first << std::endl;
+	std::cout << "-----------\n";
+	for (TEST::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
+		std::cout << it->first << std::endl;
+}
