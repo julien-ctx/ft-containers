@@ -17,7 +17,7 @@
 
 #include <stdlib.h>
 
-int main()
+void trash()
 {
 	TEST::map<int, int> mp;
 	mp.insert(TEST::make_pair(42, 234));
@@ -31,12 +31,19 @@ int main()
 	
 	for (TEST::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
 		std::cout << it->first << std::endl;
-	TEST::map<int, int>::iterator it = mp.begin();
+	TEST::map<int, int>::iterator it = mp.end();
+	it--;
+	it--;
 	// it++;it++;
 	// it++;it++;
-
 	std::cout << "erase ret: " << mp.erase(it)->first << std::endl;
 	std::cout << "-----------\n";
 	for (TEST::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
 		std::cout << it->first << std::endl;
+}
+
+int main()
+{
+	trash();
+	//system("leaks ft_containers");
 }

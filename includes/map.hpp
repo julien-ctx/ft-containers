@@ -413,12 +413,16 @@ public:
 	{
 		if (pos == end() || !pos.getCurr())
 			return end();
+
 		Node *curr = pos.getCurr();
+		iterator next = pos;
+		next++;
 		if (curr == _max)
 			_max = (--pos).getCurr() ? pos.getCurr() : _root;
 		if (curr == _min)
 			_min = (++pos).getCurr() ? pos.getCurr() : _root;
 		Node *x = NULL; Node *y = curr; bool y_color = y->color;
+		
 		if (!curr->left) // First case : 1 child on the right
 		{
 			x = curr->right;
@@ -450,15 +454,13 @@ public:
 			y->left->parent = y;
 			y->color = curr->color;
 		}
-		// _alloc.destroy(curr);
-		// _alloc.deallocate(curr, 1);
+		_alloc.destroy(curr);
+		_alloc.deallocate(curr, 1);
 		if (y_color == BLACK_NODE)
 			eraseRebalance(x);
 		_size--;
-		return iterator((++pos).getCurr(), _min, _max);
+		return iterator(next.getCurr(), _min, _max);
 	}
-
-
 
 	iterator erase(iterator first, iterator last)
 	{
