@@ -28,10 +28,14 @@ int main()
 	mp.insert(TEST::make_pair(2, 234));
 	mp.insert(TEST::make_pair(7, 234));
 	TEST::map<int, int> mp2;
-	mp2.insert(TEST::make_pair(7, 234));
+	
 	for (TEST::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
 		std::cout << it->first << std::endl;
-	std::cout << "erase ret: " << mp.erase(mp.begin())->first << std::endl;
+	TEST::map<int, int>::iterator it = mp.begin();
+	it++;it++;
+	// it++;it++;
+	std::cout << "erase ret: " << mp.erase(it)->first << std::endl;
+
 	std::cout << "-----------\n";
 	for (TEST::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
 		std::cout << it->first << std::endl;

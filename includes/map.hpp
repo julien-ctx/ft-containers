@@ -91,11 +91,12 @@ private:
 
 	void eraseRebalance(Node *node)
 	{
+		Node *sibling = NULL;
 		while (node != _root && node->color == BLACK_NODE)
 		{
 			if (node == node->parent->left)
 			{
-				Node *sibling = node->parent->right;
+				sibling = node->parent->right;
 				if (sibling && sibling->color == RED_NODE)
 				{
 					sibling->color = BLACK_NODE;
@@ -121,6 +122,37 @@ private:
 					node->parent->color = BLACK_NODE;
 					sibling->right->color = BLACK_NODE;
 					rotate(node->parent, LEFT_ROT);
+					node = _root;
+				}
+			}
+			else
+			{
+				sibling = node->parent->left;
+				if (sibling && sibling->color == RED_NODE)
+				{
+					sibling->color = BLACK_NODE;
+					node->parent->color = RED_NODE;
+					rotate(node->parent, RIGHT_ROT);
+					sibling = node->parent->left;
+				}
+				if (sibling && sibling->right->color == BLACK_NODE && sibling->right->color == BLACK_NODE)
+				{
+					sibling->color = RED_NODE;
+					node = node->parent;
+				}
+				else
+				{
+					if (sibling && sibling->left->color == BLACK_NODE)
+					{
+						sibling->right->color = BLACK_NODE;
+						sibling->color = RED_NODE;
+						rotate(sibling, LEFT_ROT);
+						sibling = node->parent->left;
+					}
+					sibling->color = node->parent->color;
+					node->parent->color = BLACK_NODE;
+					sibling->left->color = BLACK_NODE;
+					rotate(node->parent, RIGHT_ROT);
 					node = _root;
 				}
 			}
@@ -365,8 +397,14 @@ public:
 
 	iterator erase(iterator pos)
 	{
+		if (pos == end() || !pos.getCurr())
+			return end();
 		Node *curr = pos.getCurr();
-		Node *x = NULL; Node *y = NULL; bool y_color = RED_NODE;
+		if (curr == _max)
+			_max = (--pos).getCurr() ? pos.getCurr() : _root;
+		if (curr == _min)
+			_min = (++pos).getCurr() ? pos.getCurr() : _root;
+		Node *x = NULL; Node *y = curr; bool y_color = y->color;
 		if (!curr->left) // First case : 1 child on the right
 		{
 			x = curr->right;
@@ -403,16 +441,17 @@ public:
 		if (y_color == BLACK_NODE)
 			eraseRebalance(x);
 		_size--;
-		return iterator((++pos).getCurr(), _min, _max);
+		return begin();
 	}
 
 	iterator erase(iterator first, iterator last)
 	{
 		for (; first != last; first++)
 		{
+			erase(first);
 			_size--;
-			return erase(first);
 		}
+		return first;
 		return end();
 	}
 
