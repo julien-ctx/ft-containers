@@ -78,6 +78,8 @@ private:
 	/* ----- Red Black Tree ----- */
 	void transplant(Node *n1, Node *n2)
 	{
+		if (!n1 || !n2)
+			return;
 		if (!n2->parent)
             _root = n2;
 		else if (n1 == n1->parent->left)
@@ -89,35 +91,35 @@ private:
 
 	void eraseRebalance(Node *node)
 	{
-		while (node != _root && node->color == BLACK_NODE)
+		while (node != _root && node->parent != _root && node->color == BLACK_NODE)
 		{
 			if (node == node->parent->left)
 			{
-				Node *w = node->parent->right;
-				if (w && w->color == RED_NODE)
+				Node *sibling = node->parent->right;
+				if (sibling && sibling->color == RED_NODE)
 				{
-					w->color = BLACK_NODE;
+					sibling->color = BLACK_NODE;
 					node->parent->color = RED_NODE;
 					rotate(node->parent, LEFT_ROT);
-					w = node->parent->right;
+					sibling = node->parent->right;
 				}
-				if (w && w->left->color == BLACK_NODE && w->right->color == BLACK_NODE)
+				if (sibling && sibling->left->color == BLACK_NODE && sibling->right->color == BLACK_NODE)
 				{
-					w->color = RED_NODE;
+					sibling->color = RED_NODE;
 					node = node->parent;
 				}
 				else
 				{
-					if (w && w->right->color == BLACK_NODE)
+					if (sibling && sibling->right->color == BLACK_NODE)
 					{
-						w->left->color = BLACK_NODE;
-						w->color = RED_NODE;
-						rotate(w, RIGHT_ROT);
-						w = node->parent->right;
+						sibling->left->color = BLACK_NODE;
+						sibling->color = RED_NODE;
+						rotate(sibling, RIGHT_ROT);
+						sibling = node->parent->right;
 					}
-					w->color = node->parent->color;
+					sibling->color = node->parent->color;
 					node->parent->color = BLACK_NODE;
-					w->right->color = BLACK_NODE;
+					sibling->right->color = BLACK_NODE;
 					rotate(node->parent, LEFT_ROT);
 					node = _root;
 				}
@@ -175,7 +177,7 @@ private:
 			if (node->parent == node->parent->parent->right)
 			{
 				Node *uncle = node->parent->parent->left;
-					if (uncle && uncle->color  == RED_NODE)
+					if (uncle && uncle->color == RED_NODE)
 					{
 						uncle->color = BLACK_NODE;
 						node->parent->parent->color = RED_NODE;
@@ -399,7 +401,7 @@ public:
 		if (y_color == BLACK_NODE)
 			eraseRebalance(x);
 		_size--;
-		return iterator(x, _min, _max);
+		return iterator((++pos).getCurr(), _min, _max);
 	}
 
 	iterator erase(iterator first, iterator last)
