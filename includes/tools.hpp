@@ -30,7 +30,6 @@
 
 #define RED_NODE 0
 #define BLACK_NODE 1
-#define UNDEFINED_NODE 2
 #define LEFT_ROT 0
 #define RIGHT_ROT 1
 
@@ -56,7 +55,7 @@ namespace ft
 		Node *left;
 		Node *right;
 		Node *parent;
-		char color;
+		bool color;
 	};
 
 	template<class It>

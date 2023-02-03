@@ -75,7 +75,57 @@ private:
 		}
 	}
 
-	/* ----- Red Black Tree ----- */	
+	/* ----- Red Black Tree ----- */
+	void transplant(Node *n1, Node *n2)
+	{
+		if (!n2->parent)
+            _root = n2;
+		else if (n1 == n1->parent->left)
+			n1->parent->left = n2;
+		else
+			n1->parent->right = n2;
+		n2->parent = n1->parent;
+	}
+
+	void eraseRebalance(Node *node)
+	{
+		while (node != _root && node->color == BLACK_NODE)
+		{
+			if (node == node->parent->left)
+			{
+				Node *w = node->parent->right;
+				if (w && w->color == RED_NODE)
+				{
+					w->color = BLACK_NODE;
+					node->parent->color = RED_NODE;
+					rotate(node->parent, LEFT_ROT);
+					w = node->parent->right;
+				}
+				if (w && w->left->color == BLACK_NODE && w->right->color == BLACK_NODE)
+				{
+					w->color = RED_NODE;
+					node = node->parent;
+				}
+				else
+				{
+					if (w && w->right->color == BLACK_NODE)
+					{
+						w->left->color = BLACK_NODE;
+						w->color = RED_NODE;
+						rotate(w, RIGHT_ROT);
+						w = node->parent->right;
+					}
+					w->color = node->parent->color;
+					node->parent->color = BLACK_NODE;
+					w->right->color = BLACK_NODE;
+					rotate(node->parent, LEFT_ROT);
+					node = _root;
+				}
+			}
+		}
+		node->color = BLACK;
+	}
+
 	// Rotation of elements to maintain the tree's order.
 	void rotate(Node *node, bool rotate)
 	{
@@ -116,7 +166,7 @@ private:
 	}
 
 	// Change colors to maintain RBT properties.
-	void rebalance(Node *node)
+	void insertRebalance(Node *node)
 	{
 		if (!node->parent)
 			return;
@@ -195,7 +245,7 @@ private:
 				else
 					parent->right = node;
 				setMinMax(value.first, node);
-				rebalance(node);
+				insertRebalance(node);
 				_size++;
 				return iterator(node, _min, _max);
 			}
@@ -293,7 +343,7 @@ public:
 			parent->left = node;
 		else
 			parent->right = node;
-		rebalance(node);
+		insertRebalance(node);
 		setMinMax(value.first, node);
 		return ft::make_pair(iterator(node, _min, _max), ++_size);
 	}
@@ -311,20 +361,66 @@ public:
 			insert(*first);
 	}
 
-	// iterator erase(iterator pos)
-	// {
+	iterator erase(iterator pos)
+	{
+		Node *curr = pos.getCurr();
+		Node *x = NULL; Node *y = NULL; bool y_color = RED_NODE;
+		if (!curr->left) // First case : 1 child on the right
+		{
+			x = curr->right;
+			transplant(curr, curr->right);
+		} // Second case : 1 child on the left
+		else if (!curr->right)
+		{
+			x = curr->left;
+			transplant(curr, curr->left);
+		}
+		else // 2 children
+		{
+			y_color = y->color;
+			Node *tmp = curr->right;
+			while (tmp->left)
+				tmp = tmp->left;
+			y = tmp;
+			x = y->right;
+			if (y->parent == curr)
+				x->parent = y;
+			else
+			{
+				transplant(y, y->right);
+				y->right = curr->right;
+				y->right->parent = y;
+			}
+			transplant(curr, y);
+			y->left = curr->left;
+			y->left->parent = y;
+			y->color = curr->color;
+		}
+		if (y_color == BLACK_NODE)
+			eraseRebalance(x);
+		_size--;
+		return iterator(x, _min, _max);
+	}
 
-	// }
+	iterator erase(iterator first, iterator last)
+	{
+		for (; first != last; first++)
+		{
+			_size--;
+			return erase(first);
+		}
+		return end();
+	}
 
-	// iterator erase(iterator first, iterator last)
-	// {
-
-	// }
-
-	// size_type erase(const Key &key)
-	// {
-
-	// }
+	size_type erase(const Key &key)
+	{
+		for (iterator it = begin(); it != end(); it++)
+		{
+			if (it->first == key)
+				erase(it);
+		}
+		return 1;
+	}
 
 	iterator find(const Key &key)
 	{
