@@ -466,8 +466,12 @@ public:
 
 	void erase(iterator first, iterator last)
 	{
-		for (; first != last && !first.getCurr(); first++)
-			erase(first);
+		for (; first != last; first++)
+		{
+			iterator tmp = first;
+			++first;
+			erase(tmp);
+		}
 	}
 
 	size_type erase(const Key &key)
@@ -475,9 +479,12 @@ public:
 		for (iterator it = begin(); it != end(); it++)
 		{
 			if (it->first == key)
+			{
 				erase(it);
+				return 1;
+			}
 		}
-		return 1;
+		return 0;
 	}
 
 	iterator find(const Key &key)
