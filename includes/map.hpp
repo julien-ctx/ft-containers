@@ -415,14 +415,11 @@ public:
 			return;
 
 		Node *curr = pos.getCurr();
-		iterator next = pos;
-		next++;
-		if (curr == _max)
+		if (curr == _max && _size != 1)
 			_max = (--pos).getCurr() ? pos.getCurr() : _root;
-		if (curr == _min)
+		if (curr == _min && _size != 1)
 			_min = (++pos).getCurr() ? pos.getCurr() : _root;
 		Node *x = NULL; Node *y = curr; bool y_color = y->color;
-		
 		if (!curr->left) // First case : 1 child on the right
 		{
 			x = curr->right;
@@ -466,7 +463,7 @@ public:
 
 	void erase(iterator first, iterator last)
 	{
-		for (; first != last; first++)
+		while (first != last)
 		{
 			iterator tmp = first;
 			++first;
