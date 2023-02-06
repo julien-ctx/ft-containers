@@ -409,10 +409,10 @@ public:
 			insert(*first);
 	}
 
-	iterator erase(iterator pos)
+	void erase(iterator pos)
 	{
 		if (pos == end() || !pos.getCurr())
-			return end();
+			return;
 
 		Node *curr = pos.getCurr();
 		iterator next = pos;
@@ -442,7 +442,10 @@ public:
 			y = tmp;
 			x = y->right;
 			if (y->parent == curr)
-				x->parent = y;
+			{
+				if (x)
+					x->parent = y;
+			}
 			else
 			{
 				transplant(y, y->right);
@@ -459,18 +462,12 @@ public:
 		if (y_color == BLACK_NODE)
 			eraseRebalance(x);
 		_size--;
-		return iterator(next.getCurr(), _min, _max);
 	}
 
-	iterator erase(iterator first, iterator last)
+	void erase(iterator first, iterator last)
 	{
-		for (; first != last; first++)
-		{
+		for (; first != last && !first.getCurr(); first++)
 			erase(first);
-			_size--;
-		}
-		return first;
-		return end();
 	}
 
 	size_type erase(const Key &key)
