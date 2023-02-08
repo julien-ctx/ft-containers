@@ -179,7 +179,8 @@ public:
 
 	// Copy constructor
 	map(const map &x) :
-	_root(NULL), _size(0), _comp(x._comp), _alloc(x.get_allocator()), _min(NULL), _max(NULL)
+	_root(NULL), _size(0), _comp(x._comp), _alloc(x.get_allocator()), _min(NULL),
+	_max(NULL)
 	{*this = x;}
 
 	~map() {deleteAll(_root);}
@@ -235,52 +236,55 @@ public:
 
 	ft::pair<iterator, bool> insert(const value_type &value)
 	{
-		// Check if key already exists or not
-		iterator check = find(value.first);
-		if (check.getCurr())
-			return ft::make_pair(check, false);
 		// Find insertion position
 		Node *curr = _root; Node *parent = NULL;
-		while (curr && value.first != curr->pair.first)
+		while (curr)
 		{
 			parent = curr;
-			curr = _comp(value.first, curr->pair.first) ? curr->left : curr->right;
+			if (_comp(curr->pair.first, value.first))
+				curr = curr->right;
+			else if (_comp(value.first, curr->pair.first))
+            	curr = curr->left;
+			else
+				return ft::make_pair(iterator(curr, _min, _max), false);
 		}
+		// Set correct parent
 		Node *node = _alloc.allocate(1);
 		_alloc.construct(node, (Node){value, NULL, NULL, parent, 0});
-		if (!parent)
+		if (!_root)
 			_root = node;
 		else
 		{
 			if (_comp(value.first, parent->pair.first))
-					parent->left = node;
-				else
-					parent->right = node;
+				parent->left = node;
+			else
+				parent->right = node;
+		
+			// Rebalance the tree to respect AVL tree properties
+			node->height = 1 + max(getHeight(node->left), getHeight(node->right));
+			int balanceFactor = getBalanceFactor(node);
+			if (balanceFactor > 1)
+			{
+				if (value.first < node->left->pair.first)
+					rightRotate(node);
+				else if (value.first > node->left->pair.first)
+				{
+					node->left = leftRotate(node->left);
+					rightRotate(node);
+				}
+			}
+			if (balanceFactor < -1)
+			{
+				if (value.first > node->right->pair.first)
+					leftRotate(node);
+				else if (value.first < node->right->pair.first)
+				{
+					node->right = rightRotate(node->right);
+					leftRotate(node);
+				}
+			}
 		}
-		node->height = 1 + max(getHeight(node->left), getHeight(node->right));
 		setMinMax(value.first, node);
-
-		int balanceFactor = getBalanceFactor(node);
-		if (balanceFactor > 1)
-		{
-			if (value.first < node->left->pair.first)
-				rightRotate(node);
-			else if (value.first > node->left->pair.first)
-			{
-				node->left = leftRotate(node->left);
-				rightRotate(node);
-			}
-		}
-		if (balanceFactor < -1)
-		{
-			if (value.first > node->right->pair.first)
-				leftRotate(node);
-			else if (value.first < node->right->pair.first)
-			{
-				node->right = rightRotate(node->right);
-				leftRotate(node);
-			}
-		}
 		return ft::make_pair(iterator(node, _min, _max), ++_size);
 	}
 
@@ -297,9 +301,16 @@ public:
 			insert(*first);
 	}
 
+	// void eraseHelper(Node *curr)
+	// {
+	// 	if (!_size)
+	// 		return;
+		
+	// }
+
 	// void erase(iterator pos)
 	// {
-
+	// 	eraseHelper(pos.getCurr());
 	// }
 
 	// void erase(iterator first, iterator last)
