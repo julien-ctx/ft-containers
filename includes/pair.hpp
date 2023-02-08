@@ -29,8 +29,11 @@ struct pair
 	/* ------ Members Overloads ------- */
 	pair &operator=(const pair &pr)
 	{
-		first = pr.first;
-		second = pr.second;
+		if (this != &pr)
+		{
+			first = pr.first;
+			second = pr.second;
+		}
 		return *this;
 	}
 	/* ---------------------------------*/

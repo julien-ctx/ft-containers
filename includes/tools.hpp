@@ -28,10 +28,6 @@
 #define CYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define BOLD    "\033[1m\033[37m"      /* Bold White */
 
-#define RED_NODE 0
-#define BLACK_NODE 1
-#define LEFT_ROT 0
-#define RIGHT_ROT 1
 
 #define PRINT(x) std::cout << BOLD << x << std::endl << RESET; 
 #define NL() std::cout << std::endl;
@@ -44,7 +40,6 @@ void mapTest();
 
 namespace ft
 {
-
 	typedef std::ptrdiff_t difference_type;
 	typedef std::size_t size_type;
 
@@ -55,7 +50,7 @@ namespace ft
 		Node *left;
 		Node *right;
 		Node *parent;
-		bool color;
+		int height;
 	};
 
 	template<class It>

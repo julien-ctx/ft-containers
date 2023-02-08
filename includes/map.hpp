@@ -10,7 +10,6 @@
 #include "lexicographical_compare.hpp"
 #include "pair.hpp"
 
-// https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
 
 namespace ft
 {
@@ -74,198 +73,6 @@ private:
 			_alloc.deallocate(node, 1);
 		}
 	}
-
-	/* ----- Red Black Tree ----- */
-	void transplant(Node *&n1, Node *&n2)
-	{
-		if (!n1)
-			return;
-		if (!n2)
-		{
-			if (n1 == _root)
-				_root = NULL;
-			else if (n1 == n1->parent->left)
-				n1->parent->left = NULL;
-			else
-				n1->parent->right = NULL;
-			return;
-		}
-		if (!n2->parent)
-			_root = n2;
-		else if (n1 == n1->parent->left)
-			n1->parent->left = n2;
-		else
-			n1->parent->right = n2;
-		n2->parent = n1->parent;
-	}
-
-
-
-	void eraseRebalance(Node *node)
-	{
-		if (!node)
-			return;
-		Node *sibling = NULL;
-		while (node != _root && node->color == BLACK_NODE)
-		{
-			if (node == node->parent->left)
-			{
-				sibling = node->parent->right;
-				if (sibling && sibling->color == RED_NODE)
-				{
-					sibling->color = BLACK_NODE;
-					node->parent->color = RED_NODE;
-					rotate(node->parent, LEFT_ROT);
-					sibling = node->parent->right;
-				}
-				if (sibling && sibling->left->color == BLACK_NODE && sibling->right->color == BLACK_NODE)
-				{
-					sibling->color = RED_NODE;
-					node = node->parent;
-				}
-				else
-				{
-					if (sibling && sibling->right->color == BLACK_NODE)
-					{
-						sibling->left->color = BLACK_NODE;
-						sibling->color = RED_NODE;
-						rotate(sibling, RIGHT_ROT);
-						sibling = node->parent->right;
-					}
-					sibling->color = node->parent->color;
-					node->parent->color = BLACK_NODE;
-					sibling->right->color = BLACK_NODE;
-					rotate(node->parent, LEFT_ROT);
-					node = _root;
-				}
-			}
-			else
-			{
-				sibling = node->parent->left;
-				if (sibling && sibling->color == RED_NODE)
-				{
-					sibling->color = BLACK_NODE;
-					node->parent->color = RED_NODE;
-					rotate(node->parent, RIGHT_ROT);
-					sibling = node->parent->left;
-				}
-				if (sibling && sibling->right->color == BLACK_NODE && sibling->left->color == BLACK_NODE)
-				{
-					sibling->color = RED_NODE;
-					node = node->parent;
-				}
-				else
-				{
-					if (sibling && sibling->left->color == BLACK_NODE)
-					{
-						sibling->right->color = BLACK_NODE;
-						sibling->color = RED_NODE;
-						rotate(sibling, LEFT_ROT);
-						sibling = node->parent->left;
-					}
-					sibling->color = node->parent->color;
-					node->parent->color = BLACK_NODE;
-					sibling->left->color = BLACK_NODE;
-					rotate(node->parent, RIGHT_ROT);
-					node = _root;
-				}
-			}
-		}
-		node->color = BLACK_NODE;
-	}
-
-	// Rotation of elements to maintain the tree's order.
-	void rotate(Node *node, bool rotate)
-	{
-		Node *sibling = rotate == LEFT_ROT ? node->right : node->left;
-		if (rotate == LEFT_ROT)
-			node->right = sibling->left;
-		else
-			node->left = sibling->right;
-		if (rotate == LEFT_ROT && sibling->left)
-			sibling->left->parent = node;
-		else if (rotate == RIGHT_ROT && sibling->right)
-			sibling->right->parent = node;
-		sibling->parent = node->parent;
-		if (!node->parent)
-			_root = sibling;
-		else
-		{
-			if (rotate == LEFT_ROT)
-			{
-				if (node == node->parent->left)
-					node->parent->left = sibling;
-				else
-					node->parent->right = sibling;
-			}
-			else
-			{
-				if (node == node->parent->right)
-					node->parent->right = sibling;
-				else
-					node->parent->left = sibling;
-			}
-		}
-		if (rotate == LEFT_ROT)
-			sibling->left = node;
-		else
-			sibling->right = node;
-		node->parent = sibling;
-	}
-
-	// Change colors to maintain RBT properties.
-	void insertRebalance(Node *node)
-	{
-		if (!node->parent)
-			return;
-		while (node != _root && node->parent != _root && node->parent->color == RED_NODE)
-		{
-			if (node->parent == node->parent->parent->right)
-			{
-				Node *uncle = node->parent->parent->left;
-					if (uncle && uncle->color == RED_NODE)
-					{
-						uncle->color = BLACK_NODE;
-						node->parent->parent->color = RED_NODE;
-						node->parent->color = BLACK_NODE;
-						node = node->parent->parent;
-					}
-					else
-					{
-						if (node == node->parent->left)
-						{
-							node = node->parent;
-							rotate(node, RIGHT_ROT);
-						}
-						node->parent->parent->color = RED_NODE;
-						node->parent->color = BLACK_NODE;
-						rotate(node->parent->parent, LEFT_ROT);
-					}
-			}
-			else
-			{
-				Node *uncle = node->parent->parent->right;
-					if (uncle && uncle->color == RED_NODE)
-					{
-						uncle->color = BLACK_NODE;
-						node->parent->parent->color = RED_NODE;
-						node->parent->color = BLACK_NODE;
-						node = node->parent->parent;
-					}
-					else
-					{
-						if (node == node->parent->right)
-						{
-							node = node->parent;
-							rotate(node, LEFT_ROT);
-						}
-						node->parent->parent->color = RED_NODE;
-						node->parent->color = BLACK_NODE;
-						rotate(node->parent->parent, RIGHT_ROT);
-					}
-			}
-		}
-	}
 	
 	void setMinMax(key_type key, Node *node)
 	{
@@ -274,6 +81,12 @@ private:
 		if (!_max || _comp(_max->pair.first, key))
 			_max = node;
 	}
+
+	int getHeight(Node *node)
+	{return node ? node->height : 0;}
+
+	int max(int a, int b) 
+	{return (a > b) ? a : b;}
 
 	iterator insertionCheck(iterator start, iterator end, const value_type &value)
 	{
@@ -286,21 +99,67 @@ private:
 			if (it->first < value.first && it2->first > value.first)
 			{
 				Node *node = _alloc.allocate(1);
-				Node *parent = (it).getCurr();
-				_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
+				Node *parent = it.getCurr();
+				_alloc.construct(node, (Node){value, NULL, NULL, parent, 0});
 				if (_comp(value.first, parent->pair.first))
 					parent->left = node;
 				else
 					parent->right = node;
 				setMinMax(value.first, node);
-				insertRebalance(node);
 				_size++;
+				node->height = 1 + max(getHeight(node->left), getHeight(node->right));
+				int balanceFactor = getBalanceFactor(node);
+				if (balanceFactor > 1)
+				{
+					if (value.first < node->left->pair.first)
+						rightRotate(node);
+					else if (value.first > node->left->pair.first)
+					{
+						node->left = leftRotate(node->left);
+						rightRotate(node);
+					}
+				}
+				if (balanceFactor < -1)
+				{
+					if (value.first > node->right->pair.first)
+						leftRotate(node);
+					else if (value.first < node->right->pair.first)
+					{
+						node->right = rightRotate(node->right);
+						leftRotate(node);
+					}
+				}
 				return iterator(node, _min, _max);
 			}
 		}
 		return (insert(value)).first;
 	}
-	
+
+	Node *rightRotate(Node *y)
+	{
+		Node *x = y->left;
+		Node *T2 = x->right;
+		x->right = y;
+		y->left = T2;
+		y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
+		x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
+		return x;
+	}
+
+	Node *leftRotate(Node *x)
+	{
+		Node *y = x->right;
+		Node *T2 = y->left;
+		y->left = x;
+		x->right = T2;
+		x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
+		y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
+		return y;
+	}
+
+	int getBalanceFactor(Node *node)
+	{return node ? getHeight(node->left) - getHeight(node->right) : 0;}
+
 public:
 	/* ----- Constructors ----- */
 	// Default constructor
@@ -365,34 +224,63 @@ public:
 		return curr->pair.second;
 	}
 
+	// Node with minimum value
+	Node *nodeWithMinimumValue(Node *node)
+	{
+		Node *current = node;
+		while (current->left != NULL)
+			current = current->left;
+		return current;
+	}
+
 	ft::pair<iterator, bool> insert(const value_type &value)
 	{
-		Node *curr = _root;
-		Node *parent = NULL;
-		while (curr)
+		// Check if key already exists or not
+		iterator check = find(value.first);
+		if (check.getCurr())
+			return ft::make_pair(check, false);
+		// Find insertion position
+		Node *curr = _root; Node *parent = NULL;
+		while (curr && value.first != curr->pair.first)
 		{
 			parent = curr;
-			if (_comp(curr->pair.first, value.first))
-				curr = curr->right;
-			else if (_comp(value.first, curr->pair.first))
-            	curr = curr->left;
-			else
-				return ft::make_pair(iterator(curr, _min, _max), false);
+			curr = _comp(value.first, curr->pair.first) ? curr->left : curr->right;
 		}
 		Node *node = _alloc.allocate(1);
-		_alloc.construct(node, (Node){value, NULL, NULL, parent, RED_NODE});
-		if (!_root)
-		{
+		_alloc.construct(node, (Node){value, NULL, NULL, parent, 0});
+		if (!parent)
 			_root = node;
-			_root->color = BLACK_NODE;
-			_root->parent = NULL;
-		}
-		else if (_comp(value.first, parent->pair.first))
-			parent->left = node;
 		else
-			parent->right = node;
-		insertRebalance(node);
+		{
+			if (_comp(value.first, parent->pair.first))
+					parent->left = node;
+				else
+					parent->right = node;
+		}
+		node->height = 1 + max(getHeight(node->left), getHeight(node->right));
 		setMinMax(value.first, node);
+
+		int balanceFactor = getBalanceFactor(node);
+		if (balanceFactor > 1)
+		{
+			if (value.first < node->left->pair.first)
+				rightRotate(node);
+			else if (value.first > node->left->pair.first)
+			{
+				node->left = leftRotate(node->left);
+				rightRotate(node);
+			}
+		}
+		if (balanceFactor < -1)
+		{
+			if (value.first > node->right->pair.first)
+				leftRotate(node);
+			else if (value.first < node->right->pair.first)
+			{
+				node->right = rightRotate(node->right);
+				leftRotate(node);
+			}
+		}
 		return ft::make_pair(iterator(node, _min, _max), ++_size);
 	}
 
@@ -409,80 +297,33 @@ public:
 			insert(*first);
 	}
 
-	void erase(iterator pos)
-	{
-		if (pos == end() || !pos.getCurr())
-			return;
+	// void erase(iterator pos)
+	// {
 
-		Node *curr = pos.getCurr();
-		if (curr == _max && _size != 1)
-			_max = (--pos).getCurr() ? pos.getCurr() : _root;
-		if (curr == _min && _size != 1)
-			_min = (++pos).getCurr() ? pos.getCurr() : _root;
-		Node *x = NULL; Node *y = curr; bool y_color = y->color;
-		if (!curr->left) // First case : 1 child on the right
-		{
-			x = curr->right;
-			transplant(curr, curr->right);
-		}
-		else if (!curr->right) // Second case : 1 child on the left
-		{
-			x = curr->left;
-			transplant(curr, curr->left);
-		}
-		else // 2 children
-		{
-			y_color = y->color;
-			Node *tmp = curr->right;
-			while (tmp->left)
-				tmp = tmp->left;
-			y = tmp;
-			x = y->right;
-			if (y->parent == curr)
-			{
-				if (x)
-					x->parent = y;
-			}
-			else
-			{
-				transplant(y, y->right);
-				y->right = curr->right;
-				y->right->parent = y;
-			}
-			transplant(curr, y);
-			y->left = curr->left;
-			y->left->parent = y;
-			y->color = curr->color;
-		}
-		_alloc.destroy(curr);
-		_alloc.deallocate(curr, 1);
-		if (y_color == BLACK_NODE)
-			eraseRebalance(x);
-		_size--;
-	}
+	// }
 
-	void erase(iterator first, iterator last)
-	{
-		while (first != last)
-		{
-			iterator tmp = first;
-			++first;
-			erase(tmp);
-		}
-	}
+	// void erase(iterator first, iterator last)
+	// {
+	// 	while (first != last)
+	// 	{
+	// 		iterator tmp = first;
+	// 		++first;
+	// 		erase(tmp);
+	// 	}
+	// }
 
-	size_type erase(const Key &key)
-	{
-		for (iterator it = begin(); it != end(); it++)
-		{
-			if (it->first == key)
-			{
-				erase(it);
-				return 1;
-			}
-		}
-		return 0;
-	}
+	// size_type erase(const Key &key)
+	// {
+	// 	for (iterator it = begin(); it != end(); it++)
+	// 	{
+	// 		if (it->first == key)
+	// 		{
+	// 			erase(it);
+	// 			return 1;
+	// 		}
+	// 	}
+	// 	return 0;
+	// }
 
 	iterator find(const Key &key)
 	{
