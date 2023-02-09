@@ -82,11 +82,42 @@ private:
 			_max = node;
 	}
 
-	int getHeight(Node *node)
-	{return node ? node->height : 0;}
+	Node *minimum()
+	{return _min;}
 
-	int max(int a, int b) 
-	{return (a > b) ? a : b;}
+	void leftRotate(Node *x)
+	{
+		Node *y = x->right;
+		x->right = y->left;
+		if (y->left != NULL)
+			y->left->parent = x;
+		y->parent = x->parent;
+		if (x->parent == NULL)
+			_root = y;
+		else if (x == x->parent->left)
+			x->parent->left = y;
+		else
+			x->parent->right = y;
+		y->left = x;
+		x->parent = y;
+  	}
+
+	void rightRotate(Node *x)
+	{
+		Node *y = x->left;
+		x->left = y->right;
+		if (y->right != NULL)
+			y->right->parent = x;
+		y->parent = x->parent;
+		if (x->parent == NULL)
+			this->_root = y;
+		else if (x == x->parent->right)
+			x->parent->right = y;
+		else
+			x->parent->left = y;
+		y->right = x;
+		x->parent = y;
+	}
 
 	iterator insertionCheck(iterator start, iterator end, const value_type &value)
 	{
@@ -107,58 +138,20 @@ private:
 					parent->right = node;
 				setMinMax(value.first, node);
 				_size++;
-				node->height = 1 + max(getHeight(node->left), getHeight(node->right));
-				int balanceFactor = getBalanceFactor(node);
-				if (balanceFactor > 1)
+				if (node->parent == NULL) 
 				{
-					if (value.first < node->left->pair.first)
-						rightRotate(node);
-					else if (value.first > node->left->pair.first)
-					{
-						node->left = leftRotate(node->left);
-						rightRotate(node);
-					}
+					_root = node;
+					node->color = BLACK;
+					return iterator(node, _min, _max);
 				}
-				if (balanceFactor < -1)
-				{
-					if (value.first > node->right->pair.first)
-						leftRotate(node);
-					else if (value.first < node->right->pair.first)
-					{
-						node->right = rightRotate(node->right);
-						leftRotate(node);
-					}
-				}
+				if (node->parent->parent == NULL)
+					return iterator(node, _min, _max);
+				insertFix(node);
 				return iterator(node, _min, _max);
 			}
 		}
 		return (insert(value)).first;
 	}
-
-	Node *rightRotate(Node *y)
-	{
-		Node *x = y->left;
-		Node *T2 = x->right;
-		x->right = y;
-		y->left = T2;
-		y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
-		x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
-		return x;
-	}
-
-	Node *leftRotate(Node *x)
-	{
-		Node *y = x->right;
-		Node *T2 = y->left;
-		y->left = x;
-		x->right = T2;
-		x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
-		y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
-		return y;
-	}
-
-	int getBalanceFactor(Node *node)
-	{return node ? getHeight(node->left) - getHeight(node->right) : 0;}
 
 public:
 	/* ----- Constructors ----- */
@@ -250,43 +243,81 @@ public:
 		}
 		// Set correct parent
 		Node *node = _alloc.allocate(1);
-		_alloc.construct(node, (Node){value, NULL, NULL, parent, 0});
+		_alloc.construct(node, (Node){value, NULL, NULL, parent, RED});
 		if (!_root)
 			_root = node;
+		else if (_comp(value.first, parent->pair.first))
+			parent->left = node;
 		else
-		{
-			if (_comp(value.first, parent->pair.first))
-				parent->left = node;
-			else
-				parent->right = node;
-		
-			// Rebalance the tree to respect AVL tree properties
-			node->height = 1 + max(getHeight(node->left), getHeight(node->right));
-			int balanceFactor = getBalanceFactor(node);
-			if (balanceFactor > 1)
-			{
-				if (value.first < node->left->pair.first)
-					rightRotate(node);
-				else if (value.first > node->left->pair.first)
-				{
-					node->left = leftRotate(node->left);
-					rightRotate(node);
-				}
-			}
-			if (balanceFactor < -1)
-			{
-				if (value.first > node->right->pair.first)
-					leftRotate(node);
-				else if (value.first < node->right->pair.first)
-				{
-					node->right = rightRotate(node->right);
-					leftRotate(node);
-				}
-			}
-		}
+			parent->right = node;
 		setMinMax(value.first, node);
+		if (node->parent == NULL)
+		{
+			node->color = BLACK;
+			return ft::make_pair(iterator(node, _min, _max), ++_size);
+		}
+		if (node->parent->parent == NULL)
+			return ft::make_pair(iterator(node, _min, _max), ++_size);
+		insertFix(node);
+
+		
 		return ft::make_pair(iterator(node, _min, _max), ++_size);
 	}
+
+	void insertFix(Node *k)
+	{
+		Node *u;
+    	while (k->parent->color == RED)
+		{
+      		if (k->parent == k->parent->parent->right)
+			{
+       			u = k->parent->parent->left;
+        		if (u && u->color == RED)
+				{
+					u->color = BLACK;
+					k->parent->color = BLACK;
+					k->parent->parent->color = RED;
+					k = k->parent->parent;
+        		} 
+				else
+				{
+					if (k == k->parent->left)
+					{
+						k = k->parent;
+						rightRotate(k);
+					}
+					k->parent->color = BLACK;
+					k->parent->parent->color = RED;
+					leftRotate(k->parent->parent);
+				}
+      		}
+			else
+			{
+				u = k->parent->parent->right;
+				if (u && u->color == RED)
+				{
+					u->color = BLACK;
+					k->parent->color = BLACK;
+					k->parent->parent->color = RED;
+					k = k->parent->parent;
+				} 
+				else
+				{
+					if (k == k->parent->right)
+					{
+						k = k->parent;
+						leftRotate(k);
+					}
+					k->parent->color = BLACK;
+					k->parent->parent->color = RED;
+					rightRotate(k->parent->parent);
+				}
+			}
+			if (k == _root)
+				break;
+    }
+    _root->color = BLACK;
+  }
 
 	iterator insert(iterator position, const value_type &value)
 	{
@@ -300,18 +331,6 @@ public:
 		for (; first != last; first++)
 			insert(*first);
 	}
-
-	// void eraseHelper(Node *curr)
-	// {
-	// 	if (!_size)
-	// 		return;
-		
-	// }
-
-	// void erase(iterator pos)
-	// {
-	// 	eraseHelper(pos.getCurr());
-	// }
 
 	// void erase(iterator first, iterator last)
 	// {
