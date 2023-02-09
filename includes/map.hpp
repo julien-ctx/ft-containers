@@ -74,6 +74,7 @@ private:
 		}
 	}
 	
+	typedef Node* NodePtr;
 	void setMinMax(key_type key, Node *node)
 	{
 		if (!_min || _comp(key, _min->pair.first))
@@ -81,9 +82,12 @@ private:
 		if (!_max || _comp(_max->pair.first, key))
 			_max = node;
 	}
-
-	Node *minimum()
-	{return _min;}
+	NodePtr minimum(NodePtr node) {
+		while (node->left != NULL) {
+			node = node->left;
+		}
+		return node;
+	}
 
 	void leftRotate(Node *x)
 	{
@@ -332,28 +336,180 @@ public:
 			insert(*first);
 	}
 
-	// void erase(iterator first, iterator last)
-	// {
-	// 	while (first != last)
-	// 	{
-	// 		iterator tmp = first;
-	// 		++first;
-	// 		erase(tmp);
-	// 	}
-	// }
+	void erase(iterator pos)
+	{
+		if (pos == end() || !find(pos->first).getCurr())
+			return;
+		_size--;
+		if (pos.getCurr() == _max)
+		{
+			iterator tmp(_max, _min, _max);
+			tmp--;
+			_max = tmp.getCurr();
+		}
+		if (pos.getCurr() == _min)
+		{
+			iterator tmp(_min, _min, _max);
+			tmp++;
+			_min = tmp.getCurr();
+		}
+		deleteNodeHelper(_root, pos->first);
+	}
 
-	// size_type erase(const Key &key)
-	// {
-	// 	for (iterator it = begin(); it != end(); it++)
-	// 	{
-	// 		if (it->first == key)
-	// 		{
-	// 			erase(it);
-	// 			return 1;
-	// 		}
-	// 	}
-	// 	return 0;
-	// }
+	void deleteNodeHelper(NodePtr node, key_type key) {
+		// find the node containing key
+		NodePtr z = NULL;
+		NodePtr x, y;
+		while (node != NULL){
+			if (node->pair.first == key) {
+				z = node;
+			}
+
+			if (node->pair.first <= key) {
+				node = node->right;
+			} else {
+				node = node->left;
+			}
+		}
+
+		if (z == NULL) {
+			return;
+		} 
+
+		y = z;
+		int y_original_color = y->color;
+		if (z->left == NULL) {
+			x = z->right;
+			rbTransplant(z, z->right);
+		} else if (z->right == NULL) {
+			x = z->left;
+			rbTransplant(z, z->left);
+		} else {
+			y = minimum(z->right);
+			y_original_color = y->color;
+			x = y->right;
+			if (x && y->parent == z) {
+				x->parent = y;
+			} else {
+				rbTransplant(y, y->right);
+				y->right = z->right;
+				if (y->right)
+					y->right->parent = y;
+			}
+
+			rbTransplant(z, y);
+			y->left = z->left;
+			y->left->parent = y;
+			y->color = z->color;
+		}
+		delete z;
+		if (y_original_color == 0){
+			fixDelete(x);
+		}
+	}
+
+	void rbTransplant(NodePtr u, NodePtr v){
+		if (u->parent == nullptr) {
+			_root = v;
+		} else if (u == u->parent->left){
+			u->parent->left = v;
+		} else {
+			u->parent->right = v;
+		}
+		if (v)
+		v->parent = u->parent;
+	}
+	void fixDelete(NodePtr x) {
+		NodePtr s;
+		while (x && x != _root && x->color == 0) {
+			if (x == x->parent->left) {
+				s = x->parent->right;
+				if (s->color == 1) {
+					// case 3.1
+					s->color = 0;
+					x->parent->color = 1;
+					leftRotate(x->parent);
+					s = x->parent->right;
+				}
+
+				if (s->left->color == 0 && s->right->color == 0) {
+					// case 3.2
+					s->color = 1;
+					x = x->parent;
+				} else {
+					if (s->right->color == 0) {
+						// case 3.3
+						s->left->color = 0;
+						s->color = 1;
+						rightRotate(s);
+						s = x->parent->right;
+					} 
+
+					// case 3.4
+					s->color = x->parent->color;
+					x->parent->color = 0;
+					s->right->color = 0;
+					leftRotate(x->parent);
+					x = _root;
+				}
+			} else {
+				s = x->parent->left;
+				if (s->color == 1) {
+					// case 3.1
+					s->color = 0;
+					x->parent->color = 1;
+					rightRotate(x->parent);
+					s = x->parent->left;
+				}
+
+				if (s->right->color == 0 && s->right->color == 0) {
+					// case 3.2
+					s->color = 1;
+					x = x->parent;
+				} else {
+					if (s->left->color == 0) {
+						// case 3.3
+						s->right->color = 0;
+						s->color = 1;
+						leftRotate(s);
+						s = x->parent->left;
+					} 
+
+					// case 3.4
+					s->color = x->parent->color;
+					x->parent->color = 0;
+					s->left->color = 0;
+					rightRotate(x->parent);
+					x = _root;
+				}
+			} 
+		}
+		if (x)
+		x->color = 0;
+	}
+
+	void erase(iterator first, iterator last)
+	{
+		while (first != last)
+		{
+			iterator tmp = first;
+			++first;
+			erase(tmp);
+		}
+	}
+
+	size_type erase(const Key &key)
+	{
+		for (iterator it = begin(); it != end(); it++)
+		{
+			if (it->first == key)
+			{
+				erase(it);
+				return 1;
+			}
+		}
+		return 0;
+	}
 
 	iterator find(const Key &key)
 	{

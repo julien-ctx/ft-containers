@@ -14,130 +14,58 @@
 #include "containers_test/srcs/map/common.hpp"
 
 #include <stdlib.h>
+#include <list>
 
-int main()
+#define T1 int
+#define T2 std::string
+typedef _pair<const T1, T2> T3;
+
+static int iter = 0;
+
+template <typename MAP, typename U>
+void    ft_erase(MAP &mp, U param)
 {
-	ft::map<int, int> mp;
-
-	mp.insert(ft::make_pair(49, 48));
-	mp.insert(ft::make_pair(4, 48));
-	mp.insert(ft::make_pair(9, 48));
-	mp.insert(ft::make_pair(445, 48));
-	mp.insert(ft::make_pair(45, 48));
-	mp.insert(ft::make_pair(34, 48));
-	mp.insert(ft::make_pair(12, 48));
-	mp.insert(ft::make_pair(390, 48));
-	mp.insert(ft::make_pair(30, 48));
-	mp.insert(ft::make_pair(22, 48));
-	mp.insert(ft::make_pair(39, 48));
-	// mp.erase(mp.begin());
-	for (ft::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
-	{
-		if (it.getCurr()->color)
-			std::cout << it->first << " " << "RED" << std::endl;
-		else
-			std::cout << it->first << " " << "BLACK" << std::endl;
-	}
+        std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+        mp.erase(param);
+        printSize(mp);
 }
 
-// #define TEST ft 
-// #define MAX_RAM 4294967296
-// #define BUFFER_SIZE 4096
-// struct Buffer
-// {
-// 	int idx;
-// 	char buff[BUFFER_SIZE];
-// };
+template <typename MAP, typename U, typename V>
+void    ft_erase(MAP &mp, U param, V param2)
+{
+        std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+        mp.erase(param, param2);
+        printSize(mp);
+}
 
+int             main(void)
+{
+        std::list<T3> lst;
+        unsigned int lst_size = 10;
+        for (unsigned int i = 0; i < lst_size; ++i)
+                lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
+        TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+        printSize(mp);
 
-// #define COUNT (MAX_RAM / (int)sizeof(Buffer))
+        ft_erase(mp, ++mp.begin());
 
-// template<typename T>
-// class MutantStack : public TEST::stack<T>
-// {
-// public:
-// 	MutantStack() {}
-// 	MutantStack(const MutantStack<T>& src) { *this = src; }
-// 	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
-// 	{
-// 		this->c = rhs.c;
-// 		return *this;
-// 	}
-// 	~MutantStack() {}
+        ft_erase(mp, mp.begin());
+        ft_erase(mp, --mp.end());
 
-// 	typedef typename TEST::stack<T>::container_type::iterator iterator;
+        ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
+        ft_erase(mp, --(--(--mp.end())), --mp.end());
 
-// 	iterator begin() { return this->c.begin(); }
-// 	iterator end() { return this->c.end(); }
-// };
+        mp[10] = "Hello";
+        mp[11] = "Hi there";
+        printSize(mp);
+        ft_erase(mp, --(--(--mp.end())), mp.end());
 
-// int main(int argc, char** argv) {
-// 	if (argc != 2)
-// 	{
-// 		std::cerr << "Usage: ./test seed" << std::endl;
-// 		std::cerr << "Provide a seed please" << std::endl;
-// 		std::cerr << "Count value:" << COUNT << std::endl;
-// 		return 1;
-// 	}
-// 	const int seed = atoi(argv[1]);
-// 	srand(seed);
+        mp[12] = "ONE";
+        mp[13] = "TWO";
+        mp[14] = "THREE";
+        mp[15] = "FOUR";
+        printSize(mp);
+        ft_erase(mp, mp.begin(), mp.end());
 
-// 	TEST::vector<std::string> vector_str;
-// 	TEST::vector<int> vector_int;
-// 	TEST::stack<int> stack_int;
-// 	TEST::vector<Buffer> vector_buffer;
-// 	TEST::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
-// 	TEST::map<int, int> map_int;
-
-// 	for (int i = 0; i < COUNT; i++)
-// 	{
-// 		vector_buffer.push_back(Buffer());
-// 	}
-
-// 	for (int i = 0; i < COUNT; i++)
-// 	{
-// 		const int idx = rand() % COUNT;
-// 		vector_buffer[idx].idx = 5;
-// 	}
-// 	TEST::vector<Buffer>().swap(vector_buffer);
-
-// 	try
-// 	{
-// 		for (int i = 0; i < COUNT; i++)
-// 		{
-// 			const int idx = rand() % COUNT;
-// 			vector_buffer.at(idx);
-// 			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
-// 		}
-// 	}
-// 	catch(const std::exception& e)
-// 	{
-// 		//NORMAL ! :P
-// 	}
-	
-// 	for (int i = 0; i < COUNT; ++i)
-// 	{
-// 		map_int.insert(TEST::make_pair(rand(), rand()));
-// 	}
-
-// 	int sum = 0;
-// 	for (int i = 0; i < 10000; i++)
-// 	{
-// 		int access = rand();
-// 		sum += map_int[access];
-// 	}
-// 	std::cout << "should be constant with the same seed: " << sum << std::endl;
-
-// 	{
-// 		TEST::map<int, int> copy = map_int;
-// 	}
-// 	MutantStack<char> iterable_stack;
-// 	for (char letter = 'a'; letter <= 'z'; letter++)
-// 		iterable_stack.push(letter);
-// 	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
-// 	{
-// 		std::cout << *it;
-// 	}
-// 	std::cout << std::endl;
-// 	return (0);
-// }
+        return (0);
+}
