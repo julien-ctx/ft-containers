@@ -93,10 +93,10 @@ private:
 	{
 		Node *y = x->right;
 		x->right = y->left;
-		if (y->left != NULL)
+		if (y->left)
 			y->left->parent = x;
 		y->parent = x->parent;
-		if (x->parent == NULL)
+		if (!x->parent)
 			_root = y;
 		else if (x == x->parent->left)
 			x->parent->left = y;
@@ -110,10 +110,10 @@ private:
 	{
 		Node *y = x->left;
 		x->left = y->right;
-		if (y->right != NULL)
+		if (y->right)
 			y->right->parent = x;
 		y->parent = x->parent;
-		if (x->parent == NULL)
+		if (!x->parent)
 			this->_root = y;
 		else if (x == x->parent->right)
 			x->parent->right = y;
@@ -214,7 +214,7 @@ private:
 
 	void eraseReorder(Node *node, key_type key)
 	{
-		Node *z = NULL; Node *x; Node *y;
+		Node *z = NULL; Node *x = NULL; Node *y = NULL;
 		while (node)
 		{
 			if (node->pair.first == key)
@@ -285,7 +285,6 @@ private:
 				s = x->parent->right;
 				if (s->color == RED)
 				{
-					// case 3.1
 					s->color = BLACK;
 					x->parent->color = RED;
 					leftRotate(x->parent);
@@ -293,7 +292,6 @@ private:
 				}
 				if (s->left->color == BLACK && s->right->color == BLACK)
 				{
-					// case 3.2
 					s->color = RED;
 					x = x->parent;
 				} 
@@ -301,13 +299,11 @@ private:
 				{
 					if (s->right->color == BLACK)
 					{
-						// case 3.3
 						s->left->color = BLACK;
 						s->color = RED;
 						rightRotate(s);
 						s = x->parent->right;
 					} 
-					// case 3.4
 					s->color = x->parent->color;
 					x->parent->color = BLACK;
 					s->right->color = BLACK;
@@ -320,7 +316,6 @@ private:
 				s = x->parent->left;
 				if (s->color == RED)
 				{
-					// case 3.1
 					s->color = BLACK;
 					x->parent->color = RED;
 					rightRotate(x->parent);
@@ -328,7 +323,6 @@ private:
 				}
 				if (s->left->color == BLACK && s->right->color == BLACK)
 				{
-					// case 3.2
 					s->color = RED;
 					x = x->parent;
 				}
@@ -336,13 +330,11 @@ private:
 				{
 					if (s->left->color == BLACK)
 					{
-						// case 3.3
 						s->right->color = BLACK;
 						s->color = RED;
 						leftRotate(s);
 						s = x->parent->left;
 					} 
-					// case 3.4
 					s->color = x->parent->color;
 					x->parent->color = BLACK;
 					s->left->color = BLACK;
@@ -445,12 +437,12 @@ public:
 		else
 			parent->right = node;
 		setMinMax(value.first, node);
-		if (node->parent == NULL)
+		if (!node->parent)
 		{
 			node->color = BLACK;
 			return ft::make_pair(iterator(node, _min, _max), ++_size);
 		}
-		if (node->parent->parent == NULL)
+		if (!node->parent->parent)
 			return ft::make_pair(iterator(node, _min, _max), ++_size);
 		insertRebalance(node);
 		return ft::make_pair(iterator(node, _min, _max), ++_size);
