@@ -10,7 +10,6 @@
 #include "lexicographical_compare.hpp"
 #include "pair.hpp"
 
-
 namespace ft
 {
 
@@ -42,6 +41,7 @@ public:
 	protected:
 		Compare comp;
 		value_compare (Compare c) : comp(c) {}
+
 	public:
 		typedef bool result_type;
 		typedef value_type first_argument_type;
@@ -63,6 +63,7 @@ private:
 	Node *_min;
 	Node *_max;
 	
+	/* ----- Red Black Tree ----- */	
 	void deleteAll(Node *node)
 	{
 		if (node)
@@ -74,7 +75,6 @@ private:
 		}
 	}
 	
-	typedef Node* NodePtr;
 	void setMinMax(key_type key, Node *node)
 	{
 		if (!_min || _comp(key, _min->pair.first))
@@ -82,10 +82,10 @@ private:
 		if (!_max || _comp(_max->pair.first, key))
 			_max = node;
 	}
-	NodePtr minimum(NodePtr node) {
-		while (node->left != NULL) {
+	Node *getSubtreeMin(Node *node)
+	{
+		while (node->left)
 			node = node->left;
-		}
 		return node;
 	}
 
@@ -135,27 +135,226 @@ private:
 			{
 				Node *node = _alloc.allocate(1);
 				Node *parent = it.getCurr();
-				_alloc.construct(node, (Node){value, NULL, NULL, parent, 0});
+				_alloc.construct(node, (Node){value, NULL, NULL, parent, RED});
 				if (_comp(value.first, parent->pair.first))
 					parent->left = node;
 				else
 					parent->right = node;
 				setMinMax(value.first, node);
 				_size++;
-				if (node->parent == NULL) 
+				if (!node->parent) 
 				{
 					_root = node;
 					node->color = BLACK;
 					return iterator(node, _min, _max);
 				}
-				if (node->parent->parent == NULL)
+				if (node->parent && !node->parent->parent)
 					return iterator(node, _min, _max);
-				insertFix(node);
+				insertRebalance(node);
 				return iterator(node, _min, _max);
 			}
 		}
 		return (insert(value)).first;
 	}
+
+	void insertRebalance(Node *k)
+	{
+		Node *u;
+    	while (k->parent->color == RED)
+		{
+      		if (k->parent == k->parent->parent->right)
+			{
+       			u = k->parent->parent->left;
+        		if (u && u->color == RED)
+				{
+					u->color = BLACK;
+					k->parent->color = BLACK;
+					k->parent->parent->color = RED;
+					k = k->parent->parent;
+        		} 
+				else
+				{
+					if (k == k->parent->left)
+					{
+						k = k->parent;
+						rightRotate(k);
+					}
+					k->parent->color = BLACK;
+					k->parent->parent->color = RED;
+					leftRotate(k->parent->parent);
+				}
+      		}
+			else
+			{
+				u = k->parent->parent->right;
+				if (u && u->color == RED)
+				{
+					u->color = BLACK;
+					k->parent->color = BLACK;
+					k->parent->parent->color = RED;
+					k = k->parent->parent;
+				} 
+				else
+				{
+					if (k == k->parent->right)
+					{
+						k = k->parent;
+						leftRotate(k);
+					}
+					k->parent->color = BLACK;
+					k->parent->parent->color = RED;
+					rightRotate(k->parent->parent);
+				}
+			}
+			if (k == _root)
+				break;
+    	}
+    	_root->color = BLACK;
+  	}
+
+	void eraseReorder(Node *node, key_type key)
+	{
+		Node *z = NULL; Node *x; Node *y;
+		while (node)
+		{
+			if (node->pair.first == key)
+				z = node;
+			if (node->pair.first <= key)
+				node = node->right;
+			else
+				node = node->left;
+		}
+		if (!z)
+			return;
+		y = z;
+		bool saved_y_color = y->color;
+		if (!z->left)
+		{
+			x = z->right;
+			transplant(z, z->right);
+		} 
+		else if (!z->right)
+		{
+			x = z->left;
+			transplant(z, z->left);
+		}
+		else
+		{
+			y = getSubtreeMin(z->right);
+			saved_y_color = y->color;
+			x = y->right;
+			if (x && y->parent == z)
+				x->parent = y;
+			else
+			{
+				transplant(y, y->right);
+				y->right = z->right;
+				if (y->right)
+					y->right->parent = y;
+			}
+			transplant(z, y);
+			y->left = z->left;
+			y->left->parent = y;
+			y->color = z->color;
+		}
+		_alloc.destroy(z);
+		_alloc.deallocate(z, 1);
+		if (saved_y_color == BLACK)
+			eraseRebalance(x);
+	}
+
+	void transplant(Node *u, Node *v)
+	{
+		if (!u->parent)
+			_root = v;
+		else if (u == u->parent->left)
+			u->parent->left = v;
+		else
+			u->parent->right = v;
+		if (v)
+			v->parent = u->parent;
+	}
+
+	void eraseRebalance(Node *x)
+	{
+		Node *s;
+		while (x && x != _root && x->color == BLACK)
+		{
+			if (x == x->parent->left)
+			{
+				s = x->parent->right;
+				if (s->color == RED)
+				{
+					// case 3.1
+					s->color = BLACK;
+					x->parent->color = RED;
+					leftRotate(x->parent);
+					s = x->parent->right;
+				}
+				if (s->left->color == BLACK && s->right->color == BLACK)
+				{
+					// case 3.2
+					s->color = RED;
+					x = x->parent;
+				} 
+				else
+				{
+					if (s->right->color == BLACK)
+					{
+						// case 3.3
+						s->left->color = BLACK;
+						s->color = RED;
+						rightRotate(s);
+						s = x->parent->right;
+					} 
+					// case 3.4
+					s->color = x->parent->color;
+					x->parent->color = BLACK;
+					s->right->color = BLACK;
+					leftRotate(x->parent);
+					x = _root;
+				}
+			} 
+			else
+			{
+				s = x->parent->left;
+				if (s->color == RED)
+				{
+					// case 3.1
+					s->color = BLACK;
+					x->parent->color = RED;
+					rightRotate(x->parent);
+					s = x->parent->left;
+				}
+				if (s->left->color == BLACK && s->right->color == BLACK)
+				{
+					// case 3.2
+					s->color = RED;
+					x = x->parent;
+				}
+				else 
+				{
+					if (s->left->color == BLACK)
+					{
+						// case 3.3
+						s->right->color = BLACK;
+						s->color = RED;
+						leftRotate(s);
+						s = x->parent->left;
+					} 
+					// case 3.4
+					s->color = x->parent->color;
+					x->parent->color = BLACK;
+					s->left->color = BLACK;
+					rightRotate(x->parent);
+					x = _root;
+				}
+			} 
+		}
+		if (x)
+			x->color = BLACK;
+	}
+	/* -------------------------- */
 
 public:
 	/* ----- Constructors ----- */
@@ -222,15 +421,6 @@ public:
 		return curr->pair.second;
 	}
 
-	// Node with minimum value
-	Node *nodeWithMinimumValue(Node *node)
-	{
-		Node *current = node;
-		while (current->left != NULL)
-			current = current->left;
-		return current;
-	}
-
 	ft::pair<iterator, bool> insert(const value_type &value)
 	{
 		// Find insertion position
@@ -262,66 +452,9 @@ public:
 		}
 		if (node->parent->parent == NULL)
 			return ft::make_pair(iterator(node, _min, _max), ++_size);
-		insertFix(node);
-
-		
+		insertRebalance(node);
 		return ft::make_pair(iterator(node, _min, _max), ++_size);
 	}
-
-	void insertFix(Node *k)
-	{
-		Node *u;
-    	while (k->parent->color == RED)
-		{
-      		if (k->parent == k->parent->parent->right)
-			{
-       			u = k->parent->parent->left;
-        		if (u && u->color == RED)
-				{
-					u->color = BLACK;
-					k->parent->color = BLACK;
-					k->parent->parent->color = RED;
-					k = k->parent->parent;
-        		} 
-				else
-				{
-					if (k == k->parent->left)
-					{
-						k = k->parent;
-						rightRotate(k);
-					}
-					k->parent->color = BLACK;
-					k->parent->parent->color = RED;
-					leftRotate(k->parent->parent);
-				}
-      		}
-			else
-			{
-				u = k->parent->parent->right;
-				if (u && u->color == RED)
-				{
-					u->color = BLACK;
-					k->parent->color = BLACK;
-					k->parent->parent->color = RED;
-					k = k->parent->parent;
-				} 
-				else
-				{
-					if (k == k->parent->right)
-					{
-						k = k->parent;
-						leftRotate(k);
-					}
-					k->parent->color = BLACK;
-					k->parent->parent->color = RED;
-					rightRotate(k->parent->parent);
-				}
-			}
-			if (k == _root)
-				break;
-    }
-    _root->color = BLACK;
-  }
 
 	iterator insert(iterator position, const value_type &value)
 	{
@@ -353,139 +486,7 @@ public:
 			tmp++;
 			_min = tmp.getCurr();
 		}
-		deleteNodeHelper(_root, pos->first);
-	}
-
-	void deleteNodeHelper(NodePtr node, key_type key) {
-		// find the node containing key
-		NodePtr z = NULL;
-		NodePtr x, y;
-		while (node != NULL){
-			if (node->pair.first == key) {
-				z = node;
-			}
-
-			if (node->pair.first <= key) {
-				node = node->right;
-			} else {
-				node = node->left;
-			}
-		}
-
-		if (z == NULL) {
-			return;
-		} 
-
-		y = z;
-		int y_original_color = y->color;
-		if (z->left == NULL) {
-			x = z->right;
-			rbTransplant(z, z->right);
-		} else if (z->right == NULL) {
-			x = z->left;
-			rbTransplant(z, z->left);
-		} else {
-			y = minimum(z->right);
-			y_original_color = y->color;
-			x = y->right;
-			if (x && y->parent == z) {
-				x->parent = y;
-			} else {
-				rbTransplant(y, y->right);
-				y->right = z->right;
-				if (y->right)
-					y->right->parent = y;
-			}
-
-			rbTransplant(z, y);
-			y->left = z->left;
-			y->left->parent = y;
-			y->color = z->color;
-		}
-		delete z;
-		if (y_original_color == 0){
-			fixDelete(x);
-		}
-	}
-
-	void rbTransplant(NodePtr u, NodePtr v){
-		if (u->parent == nullptr) {
-			_root = v;
-		} else if (u == u->parent->left){
-			u->parent->left = v;
-		} else {
-			u->parent->right = v;
-		}
-		if (v)
-		v->parent = u->parent;
-	}
-	void fixDelete(NodePtr x) {
-		NodePtr s;
-		while (x && x != _root && x->color == 0) {
-			if (x == x->parent->left) {
-				s = x->parent->right;
-				if (s->color == 1) {
-					// case 3.1
-					s->color = 0;
-					x->parent->color = 1;
-					leftRotate(x->parent);
-					s = x->parent->right;
-				}
-
-				if (s->left->color == 0 && s->right->color == 0) {
-					// case 3.2
-					s->color = 1;
-					x = x->parent;
-				} else {
-					if (s->right->color == 0) {
-						// case 3.3
-						s->left->color = 0;
-						s->color = 1;
-						rightRotate(s);
-						s = x->parent->right;
-					} 
-
-					// case 3.4
-					s->color = x->parent->color;
-					x->parent->color = 0;
-					s->right->color = 0;
-					leftRotate(x->parent);
-					x = _root;
-				}
-			} else {
-				s = x->parent->left;
-				if (s->color == 1) {
-					// case 3.1
-					s->color = 0;
-					x->parent->color = 1;
-					rightRotate(x->parent);
-					s = x->parent->left;
-				}
-
-				if (s->right->color == 0 && s->right->color == 0) {
-					// case 3.2
-					s->color = 1;
-					x = x->parent;
-				} else {
-					if (s->left->color == 0) {
-						// case 3.3
-						s->right->color = 0;
-						s->color = 1;
-						leftRotate(s);
-						s = x->parent->left;
-					} 
-
-					// case 3.4
-					s->color = x->parent->color;
-					x->parent->color = 0;
-					s->left->color = 0;
-					rightRotate(x->parent);
-					x = _root;
-				}
-			} 
-		}
-		if (x)
-		x->color = 0;
+		eraseReorder(_root, pos->first);
 	}
 
 	void erase(iterator first, iterator last)
