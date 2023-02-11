@@ -8,7 +8,7 @@
 
 int main()
 {
-	// vectorTest();
-	// stackTest();
+	vectorTest();
+	stackTest();
 	mapTest();
 }

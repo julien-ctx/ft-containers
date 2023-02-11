@@ -310,4 +310,69 @@ void mapTest()
 	std::cout << BOLD;
 	timeDiff(ft_diff, std_diff);
 	std::cout << RESET;
+	std::cout << CYAN << "----------- RELATIONAL OPERATORS -----------\n" << RESET;
+	{
+		begin_time = clock();
+		std::cout.rdbuf(std_ss.rdbuf());
+		std::map<int, int> mp;
+		for (std::size_t i = 0; i < 42; i++)
+			std::cout << mp.insert(std::make_pair(i, i + 42)).second << std::endl;
+		std::map<int, int>::iterator it = mp.begin();
+		std::map<int, int>::iterator it2 = mp.begin();
+		std::map<int, int>::iterator it3 = mp.find(0);
+		std::cout << (it == it2) << std::endl;
+		std::cout << (it != it3) << std::endl;
+		it2++;
+		std::cout << (it == it2) << std::endl;
+		it3 = it2;
+		std::cout << (it3 == it2) << std::endl;
+		std::cout << (it3 == it) << std::endl;
+		std::map<int, int> mp2;
+		for (std::size_t i = 0; i < 42; i++)
+			std::cout << mp2.insert(std::make_pair(i, i)).first->first << std::endl;
+		std::cout << (mp == mp2) << std::endl;
+		std::cout << (mp < mp2) << std::endl;
+		std::cout << (mp >= mp2) << std::endl;
+		mp2 = mp;
+		std::cout << (mp >= mp2) << std::endl;
+		std::cout << (mp < mp2) << std::endl;
+		std::cout.rdbuf(cout_buf);
+		std_diff = begin_time - clock();
+	}
+	{
+		begin_time = clock();
+		std::cout.rdbuf(ft_ss.rdbuf());	
+		ft::map<int, int> mp;
+		for (std::size_t i = 0; i < 42; i++)
+			std::cout << mp.insert(ft::make_pair(i, i + 42)).second << std::endl;
+		ft::map<int, int>::iterator it = mp.begin();
+		ft::map<int, int>::iterator it2 = mp.begin();
+		ft::map<int, int>::iterator it3 = mp.find(0);
+		std::cout << (it == it2) << std::endl;
+		std::cout << (it != it3) << std::endl;
+		it2++;
+		std::cout << (it == it2) << std::endl;
+		it3 = it2;
+		std::cout << (it3 == it2) << std::endl;
+		std::cout << (it3 == it) << std::endl;
+		ft::map<int, int> mp2;
+		for (std::size_t i = 0; i < 42; i++)
+			std::cout << mp2.insert(ft::make_pair(i, i)).first->first << std::endl;
+		std::cout << (mp == mp2) << std::endl;
+		std::cout << (mp < mp2) << std::endl;
+		std::cout << (mp >= mp2) << std::endl;
+		mp2 = mp;
+		std::cout << (mp >= mp2) << std::endl;
+		std::cout << (mp < mp2) << std::endl;
+		std::cout.rdbuf(cout_buf);
+		ft_diff = begin_time - clock();
+	}
+	std::cout << BOLD;
+	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
+	std::cout << RESET;
+	ft_ss.clear();
+	std_ss.clear();
+	std::cout << BOLD;
+	timeDiff(ft_diff, std_diff);
+	std::cout << RESET;
 }
