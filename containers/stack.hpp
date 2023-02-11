@@ -19,6 +19,8 @@ public:
 	/* ----- Constructors ----- */
 	// Default constructor
 	explicit stack(const Container &cont = Container()) : c(cont) {}
+
+	~stack() {}
 	/* -------------------------*/
 
 	bool empty() const {return c.empty();}
