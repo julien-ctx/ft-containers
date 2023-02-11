@@ -4,8 +4,6 @@
 
 #include <iostream>
 
-#define TEST ft
-
 int main()
 {
 	vectorTest();

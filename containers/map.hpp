@@ -194,6 +194,7 @@ private:
 	*/
 	void insertRebalance(Node *node)
 	{
+		// us is uncle
 		Node *u;
     	while (node->parent->color == RED)
 		{
@@ -247,6 +248,7 @@ private:
     	_root->color = BLACK;
   	}
 
+	// This function transplant the correct nodes to reorder the RBT
 	void eraseReorder(Node *node, key_type key)
 	{
 		Node *z = NULL; Node *x = NULL; Node *y = NULL;
@@ -298,6 +300,10 @@ private:
 			eraseRebalance(x);
 	}
 
+	/*
+		This function is used to replace u by v.
+		Usually, with the erase method, u is replaced by v which is its child.
+	*/
 	void transplant(Node *u, Node *v)
 	{
 		if (!u->parent)
@@ -310,8 +316,10 @@ private:
 			v->parent = u->parent;
 	}
 
+	// This function is used to rebalance the colors and rotate the elements to keep RBT properties
 	void eraseRebalance(Node *x)
 	{
+		// s is sibling
 		Node *s = NULL;
 		while (x && x != _root && x->color == BLACK)
 		{
