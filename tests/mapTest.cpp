@@ -178,5 +178,136 @@ void mapTest()
 	std::cout << BOLD;
 	timeDiff(ft_diff, std_diff);
 	std::cout << RESET;
-
+	std::cout << CYAN << "----------------- MODIFIERS ----------------\n" << RESET;
+	{
+		begin_time = clock();
+		std::cout.rdbuf(std_ss.rdbuf());
+		std::map<int, int> mp;
+		for (std::size_t i = 0; i < 20; i++)
+			std::cout << mp.insert(std::make_pair(i, i)).first->first << std::endl;
+		for (std::size_t i = 0; i < mp.size(); i++)
+			std::cout << mp[i] << std::endl;
+		std::map<int, int> mp2 = mp;
+		for (std::size_t i = 0; i < mp2.size(); i++)
+			std::cout << mp2[i] << std::endl;
+		mp2.clear();
+		mp2.insert(++mp.begin(), mp.end());
+		std::cout << mp2.size() << std::endl;
+		for (std::size_t i = 0; i < mp2.size(); i++)
+			std::cout << mp2[i] << std::endl;
+		mp2.erase(mp2.begin(), mp2.end());
+		std::cout << mp2.size() << std::endl;
+		for (std::size_t i = 0; i < mp2.size(); i++)
+			std::cout << mp2[i] << std::endl;
+		mp.erase(14);
+		for (std::size_t i = 0; i < mp.size(); i++)
+			std::cout << mp[i] << std::endl;
+		std::cout << mp.insert(std::make_pair(10, 10)).first->first << std::endl;
+		mp.erase(--mp.end());
+		for (std::size_t i = 0; i < mp.size(); i++)
+			std::cout << mp[i] << std::endl;
+		std::cout.rdbuf(cout_buf);
+		std_diff = begin_time - clock();
+	}
+	{
+		begin_time = clock();
+		std::cout.rdbuf(ft_ss.rdbuf());
+		ft::map<int, int> mp;
+		for (std::size_t i = 0; i < 20; i++)
+			std::cout << mp.insert(ft::make_pair(i, i)).first->first << std::endl;
+		for (std::size_t i = 0; i < mp.size(); i++)
+			std::cout << mp[i] << std::endl;
+		ft::map<int, int> mp2 = mp;
+		for (std::size_t i = 0; i < mp2.size(); i++)
+			std::cout << mp2[i] << std::endl;
+		mp2.clear();
+		mp2.insert(++mp.begin(), mp.end());
+		std::cout << mp2.size() << std::endl;
+		for (std::size_t i = 0; i < mp2.size(); i++)
+			std::cout << mp2[i] << std::endl;
+		mp2.erase(mp2.begin(), mp2.end());
+		std::cout << mp2.size() << std::endl;
+		for (std::size_t i = 0; i < mp2.size(); i++)
+			std::cout << mp2[i] << std::endl;
+		mp.erase(14);
+		for (std::size_t i = 0; i < mp.size(); i++)
+			std::cout << mp[i] << std::endl;
+		std::cout << mp.insert(ft::make_pair(10, 10)).first->first << std::endl;
+		mp.erase(--mp.end());
+		for (std::size_t i = 0; i < mp.size(); i++)
+			std::cout << mp[i] << std::endl;
+		std::cout.rdbuf(cout_buf);
+		ft_diff = begin_time - clock();
+	}
+	std::cout << BOLD;
+	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
+	std::cout << RESET;
+	ft_ss.clear();
+	std_ss.clear();
+	std::cout << BOLD;
+	timeDiff(ft_diff, std_diff);
+	std::cout << RESET;
+	std::cout << CYAN << "---------------- ITERATORS -----------------\n" << RESET;
+	{
+		begin_time = clock();
+		std::cout.rdbuf(std_ss.rdbuf());
+		std::map<int, unsigned int> mp;
+		for (std::size_t i = 0; i < 20; i++)
+			std::cout << mp.insert(std::make_pair(i, i + 42)).second << std::endl;	
+		for (std::map<int, unsigned int>::iterator it = mp.begin(); it != mp.end(); it++)
+			std::cout << it->first << " " << it->second << std::endl;
+		std::map<int, unsigned int>::reverse_iterator rev = mp.rbegin();
+		for (; rev != mp.rend(); rev++)
+			std::cout << rev->first << " " << rev->second << std::endl;
+		rev = mp.rbegin();
+		std::map<int, unsigned int>::reverse_iterator rev2 = rev;
+		std::cout << (++rev2)->first << std::endl;
+		for (std::map<int, unsigned int>::const_iterator it = --mp.end(); it != mp.begin(); it--)
+			std::cout << it->second << std::endl;
+		std::cout << (++(++mp.begin()))->first << std::endl;
+		std::cout << mp.find(10)->first << std::endl;	
+		mp[10] = 0;
+		std::cout << mp.find(10)->first << std::endl;	
+		mp.erase(10);
+		std::map<int, unsigned int>::iterator cit = mp.begin();
+		std::map<int, unsigned int>::const_iterator it = cit;
+		std::cout << it->first << std::endl;
+		std::cout.rdbuf(cout_buf);
+		std_diff = begin_time - clock();
+	}
+	{
+		begin_time = clock();
+		std::cout.rdbuf(ft_ss.rdbuf());
+		ft::map<int, unsigned int> mp;
+		for (std::size_t i = 0; i < 20; i++)
+			std::cout << mp.insert(ft::make_pair(i, i + 42)).second << std::endl;	
+		for (ft::map<int, unsigned int>::iterator it = mp.begin(); it != mp.end(); it++)
+			std::cout << it->first << " " << it->second << std::endl;
+		ft::map<int, unsigned int>::reverse_iterator rev = mp.rbegin();
+		for (; rev != mp.rend(); rev++)
+			std::cout << rev->first << " " << rev->second << std::endl;
+		rev = mp.rbegin();
+		ft::map<int, unsigned int>::reverse_iterator rev2 = rev;
+		std::cout << (++rev2)->first << std::endl;
+		for (ft::map<int, unsigned int>::const_iterator it = --mp.end(); it != mp.begin(); it--)
+			std::cout << it->second << std::endl;
+		std::cout << (++(++mp.begin()))->first << std::endl;
+		std::cout << mp.find(10)->first << std::endl;	
+		mp[10] = 0;
+		std::cout << mp.find(10)->first << std::endl;	
+		mp.erase(10);
+		ft::map<int, unsigned int>::iterator cit = mp.begin();
+		ft::map<int, unsigned int>::const_iterator it = cit;
+		std::cout << it->first << std::endl;
+		std::cout.rdbuf(cout_buf);
+		ft_diff = begin_time - clock();
+	}
+	std::cout << BOLD;
+	std_ss.str() == ft_ss.str() ? std::cout << "DIFF OK ✅\n" : std::cout << "DIFF KO ❌\n";
+	std::cout << RESET;
+	ft_ss.clear();
+	std_ss.clear();
+	std::cout << BOLD;
+	timeDiff(ft_diff, std_diff);
+	std::cout << RESET;
 }
