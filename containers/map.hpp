@@ -114,7 +114,7 @@ private:
 			y->right->parent = x;
 		y->parent = x->parent;
 		if (!x->parent)
-			this->_root = y;
+			_root = y;
 		else if (x == x->parent->right)
 			x->parent->right = y;
 		else
