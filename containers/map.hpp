@@ -10,6 +10,20 @@
 #include "../utils/lexicographical_compare.hpp"
 #include "../utils/pair.hpp"
 
+/*
+Properties:
+ * The black height of the red-black tree is the number of black nodes on a path
+ from the root node to a leaf node. Leaf nodes are also counted as black nodes.
+ So, a red-black tree of height h has black height >= h/2.
+ * Height of a red-black tree with n nodes is h<= 2 log2(n + 1).
+ * All leaves (NIL) are black.
+ * The black depth of a node is defined as the number of black nodes from the
+ root to that node i.e the number of black ancestors.
+ * Every red-black tree is a special case of a binary tree.
+ * If a node is red, then its parent is black. A red node cannot have a red parent or red child)
+ * An inserted node is always red
+*/
+
 namespace ft
 {
 
@@ -89,6 +103,13 @@ private:
 		return node;
 	}
 
+	/*			   Rotate X-Y
+	*		  Z					 Z
+	*		 /					/
+	*		X	    ---->	   Y     
+	*		 \				  /
+	*		  Y     	     X    
+	*/
 	void leftRotate(Node *x)
 	{
 		Node *y = x->right;
@@ -106,6 +127,13 @@ private:
 		x->parent = y;
   	}
 
+	/*			   Rotate Z-X
+	*		  Z					 X
+	*		 /					/ \
+	*		X	    ---->	   /   \
+	*	   /				  /     \
+	*	  Y     	         Y       Z
+	*/
 	void rightRotate(Node *x)
 	{
 		Node *y = x->left;
@@ -123,11 +151,12 @@ private:
 		x->parent = y;
 	}
 
+	// This function looks for the insertion position of value, in the range start to end.
 	iterator insertionCheck(iterator start, iterator end, const value_type &value)
 	{
 		iterator it = start;
 		iterator it2 = it == end ? end : ++start;
-		for (;it2 != end; it++, it2++)
+		for (; it2 != end; it++, it2++)
 		{
 			if (it->first == value.first)
 				return it;
@@ -157,56 +186,62 @@ private:
 		return (insert(value)).first;
 	}
 
-	void insertRebalance(Node *k)
+	/*
+	After inserting an element, this function is used to adjust
+	the tree so that it keeps its properties:
+	- Node colors are modified when they need to be.
+	- Right Rotate and Left Rotate reorder the tree correctly.
+	*/
+	void insertRebalance(Node *node)
 	{
 		Node *u;
-    	while (k->parent->color == RED)
+    	while (node->parent->color == RED)
 		{
-      		if (k->parent == k->parent->parent->right)
+      		if (node->parent == node->parent->parent->right)
 			{
-       			u = k->parent->parent->left;
+       			u = node->parent->parent->left;
         		if (u && u->color == RED)
 				{
 					u->color = BLACK;
-					k->parent->color = BLACK;
-					k->parent->parent->color = RED;
-					k = k->parent->parent;
+					node->parent->color = BLACK;
+					node->parent->parent->color = RED;
+					node = node->parent->parent;
         		} 
 				else
 				{
-					if (k == k->parent->left)
+					if (node == node->parent->left)
 					{
-						k = k->parent;
-						rightRotate(k);
+						node = node->parent;
+						rightRotate(node);
 					}
-					k->parent->color = BLACK;
-					k->parent->parent->color = RED;
-					leftRotate(k->parent->parent);
+					node->parent->color = BLACK;
+					node->parent->parent->color = RED;
+					leftRotate(node->parent->parent);
 				}
       		}
 			else
 			{
-				u = k->parent->parent->right;
+				u = node->parent->parent->right;
 				if (u && u->color == RED)
 				{
 					u->color = BLACK;
-					k->parent->color = BLACK;
-					k->parent->parent->color = RED;
-					k = k->parent->parent;
+					node->parent->color = BLACK;
+					node->parent->parent->color = RED;
+					node = node->parent->parent;
 				} 
 				else
 				{
-					if (k == k->parent->right)
+					if (node == node->parent->right)
 					{
-						k = k->parent;
-						leftRotate(k);
+						node = node->parent;
+						leftRotate(node);
 					}
-					k->parent->color = BLACK;
-					k->parent->parent->color = RED;
-					rightRotate(k->parent->parent);
+					node->parent->color = BLACK;
+					node->parent->parent->color = RED;
+					rightRotate(node->parent->parent);
 				}
 			}
-			if (k == _root)
+			if (node == _root)
 				break;
     	}
     	_root->color = BLACK;
@@ -277,7 +312,7 @@ private:
 
 	void eraseRebalance(Node *x)
 	{
-		Node *s;
+		Node *s = NULL;
 		while (x && x != _root && x->color == BLACK)
 		{
 			if (x == x->parent->left)
@@ -439,6 +474,7 @@ public:
 		setMinMax(value.first, node);
 		if (!node->parent)
 		{
+			// No need to rebalance if there is only one element in the tree
 			node->color = BLACK;
 			return ft::make_pair(iterator(node, _min, _max), ++_size);
 		}

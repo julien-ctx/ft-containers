@@ -11,4 +11,5 @@ int main()
 	vectorTest();
 	stackTest();
 	mapTest();
+	// system("leaks ft_containers");
 }
