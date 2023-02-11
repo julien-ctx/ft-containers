@@ -1,5 +1,5 @@
-#include "../includes/tools.hpp"
-#include "../includes/vector.hpp"
+#include "../utils/tools.hpp"
+#include "../containers/vector.hpp"
 
 void timeDiff(clock_t &ft_diff, clock_t &std_diff)
 {

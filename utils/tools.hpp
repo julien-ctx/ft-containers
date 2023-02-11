@@ -8,7 +8,6 @@
 #include <ctime>
 
 // My containers implementation includes
-
 #include "iterator_traits.hpp"
 #include "reverse_iterator.hpp"
 #include "pair.hpp"

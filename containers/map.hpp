@@ -1,14 +1,14 @@
 
 #pragma once
 
-#include "tools.hpp"
-#include "reverse_iterator.hpp"
-#include "iterator_traits.hpp"
-#include "enable_if.hpp"
-#include "bidirectional_iterator.hpp"
-#include "is_integral.hpp"
-#include "lexicographical_compare.hpp"
-#include "pair.hpp"
+#include "../utils/tools.hpp"
+#include "../utils/reverse_iterator.hpp"
+#include "../utils/iterator_traits.hpp"
+#include "../utils/enable_if.hpp"
+#include "../utils/bidirectional_iterator.hpp"
+#include "../utils/is_integral.hpp"
+#include "../utils/lexicographical_compare.hpp"
+#include "../utils/pair.hpp"
 
 namespace ft
 {
