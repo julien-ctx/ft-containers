@@ -1,4 +1,4 @@
-# Containers: An Implementation Of C++ STL Containers | 42
+# Containers: An Implementation Of C++ Containers | 42
 
 ## Overview
 In this project I recreated **3 containers** of the STL in C++98 : **vector, stack and map**, from scratch. Each of them works the same way as the official versions, and even better in some cases.
